@@ -10,3 +10,4 @@ pipelines:
           # https://docs.gradle.org/current/userguide/gradle_wrapper.html
           - bash ./gradlew build
           - bash ./gradlew jacocoTestReport
+          #- curl -X POST --user "${BB_AUTH_STRING}" "https://api.bitbucket.org/2.0/repositories/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}/downloads" --form files=@"target/output.jar"

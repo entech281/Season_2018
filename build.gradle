@@ -4,6 +4,7 @@ plugins {
     id "idea"
     id "jaci.openrio.gradle.GradleRIO" version "2017.11.27"
     id "jacoco"
+    id 'com.github.ksoichiro.console.reporter' version '0.5.0'
 }
 
 allprojects {
@@ -54,6 +55,7 @@ task wrapper(type: Wrapper) {
 
 jacocoTestReport {
     reports {
+    	csv.enabled true
         xml.enabled true
         html.enabled true
         html.destination file("${buildDir}/jacocoHtml")
