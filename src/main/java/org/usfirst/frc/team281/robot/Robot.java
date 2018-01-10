@@ -15,7 +15,7 @@ import org.usfirst.frc.team281.robot.subsystems.DriveSubsystem;
  */
 public class Robot extends IterativeRobot {
 
-	public static final DriveSubsystem _driveSubsystem = new DriveSubsystem();
+	public final DriveSubsystem _driveSubsystem = new DriveSubsystem();
 	public static OI oi;
 
 	/**

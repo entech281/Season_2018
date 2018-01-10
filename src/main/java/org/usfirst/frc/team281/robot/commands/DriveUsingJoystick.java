@@ -3,14 +3,17 @@ package org.usfirst.frc.team281.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 
 import org.usfirst.frc.team281.robot.Robot;
+import org.usfirst.frc.team281.robot.subsystems.DriveSubsystem;
 
 /**
  *
  */
 public class DriveUsingJoystick extends Command {
-	public DriveUsingJoystick() {
+	private DriveSubsystem drive;
+	public DriveUsingJoystick(DriveSubsystem drive) {
 		// Use requires() here to declare subsystem dependencies
-		requires(Robot._driveSubsystem);
+		this.drive = drive;
+		requires(drive);
 	}
 
 	// Called just before this Command runs the first time
@@ -21,7 +24,7 @@ public class DriveUsingJoystick extends Command {
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
-		Robot._driveSubsystem.arcadeDrive(Robot.oi.getDriveJoystickForward(), Robot.oi.getDriveJoystickLateral());
+		drive.arcadeDrive(Robot.oi.getDriveJoystickForward(), Robot.oi.getDriveJoystickLateral());
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
