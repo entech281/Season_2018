@@ -1,10 +1,9 @@
 
-package org.usfirst.frc.team281.robot;
+package frc.team281.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
-
-import org.usfirst.frc.team281.robot.subsystems.DriveSubsystem;
+import frc.team281.robot.subsystems.DriveSubsystem;
 
 /**
  * The VM is configured to automatically run this class, and to call the

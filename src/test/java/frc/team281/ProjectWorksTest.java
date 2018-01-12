@@ -1,4 +1,4 @@
-package org.usfirst.frc.team281;
+package frc.team281;
 
 import static org.junit.Assert.assertEquals;
 

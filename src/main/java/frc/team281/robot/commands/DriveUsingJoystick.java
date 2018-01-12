@@ -1,9 +1,8 @@
-package org.usfirst.frc.team281.robot.commands;
+package frc.team281.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-
-import org.usfirst.frc.team281.robot.Robot;
-import org.usfirst.frc.team281.robot.subsystems.DriveSubsystem;
+import frc.team281.robot.Robot;
+import frc.team281.robot.subsystems.DriveSubsystem;
 
 /**
  *
