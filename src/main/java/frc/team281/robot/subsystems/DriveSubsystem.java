@@ -28,11 +28,11 @@ public class DriveSubsystem extends Subsystem {
 	}
 
 	public void arcadeDrive(double forw, double turn) {
-		_drive.arcadeDrive(forw, turn, true);
+		_drive.arcadeDrive(-forw, turn, true);
 	}
 
 	public void tankDrive(double left, double right) {
-		_drive.arcadeDrive(left, right, true);
+		_drive.tankDrive(left, right, true);
 	}
 
     public void initDefaultCommand() {

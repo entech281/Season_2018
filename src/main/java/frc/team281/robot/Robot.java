@@ -3,7 +3,9 @@ package frc.team281.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.Compressor;
 import frc.team281.robot.subsystems.DriveSubsystem;
+import frc.team281.robot.subsystems.ProngsSubsystem;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -15,6 +17,7 @@ import frc.team281.robot.subsystems.DriveSubsystem;
 public class Robot extends IterativeRobot {
 
 	public final DriveSubsystem _driveSubsystem = new DriveSubsystem();
+	public final static ProngsSubsystem _prongsSubsystem = new ProngsSubsystem();
 	public static OI oi;
 
 	/**
@@ -24,6 +27,8 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		oi = new OI();
+		Compressor compressor = new Compressor(RobotMap.PCModuleCANid);
+		compressor.start();
 	}
 
 	/**
@@ -50,6 +55,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
+		oi.teleopPeriodic();
 		Scheduler.getInstance().run();
 	}
 }

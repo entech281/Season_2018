@@ -12,6 +12,15 @@ public class RobotMap {
 	public static int frontRightMotorCANid = 2;
 	public static int rearLeftMotorCANid = 1;
 	public static int rearRightMotorCANid = 3;
+	public static int PCModuleCANid = 10;
 
-	public static int driveJoystick = 1;
+	public static int driveJoystick = 0;
+	
+	// Pneumatic solenoids
+	public static int prongsUpSolenoid = 0;
+	public static int prongsDownSolenoid = 1;
+	
+	// Driver Joystick Buttons
+	public static int prongsUpButton = 5;
+	public static int prongsDownButton = 3;
 }

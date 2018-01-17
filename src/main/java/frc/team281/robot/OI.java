@@ -1,7 +1,9 @@
 package frc.team281.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
-
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import frc.team281.robot.commands.ProngsUp;
+import frc.team281.robot.commands.ProngsDown;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -9,6 +11,14 @@ import edu.wpi.first.wpilibj.Joystick;
  */
 public class OI {
 	public static Joystick _driveJoystick = new Joystick(RobotMap.driveJoystick);
+	private static JoystickButton m_prongUpButton = new JoystickButton(_driveJoystick, RobotMap.prongsUpButton);
+	private static JoystickButton m_prongDownButton = new JoystickButton(_driveJoystick, RobotMap.prongsDownButton);
+	
+	public void teleopPeriodic() {
+	    m_prongUpButton.whenPressed(new ProngsUp(Robot._prongsSubsystem));
+	    m_prongDownButton.whenPressed(new ProngsDown(Robot._prongsSubsystem));
+	}
+	
 	public double getDriveJoystickForward() {
 		return _driveJoystick.getY();
 	}
