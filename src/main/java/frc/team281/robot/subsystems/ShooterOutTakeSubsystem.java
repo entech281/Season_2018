@@ -18,10 +18,10 @@ public class ShooterOutTakeSubsystem extends Subsystem {
 	}
 
 	public void shooterOutBelow() {
-		m_shooterOuttake.set(-.5);
+		m_shooterOuttake.set(-1);
 	}
 	public void shooterOutAbove() {
-		m_shooterOuttake.set(.5);
+		m_shooterOuttake.set(1);
 	}
 		public void initDefaultCommand() {
     }
