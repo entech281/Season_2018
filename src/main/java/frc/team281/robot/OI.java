@@ -40,6 +40,8 @@ public class OI {
 			return a*a;
 		}
 	}
+	
+	// Multiple branch issue was here
 	public double getDriveJoystickLateral() {
 		double a= _driveJoystick.getX();
 		if(a<0) {
