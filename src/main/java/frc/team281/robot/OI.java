@@ -5,6 +5,8 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.team281.robot.commands.ProngsUp;
 import frc.team281.robot.commands.ProngsDown;
 import frc.team281.robot.commands.ShooterOutTakeAbove;
+import frc.team281.robot.commands.ShooterOutTakeSTOP;
+import frc.team281.robot.commands.ShooterInTakeSTOP;
 import frc.team281.robot.commands.ShooterInTake;
 import frc.team281.robot.commands.ShooterOutTakeBelow;
 /**
@@ -23,8 +25,11 @@ public class OI {
 	    m_prongUpButton.whenPressed(new ProngsUp(Robot._prongsSubsystem));
 	    m_prongDownButton.whenPressed(new ProngsDown(Robot._prongsSubsystem));
 	    m_shootUpButton.whileHeld(new ShooterOutTakeAbove(Robot.m_ShooterOutTakeSubsystem));
+	    m_shootUpButton.whenReleased(new ShooterOutTakeSTOP(Robot.m_ShooterOutTakeSubsystem));
 	    m_shootDownButton.whileHeld(new ShooterOutTakeBelow(Robot.m_ShooterOutTakeSubsystem));
+	    m_shootDownButton.whenReleased(new ShooterOutTakeSTOP(Robot.m_ShooterOutTakeSubsystem));
 	    m_IntakeButton.whileHeld(new ShooterInTake(Robot.m_ShooterInTakeSubsystem));
+	    m_IntakeButton.whenReleased(new ShooterInTakeSTOP(Robot.m_ShooterInTakeSubsystem));
 	}
 	
 	public double getDriveJoystickForward() {
