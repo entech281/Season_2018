@@ -16,6 +16,9 @@ public class RobotMap {
 
 	public static int driveJoystick = 0;
 	
+	//shooter CANids
+	public static int shooterIntakeCANid = 4;
+	public static int shooterOuttakeCANid = 5;
 	// Pneumatic solenoids
 	public static int prongsUpSolenoid = 0;
 	public static int prongsDownSolenoid = 1;
