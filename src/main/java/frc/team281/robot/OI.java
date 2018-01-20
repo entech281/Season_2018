@@ -45,9 +45,9 @@ public class OI {
 	public double getDriveJoystickLateral() {
 		double a= _driveJoystick.getX();
 		if(a<0) {
-			return -a*a;
+			return -Math.pow(a, 1.5);
 		} else {
-			return a*a;
+			return Math.pow(a, 1.5);
 		}
 	}
 	//// CREATING BUTTONS
