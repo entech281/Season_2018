@@ -28,5 +28,5 @@ public class RobotMap {
 	public static int prongsDownButton = 3;
 	public static int shootUpButton = 6;
 	public static int shootDownButton = 4;
-	public static int InTakeButton = 7;
+	public static int InTakeButton = 2;
 }
