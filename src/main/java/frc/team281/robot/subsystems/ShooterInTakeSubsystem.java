@@ -18,7 +18,7 @@ public class ShooterInTakeSubsystem extends Subsystem {
 	}
 
 	public void shooterIn() {
-		m_shooterIntake.set(.5);
+		m_shooterIntake.set(-.5);
 	}
 
     public void initDefaultCommand() {
