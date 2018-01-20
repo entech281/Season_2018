@@ -22,9 +22,9 @@ public class OI {
 	public void teleopPeriodic() {
 	    m_prongUpButton.whenPressed(new ProngsUp(Robot._prongsSubsystem));
 	    m_prongDownButton.whenPressed(new ProngsDown(Robot._prongsSubsystem));
-	    m_shootUpButton.whenPressed(new ShooterOutTakeAbove(Robot.m_ShooterOutTakeSubsystem));
-	    m_shootDownButton.whenPressed(new ShooterOutTakeBelow(Robot.m_ShooterOutTakeSubsystem));
-	    m_IntakeButton.whenPressed(new ShooterInTake(Robot.m_ShooterInTakeSubsystem));
+	    m_shootUpButton.whileHeld(new ShooterOutTakeAbove(Robot.m_ShooterOutTakeSubsystem));
+	    m_shootDownButton.whileHeld(new ShooterOutTakeBelow(Robot.m_ShooterOutTakeSubsystem));
+	    m_IntakeButton.whileHeld(new ShooterInTake(Robot.m_ShooterInTakeSubsystem));
 	}
 	
 	public double getDriveJoystickForward() {
