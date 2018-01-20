@@ -10,8 +10,8 @@ import frc.team281.robot.subsystems.ShooterOutTakeSubsystem;
  *
  */
 public class ShooterInTakeSTOP extends Command {
-	private ShooterOutTakeSubsystem inTake;
-	public ShooterInTakeSTOP(ShooterOutTakeSubsystem inTake) {
+	private ShooterInTakeSubsystem inTake;
+	public ShooterInTakeSTOP(ShooterInTakeSubsystem inTake) {
 		// Use requires() here to declare subsystem dependencies
 		this.inTake = inTake;
 		requires(inTake);
