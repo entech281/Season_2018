@@ -4,7 +4,9 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.team281.robot.commands.ProngsUp;
 import frc.team281.robot.commands.ProngsDown;
-
+import frc.team281.robot.commands.ShooterOutTakeAbove;
+import frc.team281.robot.commands.ShooterInTake;
+import frc.team281.robot.commands.ShooterOutTakeBelow;
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
@@ -13,10 +15,16 @@ public class OI {
 	public static Joystick _driveJoystick = new Joystick(RobotMap.driveJoystick);
 	private static JoystickButton m_prongUpButton = new JoystickButton(_driveJoystick, RobotMap.prongsUpButton);
 	private static JoystickButton m_prongDownButton = new JoystickButton(_driveJoystick, RobotMap.prongsDownButton);
+	private static JoystickButton m_shootUpButton = new JoystickButton(_driveJoystick, RobotMap.shootUpButton);
+	private static JoystickButton m_shootDownButton = new JoystickButton(_driveJoystick, RobotMap.shootDownButton);	
+	private static JoystickButton m_IntakeButton = new JoystickButton(_driveJoystick, RobotMap.InTakeButton);
 	
 	public void teleopPeriodic() {
 	    m_prongUpButton.whenPressed(new ProngsUp(Robot._prongsSubsystem));
 	    m_prongDownButton.whenPressed(new ProngsDown(Robot._prongsSubsystem));
+	    m_shootUpButton.whenPressed(new ShooterOutTakeAbove(Robot.m_ShooterOutTakeSubsystem));
+	    m_shootDownButton.whenPressed(new ShooterOutTakeBelow(Robot.m_ShooterOutTakeSubsystem));
+	    m_IntakeButton.whenPressed(new ShooterInTake(Robot.m_ShooterInTakeSubsystem));
 	}
 	
 	public double getDriveJoystickForward() {

@@ -26,4 +26,7 @@ public class RobotMap {
 	// Driver Joystick Buttons
 	public static int prongsUpButton = 5;
 	public static int prongsDownButton = 3;
+	public static int shootUpButton = 6;
+	public static int shootDownButton = 4;
+	public static int InTakeButton = 7;
 }
