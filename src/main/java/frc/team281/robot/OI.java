@@ -35,9 +35,9 @@ public class OI {
 	public double getDriveJoystickForward() {
 		double a= _driveJoystick.getY();
 		if(a<0) {
-			return -a*a;
+			return -Math.pow(-a, RobotMap.JoystickYSoftness);
 		} else {
-			return a*a;
+			return Math.pow(a, RobotMap.JoystickXSoftness);
 		}
 	}
 	
@@ -45,7 +45,7 @@ public class OI {
 	public double getDriveJoystickLateral() {
 		double a= _driveJoystick.getX();
 		if(a<0) {
-			return -Math.pow(a, 1.5);
+			return -Math.pow(-a, 1.5);
 		} else {
 			return Math.pow(a, 1.5);
 		}
