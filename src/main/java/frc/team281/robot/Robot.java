@@ -18,11 +18,11 @@ import frc.team281.robot.subsystems.ShooterInTakeSubsystem;
  */
 public class Robot extends IterativeRobot {
 
-	public final DriveSubsystem _driveSubsystem = new DriveSubsystem();
-	public final static ProngsSubsystem _prongsSubsystem = new ProngsSubsystem();
+	public final        DriveSubsystem          _driveSubsystem           = new DriveSubsystem();
+	public final static ProngsSubsystem         _prongsSubsystem          = new ProngsSubsystem();
 	public final static ShooterOutTakeSubsystem m_ShooterOutTakeSubsystem = new ShooterOutTakeSubsystem();
-	public final static ShooterInTakeSubsystem m_ShooterInTakeSubsystem = new ShooterInTakeSubsystem();
-	public static OI oi;
+	public final static ShooterInTakeSubsystem  m_ShooterInTakeSubsystem  = new ShooterInTakeSubsystem();
+	public       static OI oi;
 
 	/**
 	 * This function is run when the robot is first started up and should be
