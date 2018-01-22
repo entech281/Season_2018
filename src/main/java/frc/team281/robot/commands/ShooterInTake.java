@@ -43,5 +43,6 @@ public class ShooterInTake extends Command {
 	// subsystems is scheduled to run
 	@Override
 	protected void interrupted() {
+        end();
 	}
 }
