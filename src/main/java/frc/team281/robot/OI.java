@@ -20,16 +20,19 @@ public class OI {
 	private static JoystickButton m_shootUpButton = new JoystickButton(_driveJoystick, RobotMap.shootUpButton);
 	private static JoystickButton m_shootDownButton = new JoystickButton(_driveJoystick, RobotMap.shootDownButton);	
 	private static JoystickButton m_IntakeButton = new JoystickButton(_driveJoystick, RobotMap.InTakeButton);
-	
-	public void teleopPeriodic() {
+
+    public OI () {
 	    m_prongUpButton.whenPressed(new ProngsUp(Robot._prongsSubsystem));
 	    m_prongDownButton.whenPressed(new ProngsDown(Robot._prongsSubsystem));
+
 	    m_shootUpButton.whileHeld(new ShooterOutTakeAbove(Robot.m_ShooterOutTakeSubsystem));
-	    m_shootUpButton.whenReleased(new ShooterOutTakeSTOP(Robot.m_ShooterOutTakeSubsystem));
+	    // m_shootUpButton.whenReleased(new ShooterOutTakeSTOP(Robot.m_ShooterOutTakeSubsystem));
+
 	    m_shootDownButton.whileHeld(new ShooterOutTakeBelow(Robot.m_ShooterOutTakeSubsystem));
-	    m_shootDownButton.whenReleased(new ShooterOutTakeSTOP(Robot.m_ShooterOutTakeSubsystem));
+	    // m_shootDownButton.whenReleased(new ShooterOutTakeSTOP(Robot.m_ShooterOutTakeSubsystem));
+
 	    m_IntakeButton.whileHeld(new ShooterInTake(Robot.m_ShooterInTakeSubsystem));
-	    m_IntakeButton.whenReleased(new ShooterInTakeSTOP(Robot.m_ShooterInTakeSubsystem));
+	    // m_IntakeButton.whenReleased(new ShooterInTakeSTOP(Robot.m_ShooterInTakeSubsystem));
 	}
 	
 	public double getDriveJoystickForward() {

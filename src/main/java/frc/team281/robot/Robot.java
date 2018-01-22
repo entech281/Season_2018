@@ -59,7 +59,6 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		oi.teleopPeriodic();
 		Scheduler.getInstance().run();
 	}
 }
