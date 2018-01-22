@@ -14,31 +14,33 @@ import frc.team281.robot.commands.ShooterOutTakeBelow;
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {
-	public  static Joystick       _driveJoystick    = new Joystick(RobotMap.driveJoystick);
-	
-	private static JoystickButton m_prongUpButton   = new JoystickButton(_driveJoystick, RobotMap.prongsUpButton  );
+	public static Joystick _driveJoystick = new Joystick(RobotMap.driveJoystick);
+	private static JoystickButton m_prongUpButton = new JoystickButton(_driveJoystick, RobotMap.prongsUpButton);
 	private static JoystickButton m_prongDownButton = new JoystickButton(_driveJoystick, RobotMap.prongsDownButton);
-	private static JoystickButton m_shootUpButton   = new JoystickButton(_driveJoystick, RobotMap.shootUpButton   );
-	private static JoystickButton m_shootDownButton = new JoystickButton(_driveJoystick, RobotMap.shootDownButton );	
-	private static JoystickButton m_IntakeButton    = new JoystickButton(_driveJoystick, RobotMap.InTakeButton    );
-	
-	public void teleopPeriodic() {
-	    m_prongUpButton.  whenPressed( new ProngsUp(           Robot._prongsSubsystem         ));
-	    m_prongDownButton.whenPressed( new ProngsDown(         Robot._prongsSubsystem         ));
-	    m_shootUpButton.  whileHeld(   new ShooterOutTakeAbove(Robot.m_ShooterOutTakeSubsystem));
-	    m_shootUpButton.  whenReleased(new ShooterOutTakeSTOP( Robot.m_ShooterOutTakeSubsystem));
-	    m_shootDownButton.whileHeld(   new ShooterOutTakeBelow(Robot.m_ShooterOutTakeSubsystem));
-	    m_shootDownButton.whenReleased(new ShooterOutTakeSTOP( Robot.m_ShooterOutTakeSubsystem));
-	    m_IntakeButton.   whileHeld(   new ShooterInTake(      Robot.m_ShooterInTakeSubsystem ));
-	    m_IntakeButton.   whenReleased(new ShooterInTakeSTOP(  Robot.m_ShooterInTakeSubsystem ));
+	private static JoystickButton m_shootUpButton = new JoystickButton(_driveJoystick, RobotMap.shootUpButton);
+	private static JoystickButton m_shootDownButton = new JoystickButton(_driveJoystick, RobotMap.shootDownButton);	
+	private static JoystickButton m_IntakeButton = new JoystickButton(_driveJoystick, RobotMap.InTakeButton);
+
+    public OI () {
+	    m_prongUpButton.whenPressed(new ProngsUp(Robot._prongsSubsystem));
+	    m_prongDownButton.whenPressed(new ProngsDown(Robot._prongsSubsystem));
+
+	    m_shootUpButton.whileHeld(new ShooterOutTakeAbove(Robot.m_ShooterOutTakeSubsystem));
+	    // m_shootUpButton.whenReleased(new ShooterOutTakeSTOP(Robot.m_ShooterOutTakeSubsystem));
+
+	    m_shootDownButton.whileHeld(new ShooterOutTakeBelow(Robot.m_ShooterOutTakeSubsystem));
+	    // m_shootDownButton.whenReleased(new ShooterOutTakeSTOP(Robot.m_ShooterOutTakeSubsystem));
+
+	    m_IntakeButton.whileHeld(new ShooterInTake(Robot.m_ShooterInTakeSubsystem));
+	    // m_IntakeButton.whenReleased(new ShooterInTakeSTOP(Robot.m_ShooterInTakeSubsystem));
 	}
 	
 	public double getDriveJoystickForward() {
 		double a= _driveJoystick.getY();
 		if(a<0) {
-			return -Math.pow(-a, RobotMap.JoystickYSoftness);
+			return -Math.pow(-a,RobotMap.JoystickYSoftness);
 		} else {
-			return Math.pow(a, RobotMap.JoystickYSoftness);
+			return Math.pow(a,RobotMap.JoystickYSoftness);
 		}
 	}
 	
