@@ -9,6 +9,7 @@ import frc.team281.robot.commands.ShooterOutTakeSTOP;
 import frc.team281.robot.commands.ShooterInTakeSTOP;
 import frc.team281.robot.commands.ShooterInTake;
 import frc.team281.robot.commands.ShooterOutTakeBelow;
+import frc.team281.robot.commands.CompleteBallShoot;;
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
@@ -20,6 +21,7 @@ public class OI {
 	private static JoystickButton m_shootUpButton = new JoystickButton(_driveJoystick, RobotMap.shootUpButton);
 	private static JoystickButton m_shootDownButton = new JoystickButton(_driveJoystick, RobotMap.shootDownButton);	
 	private static JoystickButton m_IntakeButton = new JoystickButton(_driveJoystick, RobotMap.InTakeButton);
+	private static JoystickButton m_Effshooter = new JoystickButton(_driveJoystick, RobotMap.Effshooter);
 
     public OI () {
 	    m_prongUpButton.whenPressed(new ProngsUp(Robot._prongsSubsystem));
@@ -33,6 +35,8 @@ public class OI {
 
 	    m_IntakeButton.whileHeld(new ShooterInTake(Robot.m_ShooterInTakeSubsystem));
 	    // m_IntakeButton.whenReleased(new ShooterInTakeSTOP(Robot.m_ShooterInTakeSubsystem));
+	    
+	    m_Effshooter.whenPressed(new CompleteBallShoot(Robot._prongsSubsystem, Robot.m_ShooterInTakeSubsystem, Robot.m_ShooterOutTakeSubsystem));
 	}
 	
 	public double getDriveJoystickForward() {

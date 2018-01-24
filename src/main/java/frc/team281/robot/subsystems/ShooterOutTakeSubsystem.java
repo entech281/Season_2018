@@ -23,6 +23,9 @@ public class ShooterOutTakeSubsystem extends Subsystem {
 	public void shooterOutAbove() {
 		m_shooterOuttake.set(1);
 	}
+	public void shooterOutSLOW() {
+		m_shooterOuttake.set(-.25);
+	}
 		public void initDefaultCommand() {
     }
 }

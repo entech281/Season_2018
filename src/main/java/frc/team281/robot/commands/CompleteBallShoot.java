@@ -24,7 +24,7 @@ public class CompleteBallShoot extends Command {
 		Prongs.lower();
 		SIntake.shooterIn();
 		for(int i=0;i<500;i++) {
-			SOutake.shooterOutBelow();
+			SOutake.shooterOutSLOW();
 		}
 		for(int i=0;i<500;i++) {
 			SOutake.shooterOutAbove();
