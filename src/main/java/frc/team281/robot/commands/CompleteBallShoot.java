@@ -22,12 +22,13 @@ public class CompleteBallShoot extends Command {
 	protected void execute() {
 		Prongs.lower();
 		SIntake.shooterIn();
-		for(int i=0;i<RobotMap.timeUp;i++) {
-			SOutake.shooterOutSLOW();
-		}
 		for(int i=0;i<RobotMap.timeDown;i++) {
 			SOutake.shooterOutAbove();
 		}
+		for(int i=0;i<RobotMap.timeUp;i++) {
+			SOutake.shooterOutSLOW();
+		}
+		
 		SIntake.stop();
 		SOutake.stop();
 	}
