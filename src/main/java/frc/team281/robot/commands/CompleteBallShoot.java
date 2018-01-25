@@ -1,7 +1,6 @@
 package frc.team281.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
-
-
+import frc.team281.robot.RobotMap;
 import frc.team281.robot.subsystems.*;
 public class CompleteBallShoot extends Command {
 	private ProngsSubsystem Prongs;
@@ -23,13 +22,13 @@ public class CompleteBallShoot extends Command {
 	protected void execute() {
 		Prongs.lower();
 		SIntake.shooterIn();
-		for(int i=0;i<500;i++) {
+		for(int i=0;i<RobotMap.timeUp;i++) {
 			SOutake.shooterOutSLOW();
 		}
-		for(int i=0;i<500;i++) {
+		for(int i=0;i<RobotMap.timeDown;i++) {
 			SOutake.shooterOutAbove();
 		}
-		
+		SIntake.stop();
 		SOutake.stop();
 	}
 

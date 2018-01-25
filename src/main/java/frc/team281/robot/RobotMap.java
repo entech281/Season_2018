@@ -29,7 +29,10 @@ public class RobotMap {
 	public static int shootDownButton  = 4;
 	public static int InTakeButton     = 2;
 	public static int Effshooter     = 1;
-	//Joystick adjustments 
+	//Joystick drive adjustments 
 	public static double JoystickYSoftness = 1.5;
 	public static double JoystickXSoftness = 1.5;
+	//CompleteBallShoot adjustments
+	public static int timeUp=6;
+	public static int timeDown=16;
 }
