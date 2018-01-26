@@ -1,54 +1,12 @@
 package frc.team281.robot.commands;
-import edu.wpi.first.wpilibj.command.Command;
-import frc.team281.robot.RobotMap;
-import frc.team281.robot.subsystems.*;
-public class CompleteBallShoot extends Command {
-	private ProngsSubsystem Prongs;
-	private ShooterInTakeSubsystem SIntake;
-	private ShooterOutTakeSubsystem SOutake;
-	public CompleteBallShoot(ProngsSubsystem Prongs,ShooterInTakeSubsystem SIntake,ShooterOutTakeSubsystem SOutake) {
-		this.Prongs  = Prongs;
-		this.SIntake = SIntake;
-		this.SOutake = SOutake;
-		requires(Prongs);
-		requires(SIntake);
-		requires(SOutake);
+import edu.wpi.first.wpilibj.command.CommandGroup;
+import frc.team281.robot.Robot;
+import frc.team281.robot.Robot;
+import frc.team281.robot.commands.*;
+public class CompleteBallShoot extends CommandGroup {
+	public CompleteBallShoot() {
+		addSequential(new ProngsDown(Robot._prongsSubsystem));
+		addParallel(new ShooterOutTakeBelow(Robot.m_ShooterOutTakeSubsystem));
+		addSequential(new ShooterOutTakeAbove(Robot.m_ShooterOutTakeSubsystem));
 	}
-	protected void initialize() {
-	}
-
-	// Called repeatedly when this Command is scheduled to run
-	@Override
-	protected void execute() {
-		Prongs.lower();
-		SIntake.shooterIn();
-		
-		
-		
-		SOutake.shooterOutSLOW();
-		SOutake.shooterOutBelow();
-		
-		SIntake.stop();
-		SOutake.stop();
-	}
-
-	
-	
-
-	// Called once after isFinished returns true
-	@Override
-	protected void end() {
-	}
-
-	// Called when another command which requires one or more of the same
-	// subsystems is scheduled to run
-	@Override
-	protected void interrupted() {
-	}
-	@Override
-	protected boolean isFinished() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 }
