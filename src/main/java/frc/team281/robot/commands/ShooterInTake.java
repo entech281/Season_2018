@@ -25,12 +25,13 @@ public class ShooterInTake extends Command {
 	@Override
 	protected void execute() {
 		inTake.shooterIn();
+		setTimeout(0.5);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
 	@Override
 	protected boolean isFinished() {
-		return false;
+		return isTimedOut();
 	}
 
 	// Called once after isFinished returns true
