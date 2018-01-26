@@ -15,6 +15,7 @@ public class ShooterOutTakeBelow extends Command {
 		// Use requires() here to declare subsystem dependencies
 		this.inTake = inTake;
 		requires(inTake);
+		setTimeout(0.5);
 	}
 
 	// Called just before this Command runs the first time
@@ -26,7 +27,7 @@ public class ShooterOutTakeBelow extends Command {
 	@Override
 	protected void execute() {
 		inTake.shooterOutBelow();
-		setTimeout(0.5);
+		
 	}
 
 	// Make this return true when this Command no longer needs to run execute()

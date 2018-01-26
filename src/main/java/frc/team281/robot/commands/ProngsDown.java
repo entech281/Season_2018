@@ -13,6 +13,7 @@ public class ProngsDown extends Command {
 		// Use requires() here to declare subsystem dependencies
 		this.prongs = prongs;
 		requires(prongs);
+		setTimeout(0.5);
 	}
 
 	// Called just before this Command runs the first time
@@ -29,7 +30,7 @@ public class ProngsDown extends Command {
 	// Make this return true when this Command no longer needs to run execute()
 	@Override
 	protected boolean isFinished() {
-		return false;
+		return isTimedOut();
 	}
 
 	// Called once after isFinished returns true
