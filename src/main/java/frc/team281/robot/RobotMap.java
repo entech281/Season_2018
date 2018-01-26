@@ -32,7 +32,4 @@ public class RobotMap {
 	//Joystick drive adjustments 
 	public static double JoystickYSoftness = 1.5;
 	public static double JoystickXSoftness = 1.5;
-	//CompleteBallShoot adjustments
-	public static int timeUp=6;
-	public static int timeDown=16;
 }
