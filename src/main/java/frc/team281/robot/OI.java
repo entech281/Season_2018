@@ -36,7 +36,7 @@ public class OI {
 	    m_IntakeButton.whileHeld(new ShooterInTake(Robot.m_ShooterInTakeSubsystem));
 	    // m_IntakeButton.whenReleased(new ShooterInTakeSTOP(Robot.m_ShooterInTakeSubsystem));
 	    
-	    m_Effshooter.whenPressed(new CompleteBallShoot(Robot._prongsSubsystem, Robot.m_ShooterInTakeSubsystem, Robot.m_ShooterOutTakeSubsystem));
+	    m_Effshooter.whenPressed(new CompleteBallShoot());
 	}
 	
 	public double getDriveJoystickForward() {
