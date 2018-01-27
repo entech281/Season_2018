@@ -10,6 +10,7 @@
 
 #include <WPILib.h>
 #include <ctre/Phoenix.h>
+#include <networktables/NetworkTableInstance.h>
 #if NAVX
 #include <AHRS.h>
 #endif
@@ -86,7 +87,8 @@ private:
     ADIS16448_IMU *m_imu;
 #endif
 
-    std::shared_ptr<NetworkTable> m_ntTable;
+    nt::NetworkTableInstance m_ntInstance;
+    std::shared_ptr <nt::NetworkTable> m_ntTable;
     int    m_missingRPiCount;
     int    m_rpi_lastseq;
     int    m_rpi_seq;

@@ -218,6 +218,9 @@ void DriveSubsystem::RobotInit()
     }
     m_currentYawAngle = NormalizeYaw(m_ahrs->GetYaw() - m_pRobot->InitialYaw());
 #endif
+
+    m_ntInstance = nt::NetworkTableInstance::GetDefault();
+    m_ntInstance.SetUpdateRate(0.01);
 }
 
 void DriveSubsystem::DisabledInit()
@@ -471,7 +474,7 @@ void DriveSubsystem::GetVisionData()
     //static Timer rpi_timer;
 	bool last_visionTargetsFound;
 
-    m_ntTable = NetworkTable::GetTable(POSITION_TABLE);
+    m_ntTable = m_ntInstance.GetTable(POSITION_TABLE);
     m_ntTable->PutBoolean(RIO_ALIVE_KEY,true);
     m_rpi_seq = m_ntTable->GetNumber(RPI_SEQUENCE,m_rpi_lastseq);
     if (m_rpi_seq != m_rpi_lastseq) {
