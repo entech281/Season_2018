@@ -11,11 +11,11 @@ import frc.team281.robot.subsystems.ShooterOutTakeSubsystem;
  */
 public class ShooterOutTakeAbove extends Command {
 	private ShooterOutTakeSubsystem inTake;
-	public ShooterOutTakeAbove(ShooterOutTakeSubsystem inTake,double d) {
+	public ShooterOutTakeAbove(ShooterOutTakeSubsystem inTake) {
 		// Use requires() here to declare subsystem dependencies
 		this.inTake = inTake;
 		requires(inTake);
-		setTimeout(d);
+		setTimeout(.2);
 	}
 
 	// Called just before this Command runs the first time
