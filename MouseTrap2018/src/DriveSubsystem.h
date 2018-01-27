@@ -9,7 +9,7 @@
 #endif
 
 #include <WPILib.h>
-#include <CANTalon.h>
+#include <ctre/Phoenix.h>
 #if NAVX
 #include <AHRS.h>
 #endif
@@ -72,11 +72,11 @@ private:
     EntechRobot *m_pRobot;
     DriveMode m_currMode;
     Joystick* m_joystick;
-    CANTalon* m_frmotor;
-    CANTalon* m_flmotor;
-    CANTalon* m_rrmotor;
-    CANTalon* m_rlmotor;
-    frc::RobotDrive* m_robotDrive;
+    WPI_TalonSRX* m_frmotor;
+    WPI_TalonSRX* m_flmotor;
+    WPI_TalonSRX* m_rrmotor;
+    WPI_TalonSRX* m_rlmotor;
+    frc::MecanumDrive* m_robotDrive;
 
 #if NAVX
     AHRS *m_ahrs;

@@ -1,4 +1,5 @@
 #include <WPILib.h>
+// #include <NetworkTable.h>
 
 #include "EntechRobot.h"
 #include "RobotConstants.h"
@@ -20,7 +21,7 @@ EntechRobot::EntechRobot()
     , m_dropper(NULL)
     , m_pickup(NULL)
     , m_compressor(NULL)
-    , m_lw(NULL)
+//    , m_lw(NULL)
     , m_logFP(NULL)
     , m_gamepad(NULL)
     , m_gp_useShooterPID(NULL)
@@ -104,7 +105,7 @@ void EntechRobot::CloseLog(void)
 
 void EntechRobot::RobotInit()
 {
-    m_lw = frc::LiveWindow::GetInstance();
+//    m_lw = frc::LiveWindow::GetInstance();
     m_drive = new DriveSubsystem(this,"drive");
     m_climber = new ClimberSubsystem(this, "climber");
     m_shooter = new ShooterSubsystem(this, "shooter");
@@ -778,7 +779,7 @@ void EntechRobot::TestInit()
 void EntechRobot::TestPeriodic()
 {
     /* Update Live Window */
-    m_lw->Run();
+    // m_lw->Run();
 
     for (std::list<RobotSubsystem*>::iterator it = m_robotSubsystems.begin();
          it != m_robotSubsystems.end(); ++it) {
@@ -829,6 +830,11 @@ void EntechRobot::UpdateDashboard()
 void EntechRobot::RegisterSubsystem(RobotSubsystem* subsys)
 {
     m_robotSubsystems.push_back(subsys);
+}
+
+void EntechRobot::RegisterAction(RobotAction* action)
+{
+	m_robotActions.push_back(action);
 }
 
 START_ROBOT_CLASS(EntechRobot);

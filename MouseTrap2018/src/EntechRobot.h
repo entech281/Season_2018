@@ -21,6 +21,7 @@ public:
     virtual ~EntechRobot();
 
     void RegisterSubsystem(RobotSubsystem*);
+    void RegisterAction(RobotAction*);
     bool IsGearDropped(void);
     bool IsPinSensed(void);
     bool IsInAutoDropMode(void);
@@ -56,7 +57,7 @@ private:
     DropperSubsystem *m_dropper;
     PickUpSubsystem  *m_pickup;
     Compressor *m_compressor;
-    LiveWindow *m_lw;
+    // LiveWindow *m_lw;
 
     FILE *m_logFP;
 
@@ -128,5 +129,5 @@ private:
     double m_shooterSpeed;
     double m_shooterTime;
 
-    std::map<std::string, RobotAction*> m_robotActions;
+    std::list<RobotAction*> m_robotActions;
 };

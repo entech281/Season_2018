@@ -9,6 +9,7 @@ OperatorButton::OperatorButton(frc::Joystick *js, int number)
 {
 }
 
+#if 0
 OperatorButton::OperatorButton(int js, int number)
 	: m_buttonNum(number)
     , m_lastState(false)
@@ -22,6 +23,7 @@ OperatorButton::OperatorButton(int number)
 {
 	m_js = frc::Joystick::GetStickForPort(0);
 }
+#endif
 
 OperatorButton::~OperatorButton()
 {

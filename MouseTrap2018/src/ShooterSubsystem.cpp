@@ -30,22 +30,20 @@ void ShooterSubsystem::Forward(double speed)
 {
     m_speed = speed;
     m_mode = kVbus;
-    m_ShooterMotor->SetControlMode(CANTalon::kPercentVbus);
-    m_ShooterMotor->Set(m_speed);
+    m_ShooterMotor->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, m_speed);
 }
 
 void ShooterSubsystem::SetRPM(double rpm)
 {
     m_rpm = rpm;
     m_mode = kRPM;
-    m_ShooterMotor->SetTalonControlMode(CANTalon::kSpeedMode);
-    m_ShooterMotor->Set(m_rpm);
+    m_ShooterMotor->Set(ctre::phoenix::motorcontrol::ControlMode::Velocity, m_rpm);
 }
 
 bool ShooterSubsystem::IsAtTargetRPM(void)
 {
     // if (fabs(m_ShooterMotor->GetSpeed() - m_rpm) < c_rpmTolerance) {
-    if (m_ShooterMotor->GetSpeed() > (m_rpm-c_rpmTolerance)) {
+    if (m_ShooterMotor->GetSelectedSensorVelocity(0) > (m_rpm-c_rpmTolerance)) {
         return true;
     }
     return false;
@@ -63,11 +61,14 @@ void ShooterSubsystem::TriggerClose(void)
 
 void ShooterSubsystem::RobotInit()
 {
-    m_ShooterMotor = new CANTalon(c_ShooterMotor_CANid);
-    m_ShooterMotor->SetFeedbackDevice(CANTalon::QuadEncoder);
-    m_ShooterMotor->ConfigNominalOutputVoltage(+0.0,-0.0);
-    m_ShooterMotor->ConfigMaxOutputVoltage(11.5);
-    m_ShooterMotor->ConfigEncoderCodesPerRev(20);  // actual  encoder docs say 20 pulses per channel
+    m_ShooterMotor = new TalonSRX(c_ShooterMotor_CANid);
+    m_ShooterMotor->ConfigSelectedFeedbackSensor(ctre::phoenix::motorcontrol::FeedbackDevice::QuadEncoder,0,0);
+    m_ShooterMotor->ConfigNominalOutputForward(0.0,0);
+    m_ShooterMotor->ConfigNominalOutputReverse(0.0,0);
+    m_ShooterMotor->ConfigPeakOutputForward(11.5,0);
+    // TODO: Find replacement for next line
+    // m_ShooterMotor->ConfigEncoderCodesPerRev(20);  // actual  encoder docs say 20 pulses per channel
+
     // functions to invert the motor or sensor
     // m_ShooterMotor->SetInverted(true);
     // m_ShooterMotor->SetSensorDirection(true);
@@ -76,8 +77,8 @@ void ShooterSubsystem::RobotInit()
 
     //m_ShooterMotor->SetVelocityMeasurementPeriod(CANTalon::Period_10Ms);
     //m_ShooterMotor->SetVelocityMeasurementWindow(64);
+    //m_ShooterMotor->SetControlMode(CANSpeedController::kPercentVbus);
 
-    m_ShooterMotor->SetControlMode(CANSpeedController::kPercentVbus);
     m_solenoid1 = new Solenoid(c_compressorPCMid, c_shooterSolenoidChannel1);
     m_solenoid2 = new Solenoid(c_compressorPCMid, c_shooterSolenoidChannel2);
 }
@@ -89,19 +90,18 @@ void ShooterSubsystem::SetPIDController(void)
     m_pidP = prefs->GetDouble("shooterP", 22.0);
     m_pidI = prefs->GetDouble("shooterI", 0.0);
     m_pidD = prefs->GetDouble("shooterD", 800.0);
-    m_ShooterMotor->SelectProfileSlot(0);
-    m_ShooterMotor->SetF(m_pidF);
-    m_ShooterMotor->SetP(m_pidP);
-    m_ShooterMotor->SetI(m_pidI);
-    m_ShooterMotor->SetD(m_pidD);
-    m_ShooterMotor->SetAllowableClosedLoopErr(0);
+    m_ShooterMotor->Config_kF(0,m_pidF,0);
+    m_ShooterMotor->Config_kP(0,m_pidP,0);
+    m_ShooterMotor->Config_kI(0,m_pidI,0);
+    m_ShooterMotor->Config_kD(0,m_pidD,0);
+    m_ShooterMotor->SelectProfileSlot(0,0);
+    m_ShooterMotor->ConfigAllowableClosedloopError(0,0,0);
 }
 
 void ShooterSubsystem::UpdateDashboard()
 {
     SmartDashboard::PutNumber("Shooter JS Speed", m_speed);
-    SmartDashboard::PutNumber("Shooter Speed", m_ShooterMotor->GetSpeed());
-    SmartDashboard::PutNumber("Shooter CAN Speed", m_ShooterMotor->GetEncVel());
+    SmartDashboard::PutNumber("Shooter Sensor Speed", m_ShooterMotor->GetSelectedSensorVelocity(0));
 }
 
 void ShooterSubsystem::LogHeader(FILE *fp)
@@ -111,12 +111,11 @@ void ShooterSubsystem::LogHeader(FILE *fp)
 
 void ShooterSubsystem::LogData(FILE *fp)
 {
-    fprintf(fp,"%lf,%d,",m_ShooterMotor->GetSpeed(),m_shoot);
+    fprintf(fp,"%d,%d,",m_ShooterMotor->GetSelectedSensorVelocity(0),m_shoot);
 }
 
 void ShooterSubsystem::TeleopInit()
 {
-    m_ShooterMotor->SetControlMode(CANSpeedController::kPercentVbus);
     SetPIDController();
     m_shoot = true;
 }
@@ -137,7 +136,7 @@ void ShooterSubsystem::DisabledInit()
 
 void ShooterSubsystem::DisabledPeriodic()
 {
-    m_ShooterMotor->Set(0.0);
+    m_ShooterMotor->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, 0.0);
 }
 
 void ShooterSubsystem::TeleopPeriodic()
@@ -150,13 +149,11 @@ void ShooterSubsystem::AutonomousPeriodic()
     switch (m_mode) {
     case kVbus:
         SmartDashboard::PutString("Shooter Mode", "PercentVbus");
-        m_ShooterMotor->SetControlMode(CANTalon::kPercentVbus);
-        m_ShooterMotor->Set(m_speed);
+        m_ShooterMotor->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, m_speed);
         break;
     case kRPM:
         SmartDashboard::PutString("Shooter Mode", "SpeedMode");
-        m_ShooterMotor->SetTalonControlMode(CANTalon::kSpeedMode);
-        m_ShooterMotor->Set(m_rpm);
+        m_ShooterMotor->Set(ctre::phoenix::motorcontrol::ControlMode::Velocity, m_rpm);
         break;
     }
     if (m_shoot) {

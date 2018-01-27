@@ -19,10 +19,12 @@ const char* RobotAction::GetName()
     return m_name.c_str();
 }
 
+#if 0
 std::string RobotAction::GetName()
 {
   return m_name;
 }
+#endif
 
 void RobotAction::Start(double timeout)
 {
@@ -39,7 +41,7 @@ void RobotAction::DoAction(void)
 {
   if ((m_timeout > 0.0) && (m_timeoutTimer->Get() > m_timeout)) {
     this->Stop();
-    bool m_timedout = true;
+    m_timedout = true;
     m_timeoutTimer->Stop();
   }
 }
