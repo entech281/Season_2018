@@ -1,6 +1,7 @@
-/bin/
-/build/
-/Debug/
+bin/
+build/
+Debug/
+linux_simulate/
 .project
 .gradle
 .classpath
