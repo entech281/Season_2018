@@ -20,6 +20,16 @@ This README would normally document whatever steps are necessary to get your app
 * git commit -m 'Enter message here'
 * git push
 
+### To make a new set of changes ###
+* git pull  ( make sure you have latest stuff)
+* git checkout -b <your_initials>_name_for_your_changes
+* cd Yertle2018
+* code all the things
+* ./gradlew build ( make sure your changes build )
+* git push -u origin <your_initials>_name_for_your_changes
+* go to bitbutcket.org and make a new merge request
+* get someone else to approve it and merge it to master
+
 ### To deploy to robot (ie. yertle) ###
 * Have the code on your computer you want to test (see 
 * Switch to robot's internet hotspot (ie. 281_yertle)
