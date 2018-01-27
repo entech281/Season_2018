@@ -1,5 +1,5 @@
 #include <WPILib.h>
-// #include <NetworkTable.h>
+#include <networktables/NetworkTableInstance.h>
 
 #include "EntechRobot.h"
 #include "RobotConstants.h"
@@ -64,8 +64,8 @@ EntechRobot::EntechRobot()
     , m_shooterTime(4.5)
 {
     m_robotSubsystems.clear();
-    NetworkTable::SetServerMode();
-    NetworkTable::SetUpdateRate(0.01);
+    nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault();
+    inst.SetUpdateRate(0.01);
 }
 
 EntechRobot::~EntechRobot() {}
@@ -830,11 +830,6 @@ void EntechRobot::UpdateDashboard()
 void EntechRobot::RegisterSubsystem(RobotSubsystem* subsys)
 {
     m_robotSubsystems.push_back(subsys);
-}
-
-void EntechRobot::RegisterAction(RobotAction* action)
-{
-	m_robotActions.push_back(action);
 }
 
 START_ROBOT_CLASS(EntechRobot);

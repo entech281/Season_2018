@@ -5,7 +5,6 @@
 #include <map>
 
 #include "RobotSubsystem.h"
-#include "RobotAction.h"
 
 #include "RobotConstants.h"
 #include "DriveSubsystem.h"
@@ -21,7 +20,6 @@ public:
     virtual ~EntechRobot();
 
     void RegisterSubsystem(RobotSubsystem*);
-    void RegisterAction(RobotAction*);
     bool IsGearDropped(void);
     bool IsPinSensed(void);
     bool IsInAutoDropMode(void);
@@ -128,6 +126,4 @@ private:
     Preferences *m_prefs;
     double m_shooterSpeed;
     double m_shooterTime;
-
-    std::list<RobotAction*> m_robotActions;
 };
