@@ -1,28 +1,35 @@
-# README #
+##FAQ for UNIX lang in bash/terminal##
 
-This README would normally document whatever steps are necessary to get your application up and running.
-
-### FAQ for UNIX ###
+_Instructions imply you're already in the `entech281_2018` directory_
 
 ### To pull most recent version of code ###
-* Open bash/terminal
-* cd entech2018_281
-* git checkout master
-* git pull
-* cd yertle2018
-* ./gradlew build
-* ./gradlew eclipse
-* Right click on the entech2018_281 folder in eclipse and click "Refresh"
+1. git checkout `master`
+2. git pull
+3. Refresh `entech2018_281` folder in Eclipse
 
-### To push your changes to github ###
-* cd checkout name-of-branch-you-want-to-push-to
-* git add --all
-* git commit -m 'Enter message here'
-* git push
+### To push your changes to a branch ###
+1. cd checkout `branch you want to push to (NOT master)`
+2. ./gradlew build
+3. git add --all
+4. git commit -m '_Enter message here_'
+5. git push
 
-### To deploy to robot (ie. yertle) ###
-* Have the code on your computer you want to test (see 
-* Switch to robot's internet hotspot (ie. 281_yertle)
-* ./gradlew deploy
+### To make a merge (pull) request ###
+1. Follow all the steps in the section above this
+2. Go to Pull Requests in the `entech2018_281` BitBucket sidebar
+3. Click on Create Pull Request
+4. Select branch you want merged and which branch you want to merge it into
+5. Write a __descriptive title and description__ (in description also explain what review you want made of your code)
+6. Create the Pull Request
+7. Wait for "buddy coders" to review and accept the merge (pull) request
 
-### Last updated 1/27/18 by Santiago G ###
+### To deploy to robot ###
+1. Have the code you want to test _on your computer already_ (either by writing it locally or pulling it from a branch)
+2. Connect to robot's WiFi hotspot 
+3. ./gradlew deploy
+4. Restart Robot Code in the Driver's Station
+
+#### Helpful commands ####
+pwd (to find current directory)
+
+##### Last updated 1/27/18 by Santiago #####
