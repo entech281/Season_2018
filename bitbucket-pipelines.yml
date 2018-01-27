@@ -7,5 +7,4 @@ pipelines:
           - gradle
         script: # Modify the commands below to build your repository.
           - cd Yertle2018
-          - cd PowerUProbot2018
           - bash ./gradlew build jacocoTestReport
