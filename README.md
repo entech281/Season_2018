@@ -1,6 +1,6 @@
 ##FAQ for UNIX lang in bash/terminal##
 
-_Instructions imply you're already in the `entech2018_281` directory_
+_Instructions imply you're already in the `entech281_2018` directory_
 
 ### To pull most recent version of code ###
 1. git checkout `master`
@@ -21,12 +21,15 @@ _Instructions imply you're already in the `entech2018_281` directory_
 4. Select branch you want merged and which branch you want to merge it into
 5. Write a __descriptive title and description__ (in description also explain what review you want made of your code)
 6. Create the Pull Request
-7. Wait for 1, 2, 3, ... "buddy coders" to review and accept the merge
+7. Wait for "buddy coders" to review and accept the merge (pull) request
 
 ### To deploy to robot ###
 1. Have the code you want to test _on your computer already_ (either by writing it locally or pulling it from a branch)
 2. Connect to robot's WiFi hotspot 
 3. ./gradlew deploy
 4. Restart Robot Code in the Driver's Station
+
+#### Helpful commands ####
+pwd (to find current directory)
 
 ##### Last updated 1/27/18 by Santiago #####
