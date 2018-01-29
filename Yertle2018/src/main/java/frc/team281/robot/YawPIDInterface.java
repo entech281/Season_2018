@@ -24,7 +24,6 @@ public class YawPIDInterface implements PIDSource, PIDOutput {
 	@Override
 	public void setPIDSourceType(PIDSourceType pidSource) {
 		// TODO Auto-generated method stub
-		
 	}
 	@Override
 	public PIDSourceType getPIDSourceType() {
