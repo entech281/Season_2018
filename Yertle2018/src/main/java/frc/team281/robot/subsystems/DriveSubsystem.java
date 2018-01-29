@@ -4,6 +4,7 @@ import java.lang.*;
 
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -16,6 +17,7 @@ import com.kauailabs.navx.frc.*;
 
 public class DriveSubsystem extends Subsystem {
 
+    private SmartDashboard m_sd;
     private WPI_TalonSRX _frontLeftMotor;
     private WPI_TalonSRX _frontRightMotor;
     private WPI_TalonSRX _rearLeftMotor;
@@ -53,6 +55,7 @@ public class DriveSubsystem extends Subsystem {
             DriverStation.reportError("Trouble with NavX MXP",false);
         }
 
+        m_sd = new SmartDashboard();
         _frontLeftMotor = new WPI_TalonSRX(RobotMap.frontLeftMotorCANid);
         _frontRightMotor = new WPI_TalonSRX(RobotMap.frontRightMotorCANid);
         _rearLeftMotor = new WPI_TalonSRX(RobotMap.rearLeftMotorCANid);
@@ -132,6 +135,12 @@ public class DriveSubsystem extends Subsystem {
     public void periodic() {
         // function called by scheduler automatically
         // If driving by joystick -- then nothing to do
+        m_sd.putBoolean("Hold Yaw Active: ", m_yawController.isEnabled());
+        m_sd.putNumber("Hold Yaw Angle: ", m_yawHoldAngle);
+        if (m_navXok) {
+            m_sd.putData("NavX: ", m_ahrs);
+            m_sd.putNumber("NavX Yaw Angle: ", m_ahrs.getYaw());
+        }
         if (m_state == DriveState.kDriveJoystick) {
             return;
         }
