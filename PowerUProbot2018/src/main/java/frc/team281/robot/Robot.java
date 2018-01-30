@@ -5,9 +5,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.Compressor;
 import frc.team281.robot.subsystems.DriveSubsystem;
-import frc.team281.robot.subsystems.ProngsSubsystem;
-import frc.team281.robot.subsystems.ShooterOutTakeSubsystem;
-import frc.team281.robot.subsystems.ShooterInTakeSubsystem;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -16,13 +14,10 @@ import frc.team281.robot.subsystems.ShooterInTakeSubsystem;
  * creating this project, you must also update the manifest file in the resource
  * directory.
  */
-public class Robot extends IterativeRobot {
+public class Robot extends IterativeRobot implements CommandCreator {
 
-	public final        DriveSubsystem          _driveSubsystem           = new DriveSubsystem();
-	public final static ProngsSubsystem         _prongsSubsystem          = new ProngsSubsystem();
-	public final static ShooterOutTakeSubsystem m_ShooterOutTakeSubsystem = new ShooterOutTakeSubsystem();
-	public final static ShooterInTakeSubsystem  m_ShooterInTakeSubsystem  = new ShooterInTakeSubsystem();
-	public       static OI oi;
+	public final DriveSubsystem _driveSubsystem = new DriveSubsystem();
+	public static OI oi;
 
 	/**
 	 * This function is run when the robot is first started up and should be

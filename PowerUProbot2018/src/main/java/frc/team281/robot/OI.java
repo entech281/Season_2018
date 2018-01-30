@@ -1,46 +1,23 @@
 package frc.team281.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import frc.team281.robot.commands.ProngsUp;
-import frc.team281.robot.commands.ProngsDown;
-import frc.team281.robot.commands.ShooterOutTakeAbove;
-import frc.team281.robot.commands.ShooterOutTakeSTOP;
-import frc.team281.robot.commands.ShooterInTakeSTOP;
-import frc.team281.robot.commands.ShooterInTake;
-import frc.team281.robot.commands.ShooterOutTakeBelow;
-import frc.team281.robot.commands.CompleteBallShoot;;
+
+
+
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {
-	public static Joystick _driveJoystick = new Joystick(RobotMap.driveJoystick);
-	private static JoystickButton m_prongUpButton = new JoystickButton(_driveJoystick, RobotMap.prongsUpButton);
-	private static JoystickButton m_prongDownButton = new JoystickButton(_driveJoystick, RobotMap.prongsDownButton);
-	private static JoystickButton m_shootUpButton = new JoystickButton(_driveJoystick, RobotMap.shootUpButton);
-	private static JoystickButton m_shootDownButton = new JoystickButton(_driveJoystick, RobotMap.shootDownButton);	
-	private static JoystickButton m_IntakeButton = new JoystickButton(_driveJoystick, RobotMap.InTakeButton);
-	private static JoystickButton m_Effshooter = new JoystickButton(_driveJoystick, RobotMap.Effshooter);
+	public static Joystick driveJoystick = new Joystick(RobotMap.driveJoystick);
+	
 
     public OI () {
-	    m_prongUpButton.whenPressed(new ProngsUp(Robot._prongsSubsystem));
-	    m_prongDownButton.whenPressed(new ProngsDown(Robot._prongsSubsystem));
-
-	    m_shootUpButton.whileHeld(new ShooterOutTakeAbove(Robot.m_ShooterOutTakeSubsystem));
-	    // m_shootUpButton.whenReleased(new ShooterOutTakeSTOP(Robot.m_ShooterOutTakeSubsystem));
-
-	    m_shootDownButton.whileHeld(new ShooterOutTakeBelow(Robot.m_ShooterOutTakeSubsystem));
-	    // m_shootDownButton.whenReleased(new ShooterOutTakeSTOP(Robot.m_ShooterOutTakeSubsystem));
-
-	    m_IntakeButton.whileHeld(new ShooterInTake(Robot.m_ShooterInTakeSubsystem));
-	    // m_IntakeButton.whenReleased(new ShooterInTakeSTOP(Robot.m_ShooterInTakeSubsystem));
 	    
-	    m_Effshooter.whenPressed(new CompleteBallShoot());
 	}
 	
 	public double getDriveJoystickForward() {
-		double a= _driveJoystick.getY();
+		double a = driveJoystick.getY();
 		if(a<0) {
 			return -Math.pow(-a,RobotMap.JoystickYSoftness);
 		} else {
@@ -48,9 +25,9 @@ public class OI {
 		}
 	}
 	
-	// Multiple branch issue was here
+	
 	public double getDriveJoystickLateral() {
-		double a= _driveJoystick.getX();
+		double a= driveJoystick.getX();
 		if(a<0) {
 			return -Math.pow(-a, RobotMap.JoystickXSoftness);
 		} else {
