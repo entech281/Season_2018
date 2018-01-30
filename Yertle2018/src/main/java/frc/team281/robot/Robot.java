@@ -20,7 +20,7 @@ import frc.team281.robot.subsystems.ShooterInTakeSubsystem;
  */
 public class Robot extends TimedRobot {
 
-	public final        DriveSubsystem          _driveSubsystem           = new DriveSubsystem();
+	public final static DriveSubsystem          _driveSubsystem           = new DriveSubsystem();
 	public final static ProngsSubsystem         _prongsSubsystem          = new ProngsSubsystem();
 	public final static ShooterOutTakeSubsystem m_ShooterOutTakeSubsystem = new ShooterOutTakeSubsystem();
 	public final static ShooterInTakeSubsystem  m_ShooterInTakeSubsystem  = new ShooterInTakeSubsystem();

@@ -17,7 +17,6 @@ import com.kauailabs.navx.frc.*;
 
 public class DriveSubsystem extends Subsystem {
 
-    private SmartDashboard m_sd;
     private WPI_TalonSRX _frontLeftMotor;
     private WPI_TalonSRX _frontRightMotor;
     private WPI_TalonSRX _rearLeftMotor;
@@ -42,6 +41,8 @@ public class DriveSubsystem extends Subsystem {
     private double  m_yawHoldAngle;
     YawPIDInterface m_yawPIDInterface;
     PIDController m_yawController;
+    private double m_lastJSforw;
+    private double m_lastJSturn;
 
     public DriveSubsystem() {
         try {
@@ -55,7 +56,6 @@ public class DriveSubsystem extends Subsystem {
             DriverStation.reportError("Trouble with NavX MXP",false);
         }
 
-        m_sd = new SmartDashboard();
         _frontLeftMotor = new WPI_TalonSRX(RobotMap.frontLeftMotorCANid);
         _frontRightMotor = new WPI_TalonSRX(RobotMap.frontRightMotorCANid);
         _rearLeftMotor = new WPI_TalonSRX(RobotMap.rearLeftMotorCANid);
@@ -93,6 +93,8 @@ public class DriveSubsystem extends Subsystem {
 	}
 
 	public void arcadeDrive(double forw, double turn) {
+		m_lastJSforw = forw;
+		m_lastJSturn = turn;
         if (m_yawController.isEnabled()) {
             turn += m_yawPIDInterface.getYawCorrection();
             if ((m_state == DriveState.kDriveJoystick) &&
@@ -135,11 +137,14 @@ public class DriveSubsystem extends Subsystem {
     public void periodic() {
         // function called by scheduler automatically
         // If driving by joystick -- then nothing to do
-        m_sd.putBoolean("Hold Yaw Active: ", m_yawController.isEnabled());
-        m_sd.putNumber("Hold Yaw Angle: ", m_yawHoldAngle);
+    	SmartDashboard.putNumber("Last JS forw: ",m_lastJSforw);
+    	SmartDashboard.putNumber("Last JS turn: ",m_lastJSturn);
+        SmartDashboard.putBoolean("Hold Yaw Active: ", m_yawController.isEnabled());
+        SmartDashboard.putNumber("Hold Yaw Angle: ", m_yawHoldAngle);
+    	SmartDashboard.putNumber("Yaw Correction: ",m_yawPIDInterface.getYawCorrection());
         if (m_navXok) {
-            m_sd.putData("NavX: ", m_ahrs);
-            m_sd.putNumber("NavX Yaw Angle: ", m_ahrs.getYaw());
+            SmartDashboard.putData("NavX: ", m_ahrs);
+            SmartDashboard.putNumber("NavX Yaw Angle: ", m_ahrs.getYaw());
         }
         if (m_state == DriveState.kDriveJoystick) {
             return;
