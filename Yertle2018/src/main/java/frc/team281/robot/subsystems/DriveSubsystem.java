@@ -1,5 +1,6 @@
 package frc.team281.robot.subsystems;
 
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.team281.robot.RobotMap;
 import frc.team281.robot.commands.DriveUsingJoystick;
@@ -18,6 +19,15 @@ public class DriveSubsystem extends Subsystem {
 	WPI_TalonSRX _frontRightMotor = new WPI_TalonSRX(RobotMap.frontRightMotorCANid);
 	WPI_TalonSRX _rearLeftMotor = new WPI_TalonSRX(RobotMap.rearLeftMotorCANid);
 	WPI_TalonSRX _rearRightMotor = new WPI_TalonSRX(RobotMap.rearRightMotorCANid);
+	
+	//Encoder Parameters & Encoder 
+	Encoder enc = new Encoder(0, 1, false, Encoder.EncodingType.k4X);
+	Encoder sampleEncoder = new Encoder(0, 1, false, Encoder.EncodingType.k4X);
+//	sampleEncoder.setMaxPeriod(0.1);
+//	sampleEncoder.setMinRate(10);
+//	sampleEncoder.setDistancePerPulse(5);
+//	sampleEncoder.setReverseDirection(true);
+//	sampleEncoder.setSamplesToAverage(7);
 	
 	private double m_heading;
 	private double m_distance;
