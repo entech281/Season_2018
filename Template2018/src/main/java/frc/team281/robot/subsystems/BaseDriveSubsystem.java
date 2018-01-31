@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-public class DriveSubsystem extends Subsystem {
+public class BaseDriveSubsystem extends BaseSubsystem {
 
   // Put methods for controlling this subsystem
   // here. Call these from Commands.

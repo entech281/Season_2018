@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.util.BaseSystemNotInitializedException;
 /**
  * Utility class for configuring unit tests.
  */
-public final class UnitTestUtility {
+public final class RobotTestSetup {
 
   /**
    * Sets up the base system WPILib so that it does not rely on hardware.

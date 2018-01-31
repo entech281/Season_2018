@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.Compressor;
 import frc.team281.robot.logger.DataLogger;
 import frc.team281.robot.logger.SmartDashboardLogger;
-import frc.team281.robot.subsystems.DriveSubsystem;
+import frc.team281.robot.subsystems.BaseDriveSubsystem;
 import frc.team281.robot.subsystems.ProngsSubsystem;
 import frc.team281.robot.subsystems.ShooterOutTakeSubsystem;
 import frc.team281.robot.subsystems.ShooterInTakeSubsystem;
@@ -22,11 +22,11 @@ import frc.team281.robot.subsystems.ShooterInTakeSubsystem;
  */
 public class Robot extends TimedRobot {
 
-	public  DriveSubsystem          driveSubsystem ;
+	public  BaseDriveSubsystem          driveSubsystem ;
 	public  ProngsSubsystem         prongsSubsystem;
 	public  ShooterOutTakeSubsystem shooterOutTakeSubsystem;
 	public  ShooterInTakeSubsystem  shooterInTakeSubsystem ;
-	public  OI oi;
+	public  OperatorInterface oi;
 	private Command m_AutonomousCommand;
 
 	/**
@@ -35,9 +35,9 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotInit() {
-		oi = new OI();
+		oi = new OperatorInterface();
 		DataLogger dataLogger = new SmartDashboardLogger();
-	  driveSubsystem           = new DriveSubsystem();
+	  driveSubsystem           = new BaseDriveSubsystem();
 	  prongsSubsystem          = new ProngsSubsystem(dataLogger);
 	  shooterOutTakeSubsystem = new ShooterOutTakeSubsystem();
 	  shooterInTakeSubsystem  = new ShooterInTakeSubsystem();		
