@@ -1,0 +1,99 @@
+plugins {
+    id "java"
+    id "eclipse"
+    id "idea"
+    id "jaci.openrio.gradle.GradleRIO" version "2018.01.07"
+    id "jacoco"
+    id 'com.github.ksoichiro.console.reporter' version '0.5.0'
+    id "findbugs"
+}
+
+allprojects {
+    repositories { mavenCentral() }
+}
+
+def TEAM = 281
+def ROBOT_CLASS = "frc.team281.robot.Robot"
+
+// Define my targets (RoboRIO) and artifacts (deployable files)
+// This is added by GradleRIO's backing project EmbeddedTools.
+deploy {
+    targets {
+        target("roborio", jaci.openrio.gradle.frc.RoboRIO) {
+            team = TEAM
+        }
+    }
+    artifacts {
+        artifact('frcJava', jaci.openrio.gradle.frc.FRCJavaArtifact) {
+            targets << "roborio"
+        }
+    }
+}
+
+// Defining my dependencies. In this case, WPILib (+ friends), CTRE Toolsuite (Talon SRX)
+// and NavX.
+dependencies {
+    compile wpilib()
+    compile ctre()
+    compile navx()
+    compile openrio.powerup.matchData()
+    testCompile 'junit:junit:4.12'
+	
+	// https://mvnrepository.com/artifact/org.mockito/mockito-all
+	//testCompile group: 'org.mockito', name: 'mockito-all', version: '1.9.5'
+	
+	// https://mvnrepository.com/artifact/org.powermock/powermock-module-junit4
+	//testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: '1.7.0'
+
+	// https://mvnrepository.com/artifact/org.powermock/powermock-api-mockito
+	//testCompile group: 'org.powermock', name: 'powermock-api-mockito', version: '1.7.0'
+
+	
+	// https://mvnrepository.com/artifact/org.powermock/powermock-core
+	//testCompile group: 'org.powermock', name: 'powermock-core', version: '1.7.0'
+    
+	// https://mvnrepository.com/artifact/org.powermock/powermock-module-junit4-common
+	//compile group: 'org.powermock', name: 'powermock-module-junit4-common', version: '1.7.0'
+
+	
+	testCompile 'org.powermock:powermock-api-mockito:1.6.1'
+	testCompile 'org.powermock:powermock-module-junit4-rule-agent:1.6.1'
+	testCompile 'org.powermock:powermock-module-junit4-rule:1.6.1'
+	testCompile 'org.powermock:powermock-module-junit4:1.6.1'
+    // https://mvnrepository.com/artifact/com.google.guava/guava
+	testCompile group: 'com.google.guava', name: 'guava', version: '23.6-jre'
+    
+}
+
+// Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')
+// in order to make them all available at runtime. Also adding the manifest so WPILib
+// knows where to look for our Robot Class.
+jar {
+    from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    manifest jaci.openrio.gradle.GradleRIOPlugin.javaManifest(ROBOT_CLASS)
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.4'
+}
+
+findbugs{
+    ignoreFailures = true
+    reportLevel = "medium"
+}
+
+tasks.withType(FindBugs) {
+    reports {
+        xml.enabled false
+        html.enabled true
+    }
+}
+
+jacocoTestReport {
+    reports {
+    	csv.enabled true
+        xml.enabled true
+        html.enabled true
+        html.destination file("${buildDir}/jacocoHtml")
+    }
+}
