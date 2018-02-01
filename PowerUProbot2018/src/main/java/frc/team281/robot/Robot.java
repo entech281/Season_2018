@@ -18,7 +18,8 @@ public class Robot extends IterativeRobot implements CommandCreator {
 
 	public final DriveSubsystem _driveSubsystem = new DriveSubsystem();
 	public static OI oi;
-
+	public static double x;
+	public static double y;
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.

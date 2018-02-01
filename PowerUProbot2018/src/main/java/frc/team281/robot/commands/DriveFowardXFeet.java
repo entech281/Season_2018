@@ -4,9 +4,9 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.team281.robot.Robot;
 import frc.team281.robot.subsystems.DriveSubsystem;
 
-public class DriveUsingJoystick extends Command {
+public class DriveFowardXFeet extends Command {
 	private DriveSubsystem drive;
-	public DriveUsingJoystick(DriveSubsystem drive) {
+	public DriveFowardXFeet(DriveSubsystem drive, double x) {
 		// Use requires() here to declare subsystem dependencies
 		this.drive = drive;
 		requires(drive);
@@ -20,7 +20,7 @@ public class DriveUsingJoystick extends Command {
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
-		drive.arcadeDrive(Robot.oi.getDriveJoystickForward(), Robot.oi.getDriveJoystickLateral());
+		drive.arcadeDrive(0, Robot.oi.getDriveJoystickLateral());
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
