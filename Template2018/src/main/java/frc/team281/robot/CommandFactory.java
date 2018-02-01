@@ -1,8 +1,11 @@
 package frc.team281.robot;
 
-import frc.team281.robot.commands.BaseCommand;
+import frc.team281.robot.commands.LifterLowerCommand;
+import frc.team281.robot.commands.LifterRaiseCommand;
 
 public interface CommandFactory {
 
-    BaseCommand createCommand(String commandName);
+    LifterRaiseCommand createRaiseCommand();
+    LifterLowerCommand createLowerCommand();
+
 }

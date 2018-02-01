@@ -1,34 +1,49 @@
 package frc.team281.robot.logger;
 
-import edu.wpi.first.wpilibj.Timer;
+public class ConsoleDataLogger extends DataLogger {
 
-public class ConsoleDataLogger implements DataLogger {
+	private TimeSource timer;
+	public ConsoleDataLogger(TimeSource systemTimer) {
+		this.timer = systemTimer;
+	}
+	protected double startTime = timer.getSystemTime();
 
-  protected double  startTime = Timer.getFPGATimestamp();
-  
-  protected double elapsedSeconds() {
-    return Timer.getFPGATimestamp() - startTime;
-  }
+	protected double elapsedSeconds() {
+		return timer.getSystemTime()- startTime;
+	}
 
-  
-  //TODO: use java.util.logging instead
-  @Override
-  public void logMessage(String key, String value) {
-    System.out.printf("[ %.3f ] - %s::%s\n", elapsedSeconds(), key, value);
-    
-  }
-
-  @Override
-  public void logDouble(String key, double value) {
-    System.out.printf("[ %.3f ] - %s::%.3f\n", elapsedSeconds(),key, value);
-    
-  }
-
+	private void printMessage(String format, String key, Object value) {
+		System.out.printf("[ %.3f ] - %s::" + format + "\n", elapsedSeconds(), computePath(key), value);
+	}
 
 	@Override
-	public void logInt(String key, int value) {
-		System.out.printf("[ %.3f ] - %s::%d\n", elapsedSeconds(),key, value);
-		
+	public void log(String key, String value) {
+		printMessage("%s", key, value);
+	}
+
+	@Override
+	public void log(String key, Object value) {
+		printMessage("%s", key, value.toString());
+	}
+
+	@Override
+	public void log(String key, double value) {
+		printMessage("%.3f", key, value);
+	}
+
+	@Override
+	public void log(String key, int value) {
+		printMessage("%d", key, value);
+	}
+
+	@Override
+	public void log(String key, long value) {
+		printMessage("%d", key, value);
+	}
+
+	@Override
+	public void log(String key, boolean value) {
+		printMessage("%s", key, Boolean.toString(value));
 	}
 
 }

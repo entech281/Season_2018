@@ -2,16 +2,14 @@
 package frc.team281.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-//import frc.team281.robot.commands.Autonomous;
-import edu.wpi.first.wpilibj.Compressor;
+import frc.team281.robot.commands.JoystickDriveCommand;
+import frc.team281.robot.commands.LifterLowerCommand;
+import frc.team281.robot.commands.LifterRaiseCommand;
 import frc.team281.robot.logger.DataLogger;
-import frc.team281.robot.logger.SmartDashboardLogger;
-import frc.team281.robot.subsystems.BaseDriveSubsystem;
-import frc.team281.robot.subsystems.ProngsSubsystem;
-import frc.team281.robot.subsystems.ShooterOutTakeSubsystem;
-import frc.team281.robot.subsystems.ShooterInTakeSubsystem;
+import frc.team281.robot.subsystems.RealDriveSubsystem;
+import frc.team281.robot.subsystems.RealLifterSubsystem;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -20,14 +18,12 @@ import frc.team281.robot.subsystems.ShooterInTakeSubsystem;
  * creating this project, you must also update the manifest file in the resource
  * directory.
  */
-public class Robot extends TimedRobot {
+public class Robot extends TimedRobot implements CommandFactory{
 
-	public  BaseDriveSubsystem          driveSubsystem ;
-	public  ProngsSubsystem         prongsSubsystem;
-	public  ShooterOutTakeSubsystem shooterOutTakeSubsystem;
-	public  ShooterInTakeSubsystem  shooterInTakeSubsystem ;
-	public  OperatorInterface oi;
-	private Command m_AutonomousCommand;
+	private RealDriveSubsystem  driveSubsystem ;
+	private RealLifterSubsystem lifterSubsystem;
+	private OperatorInterface operatorInterface;
+	
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -35,15 +31,15 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotInit() {
-		oi = new OperatorInterface();
-		DataLogger dataLogger = new SmartDashboardLogger();
-	  driveSubsystem           = new BaseDriveSubsystem();
-	  prongsSubsystem          = new ProngsSubsystem(dataLogger);
-	  shooterOutTakeSubsystem = new ShooterOutTakeSubsystem();
-	  shooterInTakeSubsystem  = new ShooterInTakeSubsystem();		
-		Compressor compressor = new Compressor(RobotMap.PCModuleCANid);
-		compressor.start();
-		//m_AutonomousCommand=new Autonomous(_driveSubsystem);
+		
+		
+		lifterSubsystem = new RealLifterSubsystem(DataLogger.realMatchConfiguration());
+		operatorInterface = new OperatorInterface(this);
+		driveSubsystem = new RealDriveSubsystem( DataLogger.realMatchConfiguration(),operatorInterface);
+		
+		driveSubsystem.initialize();
+		operatorInterface.initialize();
+		operatorInterface.initialize();
 	}
 
 	@Override
@@ -84,5 +80,15 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
+	}
+
+	@Override
+	public LifterRaiseCommand createRaiseCommand() {
+		return new LifterRaiseCommand( this.lifterSubsystem, DataLogger.realMatchConfiguration());
+	}
+
+	@Override
+	public LifterLowerCommand createLowerCommand() {
+		return new LifterLowerCommand( this.lifterSubsystem, DataLogger.realMatchConfiguration());
 	}
 }

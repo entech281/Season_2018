@@ -8,30 +8,40 @@ package frc.team281.robot;
  */
 public class RobotMap {
     
-    // CAN ids (must be unique)
-    public static int frontLeftMotorCANid = 0;
-    public static int frontRightMotorCANid = 2;
-    public static int rearLeftMotorCANid = 1;
-    public static int rearRightMotorCANid = 3;
-    public static int PCModuleCANid = 10;
-    public static int driveJoystick = 0;
+	public class CAN {
+	    public static final int FRONT_LEFT_MOTOR = 0;
+	    public static final int FRONT_RIGHT_MOTOR = 2;
+	    public static final int REAR_LEFT_MOTOR = 1;
+	    public static final int REAR_RIGHT_MOTOR = 3;
+	    
+	    public static final int SHOOTER_INTAKE = 4;
+	    public static final int LIFTER_UP_SOLENOID=5;
+	    public static final int PC_MODULE = 10;
+	    
+	}
 
-    // shooter CANids
-    public static int shooterIntakeCANid = 4;
-    public static int shooterOuttakeCANid = 5;
-    // Pneumatic solenoids
-    public static int prongsUpSolenoid = 0;
-    public static int prongsDownSolenoid = 1;
-
-    // Driver Joystick Buttons
-    public static int prongsUpButton = 5;
-    public static int prongsDownButton = 3;
-    public static int shootUpButton = 6;
-    public static int shootDownButton = 4;
-    public static int InTakeButton = 2;
-    public static int Effshooter = 1;
+	public class JoystickPorts {
+		public static final int JOYSTICK_1 = 1;
+	}
+	public class JoystickButtons{
+	    public static final int SHOOTER = 1;		
+	    public static final int INTAKE = 2;
+	    public static final int LIFTER_UP = 3;
+	    public static final int LIFTER_DOWN = 4;
     
-    // Joystick drive adjustments
-    public static double JoystickYSoftness = 1.5;
-    public static double JoystickXSoftness = 1.5;
+	}
+	public class PCMChannel{
+	    public static final int LIFTER_UP_SOLENOID = 2;
+	    public static final int LIFTER_DOWN_SOLENOID = 3;
+		
+	}
+	
+	public class DigitalIO{
+		public static final int UPPER_LIFTER_LIMIT = 0;
+		public static final int LOWER_LFTER_LIMIT = 1;
+		
+	}
+	public static final double JOYSTICK_Y_SOFTNESS = 1.5;
+    public static final double JOYSTICK_X_SOFTNESS = 1.5;
+     
 }

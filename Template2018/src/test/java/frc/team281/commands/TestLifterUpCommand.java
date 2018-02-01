@@ -19,7 +19,7 @@ import frc.team281.robot.subsystems.ProngsSubsystem;
 import frc.team281.robot.subsystems.TestProngsSubsystem;
 
 
-public class TestProngsUpCommand extends BaseTest{
+public class TestLifterUpCommand extends BaseTest{
 	
 	ProngsSubsystem testProngsSubsystem;
 	

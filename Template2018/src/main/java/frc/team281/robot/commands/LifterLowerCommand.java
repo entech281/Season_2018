@@ -3,28 +3,27 @@ package frc.team281.robot.commands;
 import frc.team281.robot.logger.DataLogger;
 import frc.team281.robot.subsystems.BaseLifterSubsystem;
 
-public class LifterRaiseCommand extends BaseCommand {
+public class LifterLowerCommand extends BaseCommand {
 
 	private BaseLifterSubsystem lifter;
 	private boolean completed = false;
-	public LifterRaiseCommand(BaseLifterSubsystem lifter, DataLogger dataLogger) {
+	public LifterLowerCommand(BaseLifterSubsystem lifter, DataLogger dataLogger) {
 		super(lifter, BaseLifterSubsystem.LIFTER_TIMEOUT, dataLogger);
 		this.lifter = lifter;
 	}
 
 	@Override
 	protected void execute() {
-		
-		if (! lifter.isAtTop()) {
-			dataLogger.log("Execute", "Raise");
-			lifter.raise();
+		if (! lifter.isAtBottom()) {
+			dataLogger.log("Execute", "Lower");
+			lifter.lower();
 		} 
 		else{
-			dataLogger.log("Execute", "Cannot Raise");
+			dataLogger.log("Execute", "Cannot Lower");
 			completed = true;
 		}
-	}	
-	
+	}
+
 	@Override
 	protected boolean isFinished() {
 		return completed;

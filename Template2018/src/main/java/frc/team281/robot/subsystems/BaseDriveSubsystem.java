@@ -1,41 +1,35 @@
 package frc.team281.robot.subsystems;
 
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import frc.team281.robot.RobotMap;
-import frc.team281.robot.commands.DriveUsingJoystick;
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
-import edu.wpi.first.wpilibj.command.Subsystem;
+import frc.team281.robot.DriveInstructionSource;
+import frc.team281.robot.commands.JoystickDriveCommand;
+import frc.team281.robot.logger.DataLogger;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+public abstract class BaseDriveSubsystem extends BaseSubsystem {
 
-public class BaseDriveSubsystem extends BaseSubsystem {
+	private DriveInstructionSource driveInstructionSource;
+	
+	public BaseDriveSubsystem(DataLogger dataLogger, DriveInstructionSource driveInstructionSource) {
+		super(dataLogger);
+		this.driveInstructionSource = driveInstructionSource;
+	}
 
-  // Put methods for controlling this subsystem
-  // here. Call these from Commands.
+	public abstract void stop();
 
-  WPI_TalonSRX _frontLeftMotor = new WPI_TalonSRX(RobotMap.frontLeftMotorCANid);
-  WPI_TalonSRX _frontRightMotor = new WPI_TalonSRX(RobotMap.frontRightMotorCANid);
-  WPI_TalonSRX _rearLeftMotor = new WPI_TalonSRX(RobotMap.rearLeftMotorCANid);
-  WPI_TalonSRX _rearRightMotor = new WPI_TalonSRX(RobotMap.rearRightMotorCANid);
+	public abstract void arcadeDrive(double forw, double turn);
 
-  DifferentialDrive _drive = new DifferentialDrive(
-      new SpeedControllerGroup(_frontLeftMotor, _rearLeftMotor),
-      new SpeedControllerGroup(_frontRightMotor, _rearRightMotor));
+	public abstract void tankDrive(double left, double right);
 
-  public void stop() {
-    _drive.tankDrive(0., 0.);
-  }
+	@Override
+	public void initialize() {
+		// TODO Auto-generated method stub
+		
+	}
 
-  public void arcadeDrive(double forw, double turn) {
-    _drive.arcadeDrive(-forw, turn, true);
-  }
+	@Override
+	protected void initDefaultCommand() {
+		setDefaultCommand(  new JoystickDriveCommand(this,dataLogger, driveInstructionSource));
+		
+	}
 
-  public void tankDrive(double left, double right) {
-    _drive.tankDrive(left, right, true);
-  }
 
-  public void initDefaultCommand() {
-    // Set the default command for a subsystem here.
-    setDefaultCommand(new DriveUsingJoystick(this));
-  }
 }
