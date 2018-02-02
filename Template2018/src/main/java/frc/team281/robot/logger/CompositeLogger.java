@@ -52,8 +52,9 @@ public class CompositeLogger extends DataLogger {
 
 	@Override
 	public void log(String key, boolean value) {
-		// TODO Auto-generated method stub
-
+		for (DataLogger l : loggers) {
+			l.log(key, value);
+		}
 	}
 
 }

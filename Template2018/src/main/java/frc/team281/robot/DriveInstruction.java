@@ -26,6 +26,7 @@ public class DriveInstruction {
 	public DriveInstruction(double forward, double lateral) {
 		this.lateral = lateral;
 		this.forward = forward;
+		checkLimits();
 	}
 
 	protected void checkLimits() {
@@ -34,7 +35,7 @@ public class DriveInstruction {
 	}
 
 	protected void checkLimit(String name, double value, double upper, double lower) {
-		if (value < upper || value > lower) {
+		if (value > upper || value < lower) {
 			throw new RuntimeException(name + ": must be between " + lower + " and " + upper + ": got" + value);
 		}
 	}
