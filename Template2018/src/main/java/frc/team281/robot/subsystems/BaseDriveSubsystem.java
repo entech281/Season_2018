@@ -2,17 +2,27 @@ package frc.team281.robot.subsystems;
 
 import frc.team281.robot.DriveInstructionSource;
 import frc.team281.robot.commands.JoystickDriveCommand;
-import frc.team281.robot.logger.DataLogger;
 
+/**
+ * Common base class for the drive subsystem. This contains stuff that's the
+ * same for both real operation and for testing. abstract methods should be
+ * implemented for real robot use, and for testing.
+ * 
+ * Note that this class still doesnt use any wpilib stuff!
+ * 
+ * @author dcowden
+ *
+ */
 public abstract class BaseDriveSubsystem extends BaseSubsystem {
 
-	private DriveInstructionSource driveInstructionSource;
-	
-	public BaseDriveSubsystem(DataLogger dataLogger, DriveInstructionSource driveInstructionSource) {
-		super(dataLogger);
+	protected DriveInstructionSource driveInstructionSource;
+
+	public BaseDriveSubsystem(DriveInstructionSource driveInstructionSource) {
 		this.driveInstructionSource = driveInstructionSource;
 	}
 
+	// these should be implemted using wpilib for the real system,
+	// and using fake data for the test system
 	public abstract void stop();
 
 	public abstract void arcadeDrive(double forw, double turn);
@@ -22,14 +32,16 @@ public abstract class BaseDriveSubsystem extends BaseSubsystem {
 	@Override
 	public void initialize() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
+	// an example where some functionality is shared for both test and drive
+	// implementation
+	// note that tests will need to provide a fake driveinstructionsource too!
 	@Override
 	protected void initDefaultCommand() {
-		setDefaultCommand(  new JoystickDriveCommand(this,dataLogger, driveInstructionSource));
-		
-	}
+		setDefaultCommand(new JoystickDriveCommand(this, driveInstructionSource));
 
+	}
 
 }

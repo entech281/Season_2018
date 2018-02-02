@@ -1,16 +1,23 @@
 package frc.team281.robot.logger;
 
+/**
+ * Base class for DataLoggers. Each logger has a name, and sends data somewhere
+ * for logging and display later.
+ * 
+ * @author dcowden
+ *
+ */
 public abstract class DataLogger {
 
 	public final String SEPARATOR = ".";
 	private String name = "";
 
-	public String getName() {
-		return name;
+	public DataLogger(String name) {
+		this.name = name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public String getName() {
+		return name;
 	}
 
 	public String computePath(String key) {
@@ -28,15 +35,5 @@ public abstract class DataLogger {
 	public abstract void log(String key, long value);
 
 	public abstract void log(String key, boolean value);
-	
-	public static DataLogger realMatchConfiguration() {
-		return new CompositeLogger ( 
-				new SmartDashboardLogger(), 
-				new ConsoleDataLogger(new WpilibTimeSource())
-				);
-	}
-	public static DataLogger testingConfiguration() {
-		return new ConsoleDataLogger(new WpilibTimeSource());
-	}
 
 }

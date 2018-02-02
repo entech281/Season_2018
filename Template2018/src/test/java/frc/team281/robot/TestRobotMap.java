@@ -6,17 +6,23 @@ import frc.team281.robot.RobotMap;
 
 import static org.junit.Assert.assertTrue;
 
+/**
+ * some really simple tests to prove that robot map works ok.
+ * 
+ * @author dcowden
+ *
+ */
 public class TestRobotMap {
 
-    public static void assertPositive(int value) {
-	assertTrue(value >= 0);
-    }
+	public static void assertPositive(int value) {
+		assertTrue(value >= 0);
+	}
 
-    @Test
-    public void testRobotMapItems() {
-	assertPositive(RobotMap.frontLeftMotorCANid);
-	assertPositive(RobotMap.frontRightMotorCANid);
-	assertPositive(RobotMap.rearLeftMotorCANid);
-	assertPositive(RobotMap.rearRightMotorCANid);
-    }
+	@Test
+	public void testRobotMapItems() {
+		assertPositive(RobotMap.CAN.FRONT_LEFT_MOTOR);
+		assertPositive(RobotMap.CAN.FRONT_RIGHT_MOTOR);
+		assertPositive(RobotMap.CAN.REAR_LEFT_MOTOR);
+		assertPositive(RobotMap.CAN.REAR_RIGHT_MOTOR);
+	}
 }

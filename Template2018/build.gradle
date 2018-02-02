@@ -60,8 +60,8 @@ task wrapper(type: Wrapper) {
 }
 
 findbugs{
-    ignoreFailures = true
-    reportLevel = "medium"
+    ignoreFailures = false
+    reportLevel = "high"
 }
 
 tasks.withType(FindBugs) {
@@ -79,3 +79,37 @@ jacocoTestReport {
         html.destination file("${buildDir}/jacocoHtml")
     }
 }
+
+//Additional SourceSets can be added to the jacocoOfflineSourceSets as needed by 
+project.ext.jacocoOfflineSourceSets = [ 'main' ]
+task doJacocoOfflineInstrumentation(dependsOn: [ classes, project.configurations.jacocoAnt ]) {
+    inputs.files classes.outputs.files
+    File outputDir = new File(project.buildDir, 'instrumentedClasses')
+    outputs.dir outputDir
+    doFirst {
+        project.delete(outputDir)
+        ant.taskdef(
+            resource: 'org/jacoco/ant/antlib.xml',
+            classpath: project.configurations.jacocoAnt.asPath,
+            uri: 'jacoco'
+        )
+        def instrumented = false
+        jacocoOfflineSourceSets.each { sourceSetName ->
+            if (file(sourceSets[sourceSetName].output.classesDir).exists()) {
+                def instrumentedClassedDir = "${outputDir}/${sourceSetName}"
+                ant.'jacoco:instrument'(destdir: instrumentedClassedDir) {
+                    fileset(dir: sourceSets[sourceSetName].output.classesDir, includes: '**/*.class')
+                }
+                //Replace the classes dir in the test classpath with the instrumented one
+                sourceSets.test.runtimeClasspath -= files(sourceSets[sourceSetName].output.classesDir)
+                sourceSets.test.runtimeClasspath += files(instrumentedClassedDir)
+                instrumented = true
+            }
+        }
+        if (instrumented) {
+            //Disable class verification based on https://github.com/jayway/powermock/issues/375
+            test.jvmArgs += '-noverify'
+        }
+    }
+}
+test.dependsOn doJacocoOfflineInstrumentation

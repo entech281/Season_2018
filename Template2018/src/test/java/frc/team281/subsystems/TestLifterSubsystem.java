@@ -1,64 +1,74 @@
 package frc.team281.subsystems;
 
-import frc.team281.robot.logger.DataLogger;
 import frc.team281.robot.subsystems.BaseLifterSubsystem;
 
-public class TestLifterSubsystem extends BaseLifterSubsystem{
+/**
+ * Test lifter system. This system keeps track of the position, and uses a
+ * datalogger to report when it moves.
+ * 
+ * Note that testsubsystems should be defined in src/test, so that they are not
+ * deployed to the robot.
+ * 
+ * @author dcowden
+ *
+ */
+public class TestLifterSubsystem extends BaseLifterSubsystem {
 
-	public TestLifterSubsystem(DataLogger dataLogger) {
-		super(dataLogger);
+	public static final int POSITION_BOTTOM = 0;
+
+	private int position = POSITION_BOTTOM;
+	private int maxPosition = 0;
+
+	public TestLifterSubsystem(int maxPosition) {
+		super();
+		this.maxPosition = maxPosition;
 	}
 
-	public enum Position {
-		UP,
-		DOWN
-	}
-	
-	private Position position;
-	
-	
-	public Position getPosition() {
-		return position;
+	private void moveUp() {
+		if (position < maxPosition) {
+			this.position += 1;
+		}
 	}
 
-	public void setPosition(Position position) {
-		this.position = position;
+	private void moveDown() {
+		if (position > POSITION_BOTTOM) {
+			this.position -= 1;
+		}
 	}
 
 	@Override
 	public void raise() {
-		dataLogger.log("raise", true);
-		
+		moveUp();
+		dataLogger.log("raise:position", this.position);
+
 	}
 
 	@Override
 	public void lower() {
-		dataLogger.log("lower", true);
-		
+		moveDown();
+		dataLogger.log("lower:position", this.position);
 	}
 
 	@Override
-	public boolean canLower() {
-		// TODO Auto-generated method stub
-		return position == Position.UP;
+	public boolean isAtTop() {
+		return this.position >= this.maxPosition;
 	}
 
 	@Override
-	public boolean canRaise() {
-		// TODO Auto-generated method stub
-		return position == Position.DOWN;
+	public boolean isAtBottom() {
+		return this.position <= POSITION_BOTTOM;
 	}
 
 	@Override
 	public void initialize() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	protected void initDefaultCommand() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

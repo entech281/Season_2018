@@ -1,19 +1,22 @@
 package frc.team281.robot.logger;
 
+/**
+ * logs data to the console ( system.out ) . Useful for unit testing.
+ * 
+ * @author dcowden
+ *
+ */
 public class ConsoleDataLogger extends DataLogger {
 
 	private TimeSource timer;
-	public ConsoleDataLogger(TimeSource systemTimer) {
-		this.timer = systemTimer;
-	}
-	protected double startTime = timer.getSystemTime();
 
-	protected double elapsedSeconds() {
-		return timer.getSystemTime()- startTime;
+	public ConsoleDataLogger(String name, TimeSource systemTimer) {
+		super(name);
+		this.timer = systemTimer;
 	}
 
 	private void printMessage(String format, String key, Object value) {
-		System.out.printf("[ %.3f ] - %s::" + format + "\n", elapsedSeconds(), computePath(key), value);
+		System.out.printf("[ %.3f ] - %s::" + format + "\n", timer.getElapsedSeconds(), computePath(key), value);
 	}
 
 	@Override

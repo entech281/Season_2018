@@ -2,7 +2,6 @@ package frc.team281.robot.commands;
 
 import frc.team281.robot.DriveInstruction;
 import frc.team281.robot.DriveInstructionSource;
-import frc.team281.robot.logger.DataLogger;
 import frc.team281.robot.subsystems.BaseDriveSubsystem;
 
 public class JoystickDriveCommand extends BaseCommand {
@@ -10,9 +9,8 @@ public class JoystickDriveCommand extends BaseCommand {
 	private BaseDriveSubsystem drive;
 	private DriveInstructionSource driveInstructionSource;
 
-	public JoystickDriveCommand(BaseDriveSubsystem drive, DataLogger logger,
-			DriveInstructionSource driveInstructionSource) {
-		super(drive, UNLIMITED_TIMEOUT, logger);
+	public JoystickDriveCommand(BaseDriveSubsystem drive, DriveInstructionSource driveInstructionSource) {
+		super(drive, UNLIMITED_TIMEOUT);
 		this.drive = drive;
 		this.driveInstructionSource = driveInstructionSource;
 	}
@@ -30,15 +28,15 @@ public class JoystickDriveCommand extends BaseCommand {
 	}
 
 	@Override
-	protected boolean isFinished() {
+	public boolean isFinished() {
 		return false;
 	}
 
 	@Override
-	protected void end() {
+	public void end() {
 	}
 
 	@Override
-	protected void interrupted() {
+	public void interrupted() {
 	}
 }

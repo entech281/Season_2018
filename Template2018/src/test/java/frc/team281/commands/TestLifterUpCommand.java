@@ -1,75 +1,62 @@
 package frc.team281.commands;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
 
-import edu.wpi.first.wpilibj.Timer;
-import frc.team281.robot.commands.ProngsDown;
-import frc.team281.robot.commands.ProngsUp;
-import frc.team281.robot.logger.ConsoleDataLogger;
-import frc.team281.robot.logger.DataLogger;
-import frc.team281.robot.subsystems.ProngsSubsystem;
-import frc.team281.robot.subsystems.TestProngsSubsystem;
+import edu.wpi.first.wpilibj.RobotTestUtils;
+import frc.team281.robot.commands.LifterLowerCommand;
+import frc.team281.robot.commands.LifterRaiseCommand;
+import frc.team281.subsystems.TestLifterSubsystem;
 
+/**
+ * Tests that the LifterUpcommand works like we expect. Note that it extends
+ * BestTEst, which sets up wpilib for testingoutside the robot
+ * 
+ * When this test runs, the real commands will run using the real scheduler, but
+ * things will print out in the console
+ * 
+ * @author dcowden
+ *
+ */
+public class TestLifterUpCommand extends BaseTest {
 
-public class TestLifterUpCommand extends BaseTest{
-	
-	ProngsSubsystem testProngsSubsystem;
-	
-	
-	@Before
-	public void setup() {
-	  testProngsSubsystem = PowerMockito.spy( new TestProngsSubsystem(new ConsoleDataLogger()));
-    //mockProngsSubsystem = PowerMockito.spy( new TestProngsSubsystem(new ConsoleDataLogger()) );
-    
-//    doAnswer(new Answer<Object>() {
-//        @Override
-//        public Object answer(InvocationOnMock invocation) throws Throwable {
-//          printMessage("Raise!");         
-//            return null;
-//        }
-//    }).when(mockProngsSubsystem).raise(); 
-//  
-//    doAnswer(new Answer<Object>() {
-//        @Override
-//        public Object answer(InvocationOnMock invocation) throws Throwable {
-//          printMessage("Lower!");
-//            return null;
-//        }
-//    }).when(mockProngsSubsystem).lower();   	  
-	}
-	
+	private TestLifterSubsystem testLifterSubsystem;
+
 	@Test
-	public void executesSingleSimpleCommand() {	
+	public void testCommandFinishesWithinTimeout() {
 
-		ProngsUp p = new ProngsUp(testProngsSubsystem);
-		scheduler.add(p);
-		runForSeconds(1.0);
-		verify(testProngsSubsystem,atLeastOnce()).raise();
+		// set up a spy. that way, we can not only test
+		// our system, but also ensure that methods were called as we expect.
+		// this is called behavior based testing.
+
+		testLifterSubsystem = PowerMockito.spy(new TestLifterSubsystem(10));
+		LifterRaiseCommand ld = new LifterRaiseCommand(testLifterSubsystem);
+		RobotTestUtils.schedule(ld);
+		RobotTestUtils.runForSeconds(1.0);
+		verify(testLifterSubsystem, atLeastOnce()).raise();
+		assertTrue(ld.isFinished());
 	}
-	
+
 	@Test
-	public void executeTwoCommandsOneSubsystem() {
-	    
-		scheduler.add(new ProngsUp(testProngsSubsystem));
-		dataLogger.logMessage("executeTwoCommandsOneSubsystem", "Running for 0.3 sec");
-		runForSeconds(0.3);		
-		dataLogger.logMessage("executeTwoCommandsOneSubsystem", "Creating Command");
-		scheduler.add(new ProngsDown(testProngsSubsystem));
-		dataLogger.logMessage("executeTwoCommandsOneSubsystem", "Running for 0.4 sec");
-		runForSeconds(0.4);
-		
-		//now up should have been called, followed by down
-		verify(testProngsSubsystem,atLeastOnce()).raise();
-		verify(testProngsSubsystem,atLeastOnce()).lower();
-			
-		
+	public void testThatOneCommandCancelsAnother() {
+		testLifterSubsystem = PowerMockito.spy(new TestLifterSubsystem(100));
+		LifterRaiseCommand raiseCommand = new LifterRaiseCommand(testLifterSubsystem, 0.5);
+		LifterLowerCommand lowerCommand = new LifterLowerCommand(testLifterSubsystem, 0.5);
+		RobotTestUtils.schedule(raiseCommand);
+		RobotTestUtils.runForSeconds(0.3);
+		RobotTestUtils.schedule(lowerCommand);
+
+		RobotTestUtils.runForSeconds(0.4);
+
+		assertFalse(raiseCommand.isRunning());
+		// now up should have been called, followed by down
+		verify(testLifterSubsystem, atLeastOnce()).raise();
+		verify(testLifterSubsystem, atLeastOnce()).lower();
+
 	}
 }

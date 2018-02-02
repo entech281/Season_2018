@@ -6,8 +6,14 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.team281.robot.DriveInstructionSource;
 import frc.team281.robot.RobotMap;
-import frc.team281.robot.logger.DataLogger;
 
+/**
+ * This is the drive system that will run in the robot. All the wpilib stuff
+ * goes here.
+ * 
+ * @author dcowden
+ *
+ */
 public class RealDriveSubsystem extends BaseDriveSubsystem {
 
 	private WPI_TalonSRX frontLeftMotor;
@@ -16,8 +22,8 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 	private WPI_TalonSRX rearRightMotor;
 	private DifferentialDrive drive;
 
-	public RealDriveSubsystem(DataLogger dataLogger,DriveInstructionSource driveInstructionSource) {
-		super(dataLogger,driveInstructionSource);
+	public RealDriveSubsystem(DriveInstructionSource driveInstructionSource) {
+		super(driveInstructionSource);
 	}
 
 	@Override
@@ -42,11 +48,6 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 
 	public void tankDrive(double left, double right) {
 		drive.tankDrive(left, right, true);
-	}
-
-	public void initDefaultCommand() {
-		// Set the default command for a subsystem here.
-		// setDefaultCommand(new DriveUsingJoystick(this));
 	}
 
 }
