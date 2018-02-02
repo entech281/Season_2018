@@ -35,10 +35,10 @@ public class OperatorInterface implements DriveInstructionSource {
 	@Override
 	public DriveInstruction getNextInstruction() {
 		return new DriveInstruction(adjustJoystickSoftness(RobotMap.JOYSTICK_Y_SOFTNESS, driveJoystick.getY()),
-				adjustJoystickSoftness(RobotMap.JOYSTICK_X_SOFTNESS, driveJoystick.getX()));
+				OperatorInterface.adjustJoystickSoftness(RobotMap.JOYSTICK_X_SOFTNESS, driveJoystick.getX()));
 	}
 
-	protected double adjustJoystickSoftness(double softnessFactor, double rawValue) {
+	public static double adjustJoystickSoftness(double softnessFactor, double rawValue) {
 		double adjusted = Math.pow(rawValue, softnessFactor);
 
 		if (rawValue < 0) {
