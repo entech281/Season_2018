@@ -5,7 +5,7 @@ _Instructions imply you're already in the `entech281_2018` directory_
 ### To pull most recent version of code ###
 1. git checkout `master`
 2. git pull
-3. Refresh `entech2018_281` folder in Eclipse
+3. Refresh folder in Eclipse if needed
 
 ### To push your changes to a branch ###
 1. cd checkout `branch you want to push to (NOT master)`
@@ -31,5 +31,8 @@ _Instructions imply you're already in the `entech281_2018` directory_
 
 #### Helpful commands ####
 pwd (to find current directory)
+ls (to see the names of all files inside current directory)
+git reset --hard _commit identifier code_ (to rollback to a previous commit)
+git reset --hard (to reset to the last _git pull_'d version of a branch)
 
-##### Last updated 1/27/18 by Santiago #####
+##### Last updated 2/1/18 by Santiago #####
