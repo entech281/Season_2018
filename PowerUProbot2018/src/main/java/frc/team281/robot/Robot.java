@@ -20,6 +20,7 @@ public class Robot extends IterativeRobot implements CommandCreator {
 	public static OI oi;
 	public static double x;
 	public static double y;
+	public static double theta;
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.

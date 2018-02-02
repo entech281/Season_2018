@@ -6,6 +6,7 @@ import frc.team281.robot.commands.DriveUsingJoystick;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
+
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 
@@ -14,14 +15,15 @@ public class DriveSubsystem extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 	
-	WPI_TalonSRX _frontLeftMotor = new WPI_TalonSRX(RobotMap.frontLeftMotorCANid);
+	WPI_TalonSRX _frontLeftMotor  = new WPI_TalonSRX(RobotMap.frontLeftMotorCANid );
 	WPI_TalonSRX _frontRightMotor = new WPI_TalonSRX(RobotMap.frontRightMotorCANid);
-	WPI_TalonSRX _rearLeftMotor = new WPI_TalonSRX(RobotMap.rearLeftMotorCANid);
-	WPI_TalonSRX _rearRightMotor = new WPI_TalonSRX(RobotMap.rearRightMotorCANid);
+	WPI_TalonSRX _rearLeftMotor   = new WPI_TalonSRX(RobotMap.rearLeftMotorCANid  );
+	WPI_TalonSRX _rearRightMotor  = new WPI_TalonSRX(RobotMap.rearRightMotorCANid );
 
 	DifferentialDrive _drive = new DifferentialDrive(
 			new SpeedControllerGroup(_frontLeftMotor, _rearLeftMotor),
-			new SpeedControllerGroup(_frontRightMotor,_rearRightMotor) );
+			new SpeedControllerGroup(_frontRightMotor,_rearRightMotor)
+			);
 
 	public void stop() {
 		_drive.tankDrive(0.,0.);

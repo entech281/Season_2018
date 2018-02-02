@@ -3,12 +3,14 @@ package frc.team281.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.team281.robot.Robot;
 import frc.team281.robot.subsystems.DriveSubsystem;
-
-public class TurnThetaRadians extends Command {
+//import 
+public class TurnToThetaRadians extends Command {
 	private DriveSubsystem drive;
-	public TurnThetaRadians(DriveSubsystem drive, double x) {
+	private double x;
+	public TurnToThetaRadians(DriveSubsystem drive, double theta) {
 		// Use requires() here to declare subsystem dependencies
 		this.drive = drive;
+		this.x=theta;
 		requires(drive);
 	}
 
