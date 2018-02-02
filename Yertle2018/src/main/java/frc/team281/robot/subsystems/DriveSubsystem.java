@@ -8,8 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import frc.team281.robot.RobotMap;
-import frc.team281.robot.YawPIDInterface;
+import frc.team281.robot.*;
 import frc.team281.robot.commands.DriveUsingJoystick;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -17,101 +16,102 @@ import com.kauailabs.navx.frc.*;
 
 public class DriveSubsystem extends Subsystem {
 
-    private WPI_TalonSRX _frontLeftMotor;
-    private WPI_TalonSRX _frontRightMotor;
-    private WPI_TalonSRX _rearLeftMotor;
-    private WPI_TalonSRX _rearRightMotor;
+    private WPI_TalonSRX mFrontLeftMotor;
+    private WPI_TalonSRX mFrontRightMotor;
+    private WPI_TalonSRX mRearLeftMotor;
+    private WPI_TalonSRX mRearRightMotor;
 
-    private DifferentialDrive _drive;
+    private DifferentialDrive mDrive;
 
     private enum DriveState {
         kDriveJoystick,
         kDriveDistance
     }
 
-    private DriveState m_state;
+    private DriveState mState;
 
-    static final double kYaw_P = 0.03;
-    static final double kYaw_I = 0.0001;
-    static final double kYaw_D = 0.01;
-    static final double kYaw_ToleranceDegrees = 2.0;
+    static final double YAW_P = 0.03;
+    static final double YAW_I = 0.0001;
+    static final double YAW_D = 0.01;
+    static final double YAW_ToleranceDegrees = 2.0;
 
-    private AHRS m_ahrs;
-    private boolean m_navXok;
-    private double  m_yawHoldAngle;
-    YawPIDInterface m_yawPIDInterface;
-    PIDController m_yawController;
-    private double m_lastJSforw;
-    private double m_lastJSturn;
+    private AHRS mNavX;
+    private boolean mNavXok;
+    private double  mYawHoldAngle;
+    YawPIDInterface mYawPIDInterface;
+    PIDController mYawController;
+    private double mLastJSforw;
+    private double mLastJSturn;
 
     public DriveSubsystem() {
         try {
-            m_ahrs = new AHRS(SerialPort.Port.kMXP);
-            m_ahrs.reset();
+            mNavX = new AHRS(SerialPort.Port.kMXP);
+            mNavX.reset();
             DriverStation.reportWarning("NavX MXP found",false);
-            m_navXok = true;
+            mNavXok = true;
         }
         catch(Exception e) {
-            m_navXok = false;
+            mNavXok = false;
             DriverStation.reportError("Trouble with NavX MXP",false);
         }
 
-        _frontLeftMotor = new WPI_TalonSRX(RobotMap.frontLeftMotorCANid);
-        _frontRightMotor = new WPI_TalonSRX(RobotMap.frontRightMotorCANid);
-        _rearLeftMotor = new WPI_TalonSRX(RobotMap.rearLeftMotorCANid);
-        _rearRightMotor = new WPI_TalonSRX(RobotMap.rearRightMotorCANid);
+        mFrontLeftMotor = new WPI_TalonSRX(RobotMap.frontLeftMotorCANid);
+        mFrontRightMotor = new WPI_TalonSRX(RobotMap.frontRightMotorCANid);
+        mRearLeftMotor = new WPI_TalonSRX(RobotMap.rearLeftMotorCANid);
+        mRearRightMotor = new WPI_TalonSRX(RobotMap.rearRightMotorCANid);
 
-        _drive = new DifferentialDrive(
-            new SpeedControllerGroup(_frontLeftMotor, _rearLeftMotor),
-            new SpeedControllerGroup(_frontRightMotor,_rearRightMotor) );
+        mDrive = new DifferentialDrive(
+            new SpeedControllerGroup(mFrontLeftMotor, mRearLeftMotor),
+            new SpeedControllerGroup(mFrontRightMotor,mRearRightMotor) );
 
-        m_state = DriveState.kDriveJoystick;
-        m_yawHoldAngle = 0.0;
-        m_yawPIDInterface = new YawPIDInterface(m_ahrs);
-        m_yawController = new PIDController(kYaw_P, kYaw_I, kYaw_D, m_yawPIDInterface, m_yawPIDInterface);
-        m_yawController.setAbsoluteTolerance(kYaw_ToleranceDegrees);
-        m_yawController.setInputRange(-180.0,180.0);
-        m_yawController.setContinuous(true);
-        m_yawController.setOutputRange(-1.0,1.0);
-        m_yawController.disable();
+        mState = DriveState.kDriveJoystick;
+        mYawHoldAngle = 0.0;
+        mYawPIDInterface = new YawPIDInterface(mNavX);
+        mYawController = new PIDController(YAW_P, YAW_I, YAW_D, mYawPIDInterface, mYawPIDInterface);
+        mYawController.setAbsoluteTolerance(YAW_ToleranceDegrees);
+        mYawController.setInputRange(-180.0,180.0);
+        mYawController.setContinuous(true);
+        mYawController.setOutputRange(-1.0,1.0);
+        mYawController.disable();
 
         // Make sure NavX has finished calibrating
-        if (m_navXok) {
-            while (m_ahrs.isCalibrating()) {
+        if (mNavXok) {
+            while (mNavX.isCalibrating()) {
             	try {
             		Thread.sleep(50);   // 50ms
             	}
             	catch (InterruptedException e) {
             	}
             }
-            m_ahrs.zeroYaw();
+            mNavX.zeroYaw();
         }
     }
 
 	public void stop() {
-		_drive.tankDrive(0.,0.);
+		mDrive.tankDrive(0.,0.);
 	}
 
 	public void arcadeDrive(double forw, double turn) {
-		m_lastJSforw = forw;
-		m_lastJSturn = turn;
-        if (m_yawController.isEnabled()) {
-            turn += m_yawPIDInterface.getYawCorrection();
-            if ((m_state == DriveState.kDriveJoystick) &&
-                (Math.abs(forw) > 0.25) && (Math.abs(turn) > 0.25)) {
-                double ang = Math.toDegrees(Math.atan2(turn,forw));
-                setHoldYawAngle(ang);
+		mLastJSforw = forw;
+		mLastJSturn = turn;
+        if (mYawController.isEnabled()) {
+            turn += mYawPIDInterface.getYawCorrection();
+            if (mState == DriveState.kDriveJoystick) {
+                double ang = Robot.oi.getJoystickDirection();
+                if (Math.abs(ang) <= 180.0) {
+                    setHoldYawAngle(ang);
+                }
             }
         }
-		_drive.arcadeDrive(-forw, turn, true);
+		mDrive.arcadeDrive(-forw, turn, true);
 	}
 
 	public void tankDrive(double left, double right) {
-        if (m_yawController.isEnabled()) {
-            left  += m_yawPIDInterface.getYawCorrection();
-            right -= m_yawPIDInterface.getYawCorrection();
+        if (mYawController.isEnabled()) {
+            left  += mYawPIDInterface.getYawCorrection();
+            right -= mYawPIDInterface.getYawCorrection();
         }
-		_drive.tankDrive(left, right, true);
+		mDrive.tankDrive(left, right, true);
 	}
 
     public void initDefaultCommand() {
@@ -120,33 +120,33 @@ public class DriveSubsystem extends Subsystem {
     }
 
     public void disableHoldYaw() {
-        m_yawController.disable();
+        mYawController.disable();
     }
 
     public void enableHoldYaw() {
-        m_yawController.setSetpoint(m_ahrs.getYaw());
-        m_yawController.enable();
+        mYawController.setSetpoint(mNavX.getYaw());
+        mYawController.enable();
     }
 
     public void setHoldYawAngle(double angle) {
-        m_yawHoldAngle = angle;
-        m_yawController.setSetpoint(m_yawHoldAngle);
+        mYawHoldAngle = angle;
+        mYawController.setSetpoint(mYawHoldAngle);
     }
 
     @Override
     public void periodic() {
         // function called by scheduler automatically
         // If driving by joystick -- then nothing to do
-    	SmartDashboard.putNumber("Last JS forw: ",m_lastJSforw);
-    	SmartDashboard.putNumber("Last JS turn: ",m_lastJSturn);
-        SmartDashboard.putBoolean("Hold Yaw Active: ", m_yawController.isEnabled());
-        SmartDashboard.putNumber("Hold Yaw Angle: ", m_yawHoldAngle);
-    	SmartDashboard.putNumber("Yaw Correction: ",m_yawPIDInterface.getYawCorrection());
-        if (m_navXok) {
-            SmartDashboard.putData("NavX: ", m_ahrs);
-            SmartDashboard.putNumber("NavX Yaw Angle: ", m_ahrs.getYaw());
+    	SmartDashboard.putNumber("Last JS forw: ",mLastJSforw);
+    	SmartDashboard.putNumber("Last JS turn: ",mLastJSturn);
+        SmartDashboard.putBoolean("Hold Yaw Active: ", mYawController.isEnabled());
+        SmartDashboard.putNumber("Hold Yaw Angle: ", mYawHoldAngle);
+    	SmartDashboard.putNumber("Yaw Correction: ",mYawPIDInterface.getYawCorrection());
+        if (mNavXok) {
+            SmartDashboard.putData("NavX: ", mNavX);
+            SmartDashboard.putNumber("NavX Yaw Angle: ", mNavX.getYaw());
         }
-        if (m_state == DriveState.kDriveJoystick) {
+        if (mState == DriveState.kDriveJoystick) {
             return;
         }
     }

@@ -5,21 +5,21 @@ import edu.wpi.first.wpilibj.*;
 import com.kauailabs.navx.frc.*;
 
 public class YawPIDInterface implements PIDSource, PIDOutput {
-    public double m_output;
-    private AHRS m_ahrs;
+    public double mOutput;
+    private AHRS mNavX;
     public YawPIDInterface(AHRS navx) {
-        m_ahrs = navx;
+        mNavX = navx;
     }
     public double getYawCorrection() {
-        return m_output;
+        return mOutput;
     }
     @Override
     public double pidGet() {
-        return m_ahrs.getYaw();
+        return mNavX.getYaw();
     }
     @Override
     public void pidWrite(double output) {
-        m_output = output;
+        mOutput = output;
     }
 	@Override
 	public void setPIDSourceType(PIDSourceType pidSource) {

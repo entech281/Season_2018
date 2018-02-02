@@ -9,7 +9,7 @@ import frc.team281.robot.commands.EnableHoldYaw;
 import frc.team281.robot.commands.DisableHoldYaw;
 import frc.team281.robot.commands.ShooterInTake;
 import frc.team281.robot.commands.ShooterOutTakeBelow;
-import frc.team281.robot.commands.CompleteBallShoot;;
+import frc.team281.robot.commands.CompleteBallShoot;
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
@@ -19,7 +19,7 @@ public class OI {
 	private static JoystickButton m_prongUpButton = new JoystickButton(_driveJoystick, RobotMap.prongsUpButton);
 	private static JoystickButton m_prongDownButton = new JoystickButton(_driveJoystick, RobotMap.prongsDownButton);
 	private static JoystickButton m_shootUpButton = new JoystickButton(_driveJoystick, RobotMap.shootUpButton);
-	private static JoystickButton m_shootDownButton = new JoystickButton(_driveJoystick, RobotMap.shootDownButton);	
+	private static JoystickButton m_shootDownButton = new JoystickButton(_driveJoystick, RobotMap.shootDownButton);
 	private static JoystickButton m_IntakeButton = new JoystickButton(_driveJoystick, RobotMap.InTakeButton);
 	private static JoystickButton m_Effshooter = new JoystickButton(_driveJoystick, RobotMap.Effshooter);
 	private static JoystickButton m_holdYawButton = new JoystickButton(_driveJoystick, RobotMap.holdYawButton);
@@ -36,13 +36,13 @@ public class OI {
 
 	    m_IntakeButton.whileHeld(new ShooterInTake(Robot.m_ShooterInTakeSubsystem));
 	    // m_IntakeButton.whenReleased(new ShooterInTakeSTOP(Robot.m_ShooterInTakeSubsystem));
-	    
+
 	    m_Effshooter.whenPressed(new CompleteBallShoot());
 
-	    m_holdYawButton.whenPressed(new EnableHoldYaw(Robot._driveSubsystem));
-	    m_holdYawButton.whenReleased(new DisableHoldYaw(Robot._driveSubsystem));
+        m_holdYawButton.whenPressed(new EnableHoldYaw(Robot._driveSubsystem));
+        m_holdYawButton.whenReleased(new DisableHoldYaw(Robot._driveSubsystem));
 	}
-	
+
 	public double getDriveJoystickForward() {
 		double a= _driveJoystick.getY();
 		if(a<0) {
@@ -51,7 +51,7 @@ public class OI {
 			return Math.pow(a,RobotMap.JoystickYSoftness);
 		}
 	}
-	
+
 	// Multiple branch issue was here
 	public double getDriveJoystickLateral() {
 		double a= _driveJoystick.getX();
@@ -60,6 +60,15 @@ public class OI {
 		} else {
 			return Math.pow(a, RobotMap.JoystickXSoftness);
 		}
+	}
+
+	public double getJoystickDirection() {
+		double x= _driveJoystick.getX();
+		double y= _driveJoystick.getY();
+		if ((Math.abs(x) < 0.01) && (Math.abs(y) < 0.01)) {
+			return 360.0;
+		}
+		return Math.toDegrees(Math.atan2(x,-y));
 	}
 	//// CREATING BUTTONS
 	// One type of button is a joystick button which is any button on a
