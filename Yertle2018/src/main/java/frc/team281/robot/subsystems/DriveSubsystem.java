@@ -1,7 +1,5 @@
 package frc.team281.robot.subsystems;
 
-import java.lang.*;
-
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.*;
@@ -14,7 +12,7 @@ import frc.team281.robot.commands.DriveUsingJoystick;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.*;
 
-public class DriveSubsystem extends Subsystem {
+public class DriveSubsystem extends Subsystem implements PIDOutput {
 
     private WPI_TalonSRX mFrontLeftMotor;
     private WPI_TalonSRX mFrontRightMotor;
@@ -30,16 +28,16 @@ public class DriveSubsystem extends Subsystem {
 
     private DriveState mState;
 
-    static final double YAW_P = 0.03;
-    static final double YAW_I = 0.0001;
-    static final double YAW_D = 0.01;
+    static final double YAW_P = 0.05;
+    static final double YAW_I = 0.0;
+    static final double YAW_D = 0.1;
     static final double YAW_ToleranceDegrees = 2.0;
 
     private AHRS mNavX;
     private boolean mNavXok;
     private boolean mFieldAbsolute;
     private double  mYawHoldAngle;
-    YawPIDInterface mYawPIDInterface;
+    private double  mYawCorrection;
     PIDController mYawController;
     private double mLastJSforw;
     private double mLastJSturn;
@@ -68,8 +66,8 @@ public class DriveSubsystem extends Subsystem {
         mState = DriveState.kDriveJoystick;
         mFieldAbsolute = false;
         mYawHoldAngle = 0.0;
-        mYawPIDInterface = new YawPIDInterface(mNavX);
-        mYawController = new PIDController(YAW_P, YAW_I, YAW_D, mYawPIDInterface, mYawPIDInterface);
+        mYawCorrection = 0.0;
+        mYawController = new PIDController(YAW_P, YAW_I, YAW_D, mNavX, this);
         mYawController.setAbsoluteTolerance(YAW_ToleranceDegrees);
         mYawController.setInputRange(-180.0,180.0);
         mYawController.setContinuous(true);
@@ -102,35 +100,34 @@ public class DriveSubsystem extends Subsystem {
                 mDrive.tankDrive(0.0,0.0);
             } else {
                 double js_ang = Robot.oi.getJoystickDirection();
-                double yaw_corr = mYawPIDInterface.getYawCorrection();
                 double delta_ang = js_ang - mNavX.getYaw();
                 while (delta_ang > 180.0)
                     delta_ang -= 360.0;
                 while (delta_ang < -180.0)
                     delta_ang += 360.0;
                 if (Math.abs(delta_ang) > 90.0) {
-                    mDrive.tankDrive(yaw_corr, -yaw_corr);
+                    mDrive.tankDrive(mYawCorrection, -mYawCorrection);
                 } else {
                     js_mag = js_mag * Math.cos(Math.PI*(delta_ang)/180.0);
-                    mDrive.tankDrive(js_mag+yaw_corr,js_mag-yaw_corr);
+                    mDrive.tankDrive(js_mag+mYawCorrection,js_mag-mYawCorrection);
                 }
                 setHoldYawAngle(js_ang);
             }
         } else {
             if (mYawController.isEnabled()) {
-                turn += mYawPIDInterface.getYawCorrection();
+                turn += mYawCorrection;
             }
             mDrive.arcadeDrive(-forw, turn, true);
         }
 	}
 
-	public void tankDrive(double left, double right) {
+    public void tankDrive(double left, double right) {
         if (mYawController.isEnabled()) {
-            left  += mYawPIDInterface.getYawCorrection();
-            right -= mYawPIDInterface.getYawCorrection();
+            left  += mYawCorrection;
+            right -= mYawCorrection;
         }
-		mDrive.tankDrive(left, right, true);
-	}
+	mDrive.tankDrive(left, right, true);
+    }
 
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
@@ -155,6 +152,7 @@ public class DriveSubsystem extends Subsystem {
     }
 
     public void disableHoldYaw() {
+	mYawCorrection = 0.0;
         mYawController.disable();
     }
 
@@ -168,6 +166,10 @@ public class DriveSubsystem extends Subsystem {
         return true;
     }
 
+    public void pidWrite(double output) {
+        mYawCorrection = output;
+    }
+
     @Override
     public void periodic() {
         // function called by scheduler automatically
@@ -176,7 +178,8 @@ public class DriveSubsystem extends Subsystem {
     	SmartDashboard.putNumber("Last JS turn: ",mLastJSturn);
         SmartDashboard.putBoolean("Hold Yaw Active: ", mYawController.isEnabled());
         SmartDashboard.putNumber("Hold Yaw Angle: ", mYawHoldAngle);
-    	SmartDashboard.putNumber("Yaw Correction: ",mYawPIDInterface.getYawCorrection());
+    	SmartDashboard.putNumber("Yaw Correction: ",mYawCorrection);
+    	SmartDashboard.putData("YawController:", mYawController);
         if (mNavXok) {
             SmartDashboard.putData("NavX: ", mNavX);
             SmartDashboard.putNumber("NavX Yaw Angle: ", mNavX.getYaw());
