@@ -36,6 +36,7 @@ public class Robot extends TimedRobot implements CommandFactory {
 
 		// create the objects for the real match
 		DataLoggerFactory.configureForMatch();
+
 		lifterSubsystem = new RealLifterSubsystem();
 		operatorInterface = new OperatorInterface(this);
 		driveSubsystem = new RealDriveSubsystem(operatorInterface);
