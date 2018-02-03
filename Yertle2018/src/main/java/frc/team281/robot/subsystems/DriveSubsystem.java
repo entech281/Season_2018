@@ -21,13 +21,7 @@ public class DriveSubsystem extends Subsystem {
 	WPI_TalonSRX _rearRightMotor = new WPI_TalonSRX(RobotMap.rearRightMotorCANid);
 	
 	//Encoder Parameters & Encoder 
-	Encoder enc = new Encoder(0, 1, false, Encoder.EncodingType.k4X);
-	Encoder sampleEncoder = new Encoder(0, 1, false, Encoder.EncodingType.k4X);
-//	sampleEncoder.setMaxPeriod(0.1);
-//	sampleEncoder.setMinRate(10);
-//	sampleEncoder.setDistancePerPulse(5);
-//	sampleEncoder.setReverseDirection(true);
-//	sampleEncoder.setSamplesToAverage(7);
+
 	
 	private double m_heading;
 	private double m_distance;
@@ -62,4 +56,8 @@ public class DriveSubsystem extends Subsystem {
     public boolean isFinished() {
     		return true;
     }
+    public void periodic() { 
+    	_frontLeftMotor.getSelectedSensorPosition(0);
+    }
+    	
 }
