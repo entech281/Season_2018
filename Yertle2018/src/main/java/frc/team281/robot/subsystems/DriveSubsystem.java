@@ -37,6 +37,7 @@ public class DriveSubsystem extends Subsystem {
 
     private AHRS mNavX;
     private boolean mNavXok;
+    private boolean mFieldAbsolute;
     private double  mYawHoldAngle;
     YawPIDInterface mYawPIDInterface;
     PIDController mYawController;
@@ -65,6 +66,7 @@ public class DriveSubsystem extends Subsystem {
             new SpeedControllerGroup(mFrontRightMotor,mRearRightMotor) );
 
         mState = DriveState.kDriveJoystick;
+        mFieldAbsolute = false;
         mYawHoldAngle = 0.0;
         mYawPIDInterface = new YawPIDInterface(mNavX);
         mYawController = new PIDController(YAW_P, YAW_I, YAW_D, mYawPIDInterface, mYawPIDInterface);
@@ -94,16 +96,32 @@ public class DriveSubsystem extends Subsystem {
 	public void arcadeDrive(double forw, double turn) {
 		mLastJSforw = forw;
 		mLastJSturn = turn;
-        if (mYawController.isEnabled()) {
-            turn += mYawPIDInterface.getYawCorrection();
-            if (mState == DriveState.kDriveJoystick) {
-                double ang = Robot.oi.getJoystickDirection();
-                if (Math.abs(ang) <= 180.0) {
-                    setHoldYawAngle(ang);
+        if (mFieldAbsolute) {
+            double js_mag = Robot.oi.getJoystickMagnitude();
+            if (Math.abs(js_mag) > 180.0) {
+                mDrive.tankDrive(0.0,0.0);
+            } else {
+                double js_ang = Robot.oi.getJoystickDirection();
+                double yaw_corr = mYawPIDInterface.getYawCorrection();
+                double delta_ang = js_ang - mNavX.getYaw();
+                while (delta_ang > 180.0)
+                    delta_ang -= 360.0;
+                while (delta_ang < -180.0)
+                    delta_ang += 360.0;
+                if (Math.abs(delta_ang) > 90.0) {
+                    mDrive.tankDrive(yaw_corr, -yaw_corr);
+                } else {
+                    js_mag = js_mag * Math.cos(Math.PI*(delta_ang)/180.0);
+                    mDrive.tankDrive(js_mag+yaw_corr,js_mag-yaw_corr);
                 }
+                setHoldYawAngle(js_ang);
             }
+        } else {
+            if (mYawController.isEnabled()) {
+                turn += mYawPIDInterface.getYawCorrection();
+            }
+            mDrive.arcadeDrive(-forw, turn, true);
         }
-		mDrive.arcadeDrive(-forw, turn, true);
 	}
 
 	public void tankDrive(double left, double right) {
@@ -119,11 +137,13 @@ public class DriveSubsystem extends Subsystem {
         setDefaultCommand(new DriveUsingJoystick(this));
     }
 
-    public void disableHoldYaw() {
+    public void disableFieldAbsolute() {
+        mFieldAbsolute = false;
         mYawController.disable();
     }
 
-    public void enableHoldYaw() {
+    public void enableFieldAbsolute() {
+        mFieldAbsolute = true;
         mYawController.setSetpoint(mNavX.getYaw());
         mYawController.enable();
     }

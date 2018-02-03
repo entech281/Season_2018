@@ -5,8 +5,8 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.team281.robot.commands.ProngsUp;
 import frc.team281.robot.commands.ProngsDown;
 import frc.team281.robot.commands.ShooterOutTakeAbove;
-import frc.team281.robot.commands.EnableHoldYaw;
-import frc.team281.robot.commands.DisableHoldYaw;
+import frc.team281.robot.commands.EnableFieldAbsolute;
+import frc.team281.robot.commands.DisableFieldAbsolute;
 import frc.team281.robot.commands.ShooterInTake;
 import frc.team281.robot.commands.ShooterOutTakeBelow;
 import frc.team281.robot.commands.CompleteBallShoot;
@@ -22,7 +22,7 @@ public class OI {
 	private static JoystickButton m_shootDownButton = new JoystickButton(_driveJoystick, RobotMap.shootDownButton);
 	private static JoystickButton m_IntakeButton = new JoystickButton(_driveJoystick, RobotMap.InTakeButton);
 	private static JoystickButton m_Effshooter = new JoystickButton(_driveJoystick, RobotMap.Effshooter);
-	private static JoystickButton m_holdYawButton = new JoystickButton(_driveJoystick, RobotMap.holdYawButton);
+	private static JoystickButton m_fieldAbsoluteButton = new JoystickButton(_driveJoystick, RobotMap.holdYawButton);
 
     public OI () {
 	    m_prongUpButton.whenPressed(new ProngsUp(Robot._prongsSubsystem));
@@ -39,8 +39,8 @@ public class OI {
 
 	    m_Effshooter.whenPressed(new CompleteBallShoot());
 
-        m_holdYawButton.whenPressed(new EnableHoldYaw(Robot._driveSubsystem));
-        m_holdYawButton.whenReleased(new DisableHoldYaw(Robot._driveSubsystem));
+        m_fieldAbsoluteButton.whenPressed(new EnableFieldAbsolute(Robot._driveSubsystem));
+        m_fieldAbsoluteButton.whenReleased(new DisableFieldAbsolute(Robot._driveSubsystem));
 	}
 
 	public double getDriveJoystickForward() {
@@ -69,6 +69,12 @@ public class OI {
 			return 360.0;
 		}
 		return Math.toDegrees(Math.atan2(x,-y));
+	}
+
+	public double getJoystickMagnitude() {
+		double x= _driveJoystick.getX();
+		double y= _driveJoystick.getY();
+		return Math.sqrt(x*x+y*y);
 	}
 	//// CREATING BUTTONS
 	// One type of button is a joystick button which is any button on a

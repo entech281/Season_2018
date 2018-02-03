@@ -7,9 +7,9 @@ import frc.team281.robot.subsystems.DriveSubsystem;
 /**
  *
  */
-public class EnableHoldYaw extends Command {
+public class EnableFieldAbsolute extends Command {
 	private DriveSubsystem m_drive;
-	public EnableHoldYaw(DriveSubsystem drive) {
+	public EnableFieldAbsolute(DriveSubsystem drive) {
 		// Use requires() here to declare subsystem dependencies
 		m_drive = drive;
 		requires(drive);
@@ -18,7 +18,7 @@ public class EnableHoldYaw extends Command {
 	// Called just before this Command runs the first time
 	@Override
 	protected void initialize() {
-		m_drive.enableHoldYaw();
+		m_drive.enableFieldAbsolute();
 	}
 
 	// Called repeatedly when this Command is scheduled to run
