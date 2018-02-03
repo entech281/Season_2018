@@ -29,7 +29,9 @@ public class RobotMap {
 	public static int shootDownButton  = 4;
 	public static int InTakeButton     = 2;
 	public static int Effshooter     = 1;
-	public static int holdYawButton  = 12;
+	public static int setRandomYawButton = 10;
+	public static int disableHoldYawButton = 11;
+	public static int fieldAbsoluteButton  = 12;
 	
 	//Joystick drive adjustments 
 	public static double JoystickYSoftness = 1.5;

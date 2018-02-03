@@ -151,6 +151,21 @@ public class DriveSubsystem extends Subsystem {
     public void setHoldYawAngle(double angle) {
         mYawHoldAngle = angle;
         mYawController.setSetpoint(mYawHoldAngle);
+        mYawController.enable();
+    }
+
+    public void disableHoldYaw() {
+        mYawController.disable();
+    }
+
+    public boolean isAtAngle() {
+        if (mYawController.isEnabled()) {
+           if (Math.abs(mYawHoldAngle-mNavX.getYaw()) < YAW_ToleranceDegrees) {
+                return true;
+           }
+           return false;
+        }
+        return true;
     }
 
     @Override
