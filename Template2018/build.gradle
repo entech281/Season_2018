@@ -8,9 +8,12 @@ plugins {
     id "findbugs"
 }
 
+
 allprojects {
     repositories { mavenCentral() }
 }
+
+
 
 def TEAM = 281
 def ROBOT_CLASS = "frc.team281.robot.Robot"
@@ -61,7 +64,7 @@ task wrapper(type: Wrapper) {
 
 findbugs{
     ignoreFailures = false
-    reportLevel = "medium"
+    reportLevel = "low"
 }
 
 tasks.withType(FindBugs) {

@@ -3,7 +3,7 @@ package frc.team281.subsystems;
 import frc.team281.robot.DriveInstructionSource;
 import frc.team281.robot.subsystems.BaseDriveSubsystem;
 
-public class TestDriveSubsystem extends BaseDriveSubsystem {
+public class FakeDriveSubsystem extends BaseDriveSubsystem {
 
 	private double xPosition = 0.0;
 	private double yPosition = 0.0;
@@ -11,7 +11,7 @@ public class TestDriveSubsystem extends BaseDriveSubsystem {
 	public static final double DRIVE_SPEED = 10.0;
 	public static final double DISTANCE_PER_CLICK = DRIVE_SPEED * 0.020;
 
-	public TestDriveSubsystem(DriveInstructionSource driveInstructionSource) {
+	public FakeDriveSubsystem(DriveInstructionSource driveInstructionSource) {
 		super(driveInstructionSource);
 	}
 

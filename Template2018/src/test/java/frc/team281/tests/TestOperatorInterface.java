@@ -1,8 +1,10 @@
-package frc.team281.robot;
+package frc.team281.tests;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
+
+import frc.team281.robot.OperatorInterface;
 
 public class TestOperatorInterface {
 

@@ -3,7 +3,7 @@ package frc.team281.subsystems;
 import frc.team281.robot.DriveInstruction;
 import frc.team281.robot.DriveInstructionSource;
 
-public class TestDriveInstructionSource implements DriveInstructionSource {
+public class FakeDriveInstructionSource implements DriveInstructionSource {
 
 	public double getJoystickLateral() {
 		return joystickLateral;

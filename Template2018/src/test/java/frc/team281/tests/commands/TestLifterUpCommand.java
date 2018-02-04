@@ -1,4 +1,4 @@
-package frc.team281.commands;
+package frc.team281.tests.commands;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -11,7 +11,8 @@ import org.powermock.api.mockito.PowerMockito;
 import edu.wpi.first.wpilibj.RobotTestUtils;
 import frc.team281.robot.commands.LifterLowerCommand;
 import frc.team281.robot.commands.LifterRaiseCommand;
-import frc.team281.subsystems.TestLifterSubsystem;
+import frc.team281.subsystems.FakeLifterSubsystem;
+import frc.team281.tests.BaseTest;
 
 /**
  * Tests that the LifterUpcommand works like we expect. Note that it extends
@@ -25,7 +26,7 @@ import frc.team281.subsystems.TestLifterSubsystem;
  */
 public class TestLifterUpCommand extends BaseTest {
 
-	private TestLifterSubsystem testLifterSubsystem;
+	private FakeLifterSubsystem testLifterSubsystem;
 
 	@Test
 	public void testCommandFinishesWithinTimeout() {
@@ -34,7 +35,7 @@ public class TestLifterUpCommand extends BaseTest {
 		// our system, but also ensure that methods were called as we expect.
 		// this is called behavior based testing.
 
-		testLifterSubsystem = PowerMockito.spy(new TestLifterSubsystem(10));
+		testLifterSubsystem = PowerMockito.spy(new FakeLifterSubsystem(10));
 		LifterRaiseCommand ld = new LifterRaiseCommand(testLifterSubsystem);
 		RobotTestUtils.schedule(ld);
 		RobotTestUtils.runForSeconds(1.0);
@@ -44,7 +45,7 @@ public class TestLifterUpCommand extends BaseTest {
 
 	@Test
 	public void testThatOneCommandCancelsAnother() {
-		testLifterSubsystem = PowerMockito.spy(new TestLifterSubsystem(100));
+		testLifterSubsystem = PowerMockito.spy(new FakeLifterSubsystem(100));
 		LifterRaiseCommand raiseCommand = new LifterRaiseCommand(testLifterSubsystem, 0.5);
 		LifterLowerCommand lowerCommand = new LifterLowerCommand(testLifterSubsystem, 0.5);
 		RobotTestUtils.schedule(raiseCommand);

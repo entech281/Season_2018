@@ -1,26 +1,27 @@
-package frc.team281.commands;
+package frc.team281.tests.commands;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
 import edu.wpi.first.wpilibj.RobotTestUtils;
-import frc.team281.subsystems.TestDriveInstructionSource;
-import frc.team281.subsystems.TestDriveSubsystem;
+import frc.team281.subsystems.FakeDriveInstructionSource;
+import frc.team281.subsystems.FakeDriveSubsystem;
+import frc.team281.tests.BaseTest;
 
 public class TestDriveSystemCommands extends BaseTest {
 
-	protected TestDriveSubsystem driveSubsystem;
+	protected FakeDriveSubsystem driveSubsystem;
 
 	@Test
 	public void testThatDriveSystemDrives() {
 
 		// this is a fake joystick that simlulates the real one in the tests
 		// initially the joystick is centered.
-		TestDriveInstructionSource testJoystick = new TestDriveInstructionSource();
+		FakeDriveInstructionSource testJoystick = new FakeDriveInstructionSource();
 
 		// the subsystem creates a command for us-- no need to register it!
-		driveSubsystem = new TestDriveSubsystem(testJoystick);
+		driveSubsystem = new FakeDriveSubsystem(testJoystick);
 
 		RobotTestUtils.runForSeconds(0.5);
 
