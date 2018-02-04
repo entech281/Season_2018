@@ -1,4 +1,7 @@
-##FAQ for UNIX lang in bash/terminal##
+### Build Status ###
+[![Build Status](https://travis-ci.org/Greenvillians281/Entech281_2018.svg?branch=master)](https://travis-ci.org/Greenvillians281/Entech281_2018)
+
+### FAQ for UNIX lang in bash/terminal ###
 
 _Instructions imply you're already in the `entech281_2018` directory_
 

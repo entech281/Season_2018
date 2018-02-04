@@ -1,6 +1,8 @@
 bin/
 build/
 Debug/
+.gradle/
+.settings/
 linux_simulate/
 .project
 .gradle
