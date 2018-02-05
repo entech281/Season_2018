@@ -1,8 +1,10 @@
 package frc.team281.robot.subsystems;
 
 import com.ctre.CANTalon;
-import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -33,7 +35,10 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 	public static final double D_MOTOR = 0.0;
 	public static final double F_MOTOR = 0.0;
 	public static final int FIRST_MOTOR_INDEX = 0;
-	public static final int MOTOR_POSITION_TIMEOUT_MILLIS=20000;
+	
+	//recommended value per Software Reference manual
+	//10ms for calls during init, and 0ms for calls during periodic loop
+	public static final int MOTOR_POSITION_TIMEOUT_MILLIS=10;
 	public static final int MOTOR_ACCELERATION=1;
 	public static final int MOTOR_CRUISE_VELOCITY=1;
 	
@@ -43,20 +48,38 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 
 	@Override
 	public synchronized void initialize() {
-	    	//CANTalon ct = new CANTalon(RobotMap.CAN.FRONT_LEFT_MOTOR);
-	    	
+		
+		
 		frontLeftMotor = new WPI_TalonSRX(RobotMap.CAN.FRONT_LEFT_MOTOR);
 		frontRightMotor = new WPI_TalonSRX(RobotMap.CAN.FRONT_RIGHT_MOTOR);
 		rearLeftMotor = new WPI_TalonSRX(RobotMap.CAN.REAR_LEFT_MOTOR);
 		rearRightMotor = new WPI_TalonSRX(RobotMap.CAN.REAR_RIGHT_MOTOR);
-
+		
+		TalonSRX talon = (TalonSRX)frontLeftMotor;
+		
 		drive = new DifferentialDrive(new SpeedControllerGroup(frontLeftMotor, rearLeftMotor),
 				new SpeedControllerGroup(frontRightMotor, rearRightMotor));
 		
 		//frontLeftMotor.getSensorCollection().getQuadraturePosition();
+
+		/* CTRE Magnetic Encoder relative, same as Quadrature */
+		//talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0); /* PIDLoop=0, timeoutMs=0 */
+		/* CTRE Magnetic Encoder absolute (within one rotation), same as PulseWidthEncodedPosition */
+		//talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 0); /* PIDLoop=0, timeoutMs=0 */
 		
+		/* quadrature */
+		
+		//talon.configPeakCurrentLimit(35, 10); /* 35 A */
+		//talon.configPeakCurrentDuration(200, 10); /* 200ms */
+		//talon.configContinuousCurrentLimit(30, 10); /* 30A */
+		//talon.enableCurrentLimit(true); /* turn it on */		
+		talon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0); /* PIDLoop=0, timeoutMs=0 */		
 	}
 
+	//recommended-- start with all gains but P, and work from there
+	//then double the gain until oscillations occur
+	//then add d gain at 10 to 100x P
+	//finally, add I = 0.01xP
 	private void setPID(WPI_TalonSRX talon,  double F, double P, double I, double D , int timeoutMillis){
 
 	    talon.config_kD(FIRST_MOTOR_INDEX, D, timeoutMillis);
@@ -68,9 +91,10 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 	public synchronized void driveDistance(double leftDistanceInches, double rightDistanceInches ){
 	    //ref https://www.chiefdelphi.com/forums/showthread.php?p=1633629
 	    //motionMagic is basically a trade name for a trapezoidal motion profile	 
-	    //a java example : https://github.com/CrossTheRoadElec/FRC-Examples-STEAMWORKS/tree/master/JAVA_MotionMagicExample/src/org/usfirst/frc/team217/robot
-	    //another example of closed loop position
-	    //https://github.com/CrossTheRoadElec/FRC-Examples-STEAMWORKS/blob/master/JAVA_PositionClosedLoop/src/org/usfirst/frc/team469/robot/Robot.java
+	    //a java example : https://github.com/CrossTheRoadElec/Phoenix-Examples-Languages/tree/master/Java/MotionMagic/src/org/usfirst/frc/team217/robot
+		//ctre api doc  http://www.ctr-electronics.com/downloads/api/java/html/index.html
+		//software manual https://github.com/CrossTheRoadElec/Phoenix-Documentation/raw/master/Talon%20SRX%20Victor%20SPX%20-%20Software%20Reference%20Manual.pdf
+		
 	    positionDrivingMode = true;
 	    double leftEncoderClicks = leftDistanceInches * ENCODER_CLICKS_PER_INCH;
 	    double rightEncoderClicks = rightDistanceInches * ENCODER_CLICKS_PER_INCH;
