@@ -42,7 +42,7 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 	}
 
 	@Override
-	public void initialize() {
+	public synchronized void initialize() {
 	    	//CANTalon ct = new CANTalon(RobotMap.CAN.FRONT_LEFT_MOTOR);
 	    	
 		frontLeftMotor = new WPI_TalonSRX(RobotMap.CAN.FRONT_LEFT_MOTOR);
@@ -98,7 +98,7 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 	    rearRightMotor.set(ControlMode.MotionMagic,rightEncoderClicks);	    
 	    
 	}
-	public void stop() {
+	public synchronized void stop() {
 	    if ( ! positionDrivingMode ){
 		drive.tankDrive(0., 0.);
 	    }
