@@ -4,7 +4,11 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-public class TestCompositeLogger {
+import frc.team281.robot.subsystems.BaseSubsystem;
+import frc.team281.subsystems.FakeLifterSubsystem;
+import frc.team281.tests.BaseTest;
+
+public class TestCompositeLogger extends BaseTest {
 
 	
 	@Test
@@ -18,9 +22,10 @@ public class TestCompositeLogger {
 		cdl.log("foo2", true);
 		cdl.log("foo3", 0.0);
 		cdl.log("foo4", (int)0);
-		cdl.log("foo5",new Object() );
+		cdl.log("foo5", new Object() );
+		cdl.log("foo6", new FakeLifterSubsystem(10));
 		
-		assertEquals(10, logger1.getCounter() + logger2.getCounter());
+		assertEquals(12, logger1.getCounter() + logger2.getCounter());
 	}
 }
 
@@ -29,6 +34,7 @@ class FakeDataLogger extends DataLogger{
 	public FakeDataLogger(String name) {
 		super(name);
 	}
+	
 	@Override
 	public void log(String key, Object value) {
 		counter++;				
@@ -61,4 +67,11 @@ class FakeDataLogger extends DataLogger{
 	public int getCounter() {
 		return counter;
 	}
+	
+	// Adds the remote to the tester
+    @Override
+    public void log(BaseSubsystem subsystem) {
+        counter++;
+        
+    }
 }
