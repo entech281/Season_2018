@@ -18,7 +18,7 @@ public abstract class BaseCommand extends Command {
     public static final double UNLIMITED_TIMEOUT = 100000000;
 
     public BaseCommand(BaseSubsystem subsystem) {
-	this(subsystem, UNLIMITED_TIMEOUT);
+        this(subsystem, UNLIMITED_TIMEOUT);
     }
 
     /**
@@ -28,12 +28,12 @@ public abstract class BaseCommand extends Command {
      * @param timeOut
      */
     public BaseCommand(BaseSubsystem subsystem, double timeOut) {
-	super(timeOut);
-	this.dataLogger = DataLoggerFactory.getLoggerFactory().createDataLogger(this.getName());
+        super(timeOut);
+        this.dataLogger = DataLoggerFactory.getLoggerFactory().createDataLogger(this.getName());
 
-	if (subsystem != null) {
-	    requires(subsystem);
-	}
+        if (subsystem != null) {
+            requires(subsystem);
+        }
 
     }
 
@@ -41,12 +41,12 @@ public abstract class BaseCommand extends Command {
     // we open them up so that they can be called in unti testing.
     @Override
     public synchronized boolean isRunning() {
-	return super.isRunning();
+        return super.isRunning();
     }
 
     @Override
     public synchronized boolean isCanceled() {
-	return super.isCanceled();
+        return super.isCanceled();
     }
 
 }

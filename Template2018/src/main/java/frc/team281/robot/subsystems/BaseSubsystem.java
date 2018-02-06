@@ -18,12 +18,15 @@ import frc.team281.robot.logger.DataLoggerFactory;
  */
 public abstract class BaseSubsystem extends Subsystem {
 
-	protected DataLogger dataLogger;
+    protected DataLogger dataLogger;
 
-	public BaseSubsystem() {
-		this.dataLogger = DataLoggerFactory.getLoggerFactory().createDataLogger(this.getName());
-	}
+    public BaseSubsystem() {
+        this.dataLogger = DataLoggerFactory.getLoggerFactory().createDataLogger(this.getName());
 
-	public abstract void initialize();
+        // Sets BaseSubsystem as a reference in the log method
+        this.dataLogger.log(this);
+    }
+
+    public abstract void initialize();
 
 }

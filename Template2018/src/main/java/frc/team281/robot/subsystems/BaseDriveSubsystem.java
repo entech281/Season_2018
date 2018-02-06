@@ -15,33 +15,33 @@ import frc.team281.robot.commands.JoystickDriveCommand;
  */
 public abstract class BaseDriveSubsystem extends BaseSubsystem {
 
-	protected DriveInstructionSource driveInstructionSource;
+    protected DriveInstructionSource driveInstructionSource;
 
-	public BaseDriveSubsystem(DriveInstructionSource driveInstructionSource) {
-		this.driveInstructionSource = driveInstructionSource;
-	}
+    public BaseDriveSubsystem(DriveInstructionSource driveInstructionSource) {
+        this.driveInstructionSource = driveInstructionSource;
+    }
 
-	// these should be implemted using wpilib for the real system,
-	// and using fake data for the test system
-	public abstract void stop();
+    // these should be implemted using wpilib for the real system,
+    // and using fake data for the test system
+    public abstract void stop();
 
-	public abstract void arcadeDrive(double forw, double turn);
+    public abstract void arcadeDrive(double forw, double turn);
 
-	public abstract void tankDrive(double left, double right);
+    public abstract void tankDrive(double left, double right);
 
-	@Override
-	public void initialize() {
-		// TODO Auto-generated method stub
+    @Override
+    public void initialize() {
+        // TODO Auto-generated method stub
 
-	}
+    }
 
-	// an example where some functionality is shared for both test and drive
-	// implementation
-	// note that tests will need to provide a fake driveinstructionsource too!
-	@Override
-	protected void initDefaultCommand() {
-		setDefaultCommand(new JoystickDriveCommand(this, driveInstructionSource));
+    // an example where some functionality is shared for both test and drive
+    // implementation
+    // note that tests will need to provide a fake driveinstructionsource too!
+    @Override
+    protected void initDefaultCommand() {
+        setDefaultCommand(new JoystickDriveCommand(this, driveInstructionSource));
 
-	}
+    }
 
 }
