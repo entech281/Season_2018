@@ -23,77 +23,77 @@ import frc.team281.robot.subsystems.RealLifterSubsystem;
  */
 public class Robot extends TimedRobot implements CommandFactory {
 
-	private RealDriveSubsystem driveSubsystem;
-	private RealLifterSubsystem lifterSubsystem;
-	private OperatorInterface operatorInterface;
+    private RealDriveSubsystem driveSubsystem;
+    private RealLifterSubsystem lifterSubsystem;
+    private OperatorInterface operatorInterface;
 
-	/**
-	 * This function is run when the robot is first started up and should be used
-	 * for any initialization code.
-	 */
-	@Override
-	public void robotInit() {
+    /**
+     * This function is run when the robot is first started up and should be used
+     * for any initialization code.
+     */
+    @Override
+    public void robotInit() {
 
-		// create the objects for the real match
-		DataLoggerFactory.configureForMatch();
+        // create the objects for the real match
+        DataLoggerFactory.configureForMatch();
 
-		lifterSubsystem = new RealLifterSubsystem();
-		operatorInterface = new OperatorInterface(this);
-		driveSubsystem = new RealDriveSubsystem(operatorInterface);
+        lifterSubsystem = new RealLifterSubsystem();
+        operatorInterface = new OperatorInterface(this);
+        driveSubsystem = new RealDriveSubsystem(operatorInterface);
 
-		driveSubsystem.initialize();
-		operatorInterface.initialize();
-		operatorInterface.initialize();
-	}
+        driveSubsystem.initialize();
+        operatorInterface.initialize();
+        operatorInterface.initialize();
+    }
 
-	@Override
-	public void autonomousInit() {
-		// m_AutonomousCommand.start();
-	}
+    @Override
+    public void autonomousInit() {
+        // m_AutonomousCommand.start();
+    }
 
-	/**
-	 * This function is called periodically during operator control
-	 */
-	@Override
-	public void autonomousPeriodic() {
-		Scheduler.getInstance().run();
-	}
+    /**
+     * This function is called periodically during operator control
+     */
+    @Override
+    public void autonomousPeriodic() {
+        Scheduler.getInstance().run();
+    }
 
-	@Override
-	public void disabledInit() {
+    @Override
+    public void disabledInit() {
 
-	}
+    }
 
-	/**
-	 * This function is called once each time the robot enters Disabled mode. You
-	 * can use it to reset any subsystem information you want to clear when the
-	 * robot is disabled.
-	 */
+    /**
+     * This function is called once each time the robot enters Disabled mode. You
+     * can use it to reset any subsystem information you want to clear when the
+     * robot is disabled.
+     */
 
-	@Override
-	public void disabledPeriodic() {
-		Scheduler.getInstance().run();
-	}
+    @Override
+    public void disabledPeriodic() {
+        Scheduler.getInstance().run();
+    }
 
-	@Override
-	public void teleopInit() {
-	}
+    @Override
+    public void teleopInit() {
+    }
 
-	/**
-	 * This function is called periodically during operator control
-	 */
-	@Override
-	public void teleopPeriodic() {
-		Scheduler.getInstance().run();
-	}
+    /**
+     * This function is called periodically during operator control
+     */
+    @Override
+    public void teleopPeriodic() {
+        Scheduler.getInstance().run();
+    }
 
-	@Override
-	public LifterRaiseCommand createRaiseCommand() {
-		return new LifterRaiseCommand(this.lifterSubsystem);
-	}
+    @Override
+    public LifterRaiseCommand createRaiseCommand() {
+        return new LifterRaiseCommand(this.lifterSubsystem);
+    }
 
-	@Override
-	public LifterLowerCommand createLowerCommand() {
-		return new LifterLowerCommand(this.lifterSubsystem);
-	}
+    @Override
+    public LifterLowerCommand createLowerCommand() {
+        return new LifterLowerCommand(this.lifterSubsystem);
+    }
 }

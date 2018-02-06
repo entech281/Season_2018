@@ -13,8 +13,8 @@ import frc.team281.robot.commands.LifterRaiseCommand;
  */
 public interface CommandFactory {
 
-	LifterRaiseCommand createRaiseCommand();
+    LifterRaiseCommand createRaiseCommand();
 
-	LifterLowerCommand createLowerCommand();
+    LifterLowerCommand createLowerCommand();
 
 }

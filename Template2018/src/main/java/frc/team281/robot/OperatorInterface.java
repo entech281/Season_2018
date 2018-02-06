@@ -14,36 +14,36 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;;
  */
 public class OperatorInterface implements DriveInstructionSource {
 
-	private Joystick driveJoystick;
-	private JoystickButton lifterUpButton;
-	private JoystickButton lifterDownButton;
-	private CommandFactory factory;
+    private Joystick driveJoystick;
+    private JoystickButton lifterUpButton;
+    private JoystickButton lifterDownButton;
+    private CommandFactory factory;
 
-	public OperatorInterface(CommandFactory factory) {
-		this.factory = factory;
-	}
+    public OperatorInterface(CommandFactory factory) {
+        this.factory = factory;
+    }
 
-	public void initialize() {
-		driveJoystick = new Joystick(RobotMap.JoystickPorts.JOYSTICK_1);
-		lifterUpButton = new JoystickButton(driveJoystick, RobotMap.JoystickButtons.LIFTER_UP);
-		lifterDownButton = new JoystickButton(driveJoystick, RobotMap.JoystickButtons.LIFTER_DOWN);
-		lifterUpButton.whenPressed(factory.createRaiseCommand());
-		lifterDownButton.whenPressed(factory.createLowerCommand());
-	}
+    public void initialize() {
+        driveJoystick = new Joystick(RobotMap.JoystickPorts.JOYSTICK_1);
+        lifterUpButton = new JoystickButton(driveJoystick, RobotMap.JoystickButtons.LIFTER_UP);
+        lifterDownButton = new JoystickButton(driveJoystick, RobotMap.JoystickButtons.LIFTER_DOWN);
+        lifterUpButton.whenPressed(factory.createRaiseCommand());
+        lifterDownButton.whenPressed(factory.createLowerCommand());
+    }
 
-	@Override
-	public DriveInstruction getNextInstruction() {
-		return new DriveInstruction(adjustJoystickSoftness(RobotMap.JOYSTICK_Y_SOFTNESS, driveJoystick.getY()),
-				OperatorInterface.adjustJoystickSoftness(RobotMap.JOYSTICK_X_SOFTNESS, driveJoystick.getX()));
-	}
+    @Override
+    public DriveInstruction getNextInstruction() {
+        return new DriveInstruction(adjustJoystickSoftness(RobotMap.JOYSTICK_Y_SOFTNESS, driveJoystick.getY()),
+                OperatorInterface.adjustJoystickSoftness(RobotMap.JOYSTICK_X_SOFTNESS, driveJoystick.getX()));
+    }
 
-	public static double adjustJoystickSoftness(double softnessFactor, double rawValue) {
-		double adjusted = Math.pow(rawValue, softnessFactor);
+    public static double adjustJoystickSoftness(double softnessFactor, double rawValue) {
+        double adjusted = Math.pow(rawValue, softnessFactor);
 
-		if (rawValue < 0) {
-			return -adjusted;
-		} else {
-			return adjusted;
-		}
-	}
+        if (rawValue < 0) {
+            return -adjusted;
+        } else {
+            return adjusted;
+        }
+    }
 }
