@@ -30,6 +30,15 @@ _Instructions imply you're already in the `Team281_2018` directory_
 
 >Eclipse has lost its mind! - Dave Cowden
 
+### Fix Eclipse 101 
+cd (directory you want to be in)
+./gradlew clean
+ls -la
+rm -rf .classpath .project .settings 
+./gradlew eclipse
+open eclipse > browse to directory
+Enjoy your happy eclipse!
+
 ### To format your document
 1. Click anywhere in a document or Package Explorer
 2. Click Source
