@@ -1,6 +1,9 @@
 ## Build Status
 [![Build Status](https://travis-ci.org/Greenvillians281/Entech281_2018.svg?branch=master)](https://travis-ci.org/Greenvillians281/Entech281_2018)
 
+## Team281 Java conventions
+Eclipse Preferences > Java > Code Style > Formatter > New > Profile name: Team281 Conventions > Initialize settings with "Java Conventions" > OK > Change Tab policy to "Spaces only" > Set Indentation size to 4 > Set Tab size to 4 > OK
+
 ## FAQ for UNIX lang in bash/terminal
 
 _Instructions imply you're already in the `Team281_2018` directory_
