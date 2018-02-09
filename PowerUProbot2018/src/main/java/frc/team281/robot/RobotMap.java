@@ -17,9 +17,11 @@ public class RobotMap {
 	public static int rightCubeGripperCANid= 0;
 	public static int clawCubeGripperCANid = 0;
 	
-	public static int elevatorCANid = 0;
-	public static int cubeWristCANid = 0;
+	public static int elevatorCANid        = 0;
+	public static int cubeWristCANid       = 0;
 	
+	public static int leftRampMotorCANid   = 0;
+	public static int rightRampMotorCANid  = 0;
 	public static int PCModuleCANid        = 10;
 	public static int driveJoystick        = 0;
 	
