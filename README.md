@@ -1,5 +1,6 @@
 ### Build Status ###
-[![Build Status](https://travis-ci.org/Greenvillians281/Entech281_2018.svg?branch=master)](https://travis-ci.org/Greenvillians281/Entech281_2018)
+[![Build Status](https://travis-ci.org/entech281/Season_2018.svg?branch=master)](https://travis-ci.org/entech281/Season_2018)
+
 
 ### FAQ for UNIX lang in bash/terminal ###
 
