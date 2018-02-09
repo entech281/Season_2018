@@ -30,7 +30,7 @@ public class DriveSubsystem extends Subsystem implements PIDOutput {
 
     static final double YAW_P = 0.05;
     static final double YAW_I = 0.0;
-    static final double YAW_D = 0.1;
+    static final double YAW_D = 0.0;
     static final double YAW_ToleranceDegrees = 2.0;
 
     private AHRS mNavX;
@@ -71,7 +71,7 @@ public class DriveSubsystem extends Subsystem implements PIDOutput {
         mYawController.setAbsoluteTolerance(YAW_ToleranceDegrees);
         mYawController.setInputRange(-180.0,180.0);
         mYawController.setContinuous(true);
-        mYawController.setOutputRange(-1.0,1.0);
+        mYawController.setOutputRange(-0.4,0.4);
         mYawController.disable();
 
         // Make sure NavX has finished calibrating
