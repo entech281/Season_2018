@@ -11,9 +11,6 @@ pipelines:
           - cd ..
           - cd PowerUProbot2018
           - bash ./gradlew build jacocoTestReport
-<<<<<<< HEAD
-=======
           - cd ..
           - cd Template2018
           - bash ./gradlew clean build jacocoTestReport
->>>>>>> master
