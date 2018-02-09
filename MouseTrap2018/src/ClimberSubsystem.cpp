@@ -25,10 +25,9 @@ ClimberSubsystem::~ClimberSubsystem()
 
 void ClimberSubsystem::RobotInit()
 {
-    m_climberMotor = new CANTalon(c_climberMotor_CANid);
-    m_climberMotor->SetControlMode(CANSpeedController::kPercentVbus);
+    m_climberMotor = new TalonSRX(c_climberMotor_CANid);
     m_climberMotor->SetInverted(true);
-    m_climberMotor->ConfigNeutralMode(frc::CANSpeedController::NeutralMode::kNeutralMode_Brake);
+    m_climberMotor->SetNeutralMode(Brake);
     // TODO Invert encoder direction too
 
     m_timer = new Timer();
@@ -56,7 +55,7 @@ void ClimberSubsystem::Backward()
 void ClimberSubsystem::UpdateDashboard()
 {
     SmartDashboard::PutNumber("Climber Speed", m_speed);
-    SmartDashboard::PutNumber("Climb Actual Speed", m_climberMotor->GetSpeed());
+    SmartDashboard::PutNumber("Climb Actual Speed", m_climberMotor->GetMotorOutputPercent());
     SmartDashboard::PutNumber("Climber Current:", m_climberMotor->GetOutputCurrent());
 }
 
@@ -83,7 +82,7 @@ void ClimberSubsystem::DisabledInit()
 void ClimberSubsystem::DisabledPeriodic()
 {
     m_mode = kOff;
-    m_climberMotor->Set(0.0);
+    m_climberMotor->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput,0.0);
 }
 
 //declares that the robot should turn the rope climber when the button is pressed.
@@ -113,7 +112,7 @@ void ClimberSubsystem::TeleopPeriodic()
         // check stops the climb.  The allows the robot to get climbing again (and the motor turning)
         // before we declare the climb finished.  Alternatively, we could simply just not check the
         // encoder at all and use the operator lifting his finger off the button to stop the climb
-        if ((fabs(m_climberMotor->GetSpeed()) < c_speedThreshold) && (m_timer->Get() > c_minClimbTime)) {
+        if ((fabs(m_climberMotor->GetMotorOutputPercent()) < c_speedThreshold) && (m_timer->Get() > c_minClimbTime)) {
             m_mode = kAtTop;
             m_speed = 0.0;
         }
@@ -122,7 +121,7 @@ void ClimberSubsystem::TeleopPeriodic()
         m_speed = 0.0;
         break;
     }
-    m_climberMotor->Set(m_speed);
+    m_climberMotor->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput,m_speed);
 }
 
 void ClimberSubsystem::AutonomousPeriodic()

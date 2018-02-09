@@ -5,7 +5,6 @@
 #include <map>
 
 #include "RobotSubsystem.h"
-#include "RobotAction.h"
 
 #include "RobotConstants.h"
 #include "DriveSubsystem.h"
@@ -56,7 +55,7 @@ private:
     DropperSubsystem *m_dropper;
     PickUpSubsystem  *m_pickup;
     Compressor *m_compressor;
-    LiveWindow *m_lw;
+    // LiveWindow *m_lw;
 
     FILE *m_logFP;
 
@@ -127,6 +126,4 @@ private:
     Preferences *m_prefs;
     double m_shooterSpeed;
     double m_shooterTime;
-
-    std::map<std::string, RobotAction*> m_robotActions;
 };

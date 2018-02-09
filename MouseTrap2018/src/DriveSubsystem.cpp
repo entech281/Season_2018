@@ -149,23 +149,23 @@ void DriveSubsystem::RobotInit()
     }
 #endif
 
-    m_flmotor = new CANTalon(c_flmotor_CANid);
-    m_frmotor = new CANTalon(c_frmotor_CANid);
-    m_rlmotor = new CANTalon(c_rlmotor_CANid);
-    m_rrmotor = new CANTalon(c_rrmotor_CANid);
+    m_flmotor = new WPI_TalonSRX(c_flmotor_CANid);
+    m_frmotor = new WPI_TalonSRX(c_frmotor_CANid);
+    m_rlmotor = new WPI_TalonSRX(c_rlmotor_CANid);
+    m_rrmotor = new WPI_TalonSRX(c_rrmotor_CANid);
 
-    m_robotDrive = new frc::RobotDrive(m_flmotor, m_rlmotor, m_frmotor, m_rrmotor);
+    //    m_flmotor->SetControlMode(CANSpeedController::kPercentVbus);
+    //    m_frmotor->SetControlMode(CANSpeedController::kPercentVbus);
+    //    m_rlmotor->SetControlMode(CANSpeedController::kPercentVbus);
+    //    m_rrmotor->SetControlMode(CANSpeedController::kPercentVbus);
+
+    m_flmotor->SetInverted(c_kflmotor_inverted);
+    m_frmotor->SetInverted(c_kfrmotor_inverted);
+    m_rlmotor->SetInverted(c_krlmotor_inverted);
+    m_rrmotor->SetInverted(c_krrmotor_inverted);
+
+    m_robotDrive = new frc::MecanumDrive(*m_flmotor, *m_rlmotor, *m_frmotor, *m_rrmotor);
     m_robotDrive->SetSafetyEnabled(false);
-
-//    m_flmotor->SetControlMode(CANSpeedController::kPercentVbus);
-//    m_frmotor->SetControlMode(CANSpeedController::kPercentVbus);
-//    m_rlmotor->SetControlMode(CANSpeedController::kPercentVbus);
-//    m_rrmotor->SetControlMode(CANSpeedController::kPercentVbus);
-
-    m_robotDrive->SetInvertedMotor(frc::RobotDrive::kFrontLeftMotor , c_kflmotor_inverted);
-    m_robotDrive->SetInvertedMotor(frc::RobotDrive::kRearLeftMotor  , c_krlmotor_inverted);
-    m_robotDrive->SetInvertedMotor(frc::RobotDrive::kFrontRightMotor, c_kfrmotor_inverted);
-    m_robotDrive->SetInvertedMotor(frc::RobotDrive::kRearRightMotor , c_krrmotor_inverted);
 
     // PID Controllers
 #if NAVX
@@ -218,6 +218,9 @@ void DriveSubsystem::RobotInit()
     }
     m_currentYawAngle = NormalizeYaw(m_ahrs->GetYaw() - m_pRobot->InitialYaw());
 #endif
+
+    m_ntInstance = nt::NetworkTableInstance::GetDefault();
+    m_ntInstance.SetUpdateRate(0.01);
 }
 
 void DriveSubsystem::DisabledInit()
@@ -471,7 +474,7 @@ void DriveSubsystem::GetVisionData()
     //static Timer rpi_timer;
 	bool last_visionTargetsFound;
 
-    m_ntTable = NetworkTable::GetTable(POSITION_TABLE);
+    m_ntTable = m_ntInstance.GetTable(POSITION_TABLE);
     m_ntTable->PutBoolean(RIO_ALIVE_KEY,true);
     m_rpi_seq = m_ntTable->GetNumber(RPI_SEQUENCE,m_rpi_lastseq);
     if (m_rpi_seq != m_rpi_lastseq) {
@@ -548,7 +551,7 @@ void DriveSubsystem::DisabledPeriodic()
     SmartDashboard::PutNumber("jsX", 0.0);
     SmartDashboard::PutNumber("jsY", 0.0);
     SmartDashboard::PutNumber("jsT", 0.0);
-    m_robotDrive->MecanumDrive_Cartesian(0.0, 0.0, 0.0, 0.0);
+    m_robotDrive->DriveCartesian(0.0, 0.0, 0.0, 0.0);
 }
 
 double DriveSubsystem::GetRobotYaw(void)
@@ -705,7 +708,7 @@ void DriveSubsystem::AutonomousPeriodic()
         SmartDashboard::PutNumber("jsX", 0.0);
         SmartDashboard::PutNumber("jsY", 0.0);
         SmartDashboard::PutNumber("jsT", 0.0);
-        m_robotDrive->MecanumDrive_Cartesian(0.0, 0.0, 0.0, 0.0);
+        m_robotDrive->DriveCartesian(0.0, 0.0, 0.0, 0.0);
         break;
     case kAutomatic:
         DoDriveAutomatic();
@@ -723,7 +726,7 @@ void DriveSubsystem::DoDriveAutomatic()
         SmartDashboard::PutNumber("jsX", 0.0);
         SmartDashboard::PutNumber("jsY", 0.0);
         SmartDashboard::PutNumber("jsT", 0.0);
-        m_robotDrive->MecanumDrive_Cartesian(0.0, 0.0, 0.0, 0.0);
+        m_robotDrive->DriveCartesian(0.0, 0.0, 0.0, 0.0);
     } else {
         // Either use joystick for speed from driver or what autonomous wants
         if (m_forwardJS > 1.0) {
@@ -749,7 +752,7 @@ void DriveSubsystem::DoDriveAutomatic()
         SmartDashboard::PutNumber("jsX", jsX);
         SmartDashboard::PutNumber("jsY", jsY);
         SmartDashboard::PutNumber("jsT", jsT);
-        m_robotDrive->MecanumDrive_Cartesian(jsX, jsY, jsT, 0.0);
+        m_robotDrive->DriveCartesian(jsX, jsY, jsT, 0.0);
     }
 }
 
@@ -782,7 +785,7 @@ void DriveSubsystem::DoDriveDeadRecon()
     SmartDashboard::PutNumber("jsX", jsX);
     SmartDashboard::PutNumber("jsY", jsY);
     SmartDashboard::PutNumber("jsT", jsT);
-    m_robotDrive->MecanumDrive_Cartesian(jsX, jsY, jsT, gyroAngle);
+    m_robotDrive->DriveCartesian(jsX, jsY, jsT, gyroAngle);
 }
 
 void DriveSubsystem::DoDriveManual()
@@ -843,7 +846,7 @@ void DriveSubsystem::DoDriveManual()
     SmartDashboard::PutNumber("jsX", jsX);
     SmartDashboard::PutNumber("jsY", jsY);
     SmartDashboard::PutNumber("jsT", jsT);
-    m_robotDrive->MecanumDrive_Cartesian(jsX, jsY, jsT, gyroAngle);
+    m_robotDrive->DriveCartesian(jsX, jsY, jsT, gyroAngle);
 }
 
 void DriveSubsystem::TestPeriodic()

@@ -2,7 +2,7 @@
 #define _CLIMBER_SUBSYSTEM_H
 
 #include <WPILib.h>
-#include <CANTalon.h>
+#include <ctre/Phoenix.h>
 
 #include "RobotSubsystem.h"
 
@@ -32,7 +32,7 @@ public:
 
 private:
     enum ClimbMode { kOff, kGrab, kClimb, kLower, kAtTop };
-    CANTalon* m_climberMotor;
+    TalonSRX* m_climberMotor;
     double m_speed;
     ClimbMode m_mode;
     Timer *m_timer;

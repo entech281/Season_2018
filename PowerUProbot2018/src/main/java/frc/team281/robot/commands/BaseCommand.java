@@ -1,4 +1,5 @@
 package frc.team281.robot.commands;
+
 import edu.wpi.first.wpilibj.command.Command;
 public abstract class BaseCommand extends Command{
 
@@ -6,5 +7,4 @@ public abstract class BaseCommand extends Command{
 	protected boolean isFinished() {
 		return false;
 	}
-
 }

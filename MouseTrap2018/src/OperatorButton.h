@@ -8,8 +8,10 @@ public:
         enum ButtonState { kReleased=0, kPressed=1, kJustPressed, kJustReleased };
 
         OperatorButton(Joystick *js, int number);
+#if 0
         OperatorButton(int js, int number);
         OperatorButton(int number);
+#endif
         ~OperatorButton();
         ButtonState Get(void);
         bool GetBool(void);

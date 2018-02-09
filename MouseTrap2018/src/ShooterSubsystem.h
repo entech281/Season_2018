@@ -2,7 +2,7 @@
 #define _SHOOTER_SUBSYSTEM_H
 
 #include <WPILib.h>
-#include <CANTalon.h>
+#include <ctre/Phoenix.h>
 
 #include "RobotSubsystem.h"
 
@@ -36,7 +36,7 @@ public:
 private:
     void SetPIDController(void);
 
-    CANTalon* m_ShooterMotor;
+    TalonSRX* m_ShooterMotor;
     Solenoid* m_solenoid1;
     Solenoid* m_solenoid2;
     frc::Timer m_timer;

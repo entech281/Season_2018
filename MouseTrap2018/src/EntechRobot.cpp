@@ -20,7 +20,7 @@ EntechRobot::EntechRobot()
     , m_dropper(NULL)
     , m_pickup(NULL)
     , m_compressor(NULL)
-    , m_lw(NULL)
+//    , m_lw(NULL)
     , m_logFP(NULL)
     , m_gamepad(NULL)
     , m_gp_useShooterPID(NULL)
@@ -63,8 +63,6 @@ EntechRobot::EntechRobot()
     , m_shooterTime(4.5)
 {
     m_robotSubsystems.clear();
-    NetworkTable::SetServerMode();
-    NetworkTable::SetUpdateRate(0.01);
 }
 
 EntechRobot::~EntechRobot() {}
@@ -104,7 +102,7 @@ void EntechRobot::CloseLog(void)
 
 void EntechRobot::RobotInit()
 {
-    m_lw = frc::LiveWindow::GetInstance();
+//    m_lw = frc::LiveWindow::GetInstance();
     m_drive = new DriveSubsystem(this,"drive");
     m_climber = new ClimberSubsystem(this, "climber");
     m_shooter = new ShooterSubsystem(this, "shooter");
@@ -778,7 +776,7 @@ void EntechRobot::TestInit()
 void EntechRobot::TestPeriodic()
 {
     /* Update Live Window */
-    m_lw->Run();
+    // m_lw->Run();
 
     for (std::list<RobotSubsystem*>::iterator it = m_robotSubsystems.begin();
          it != m_robotSubsystems.end(); ++it) {
