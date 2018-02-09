@@ -1,10 +1,9 @@
 package frc.team281.robot.commands;
 
-import edu.wpi.first.wpilibj.command.Command;
 import frc.team281.robot.Robot;
 import frc.team281.robot.subsystems.DriveSubsystem;
 
-public class DriveUsingJoystick extends Command {
+public class DriveUsingJoystick extends BaseCommand {
 	private DriveSubsystem drive;
 	public DriveUsingJoystick(DriveSubsystem drive) {
 		// Use requires() here to declare subsystem dependencies

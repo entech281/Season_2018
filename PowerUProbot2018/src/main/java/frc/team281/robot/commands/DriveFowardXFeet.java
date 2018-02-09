@@ -1,10 +1,10 @@
 package frc.team281.robot.commands;
 
-import edu.wpi.first.wpilibj.command.Command;
+
 import frc.team281.robot.Robot;
 import frc.team281.robot.subsystems.DriveSubsystem;
 
-public class DriveFowardXFeet extends Command {
+public class DriveFowardXFeet extends BaseCommand {
 	private DriveSubsystem drive;
 	public DriveFowardXFeet(DriveSubsystem drive, double x) {
 		// Use requires() here to declare subsystem dependencies

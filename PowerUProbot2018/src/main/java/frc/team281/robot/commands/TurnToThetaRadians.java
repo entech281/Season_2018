@@ -1,10 +1,9 @@
 package frc.team281.robot.commands;
 
-import edu.wpi.first.wpilibj.command.Command;
 import frc.team281.robot.Robot;
 import frc.team281.robot.subsystems.DriveSubsystem;
-//import 
-public class TurnToThetaRadians extends Command {
+
+public class TurnToThetaRadians extends BaseCommand {
 	private DriveSubsystem drive;
 	private double x;
 	public TurnToThetaRadians(DriveSubsystem drive, double theta) {
