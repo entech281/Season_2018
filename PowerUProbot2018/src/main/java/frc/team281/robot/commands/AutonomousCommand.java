@@ -1,8 +1,8 @@
 package frc.team281.robot.commands;
-import edu.wpi.first.wpilibj.command.CommandGroup;
+
 import java.util.ArrayList;
 
-public class AutonomousCommand extends CommandGroup {
+public class AutonomousCommand extends BaseCommandGroup {
 	private BaseCommand LastC;
 	public AutonomousCommand(ArrayList<BaseCommand> l) {
 		this.LastC= l.get(l.size()-1);

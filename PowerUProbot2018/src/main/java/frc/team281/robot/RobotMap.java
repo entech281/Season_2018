@@ -12,8 +12,17 @@ public class RobotMap {
 	public static int frontRightMotorCANid = 2;
 	public static int rearLeftMotorCANid   = 1;
 	public static int rearRightMotorCANid  = 3;
+	
+	public static int leftCubeGripperCANid = 0;
+	public static int rightCubeGripperCANid= 0;
+	public static int clawCubeGripperCANid = 0;
+	
+	public static int elevatorCANid = 0;
+	public static int cubeWristCANid = 0;
+	
 	public static int PCModuleCANid        = 10;
 	public static int driveJoystick        = 0;
+	
 	//Joystick drive adjustments 
 	public static double JoystickYSoftness = 1.5;
 	public static double JoystickXSoftness = 1.5;
