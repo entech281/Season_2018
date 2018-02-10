@@ -1,20 +1,14 @@
 # Contents
 - [Build Status](#build-status)
-> Shows the current master branch build status
-- [Java Conventions](#team281-java-conventions)
-> Our most recent conventions for your code
+- [Java Conventions](#java-conventions)
 - [Terminal Help](#terminal-help)
-> One-stop-shop for all your terminal command needs
 - [Eclipse Help](#eclipse-help)
-> Eclipse has lost its mind! - Dave Cowden
 - [Helpful Information](#helpful-information)
-> In case the resident stasher is absent
-
 
 ## Build Status
 [![Build Status](https://travis-ci.org/Greenvillians281/Entech281_2018.svg?branch=master)](https://travis-ci.org/Greenvillians281/Entech281_2018)
      
-## Team281 Java Conventions
+## Java Conventions
 Eclipse Preferences > Java > Code Style > Formatter > New > Name the profile to Team281 Conventions > Initialize settings with "Java Conventions" > OK > Change Tab policy to "Spaces only" > Set Indentation size to 4 > Set Tab size to 4 > OK
 
 ## Terminal Help
@@ -44,14 +38,12 @@ _Instructions imply you're already in the `Team281_2018` directory_
 >Eclipse has lost its mind! - Dave Cowden
 
 ### Fix Eclipse 101 
-* cd (directory you want to be in)
-* ./gradlew clean
-* ls -la
-* rm -rf .classpath .project .settings 
-* ./gradlew eclipse
-* Open eclipse
-* Browse to directory
-* Enjoy your happy eclipse!
+1. cd (directory you want to be in)
+2. ./gradlew clean
+3. ls -la
+4. rm -rf .classpath .project .settings 
+5. ./gradlew eclipse
+6. Open eclipse and browse to directory
 
 ### To format your document
 1. Click anywhere in a document or Package Explorer
@@ -62,9 +54,7 @@ _Instructions imply you're already in the `Team281_2018` directory_
 * ./gradlew build to test for bugfixes
 * Right click what you want to be tested in the File Explorer > Run as > JUnit Test
 
-## Helpful information
-
-### Helpful commands 
+## Helpful Information 
 * pwd (to find current directory)
 * ls (to see the names of all files inside current directory)
 * git reset --hard _CommitIdentifierCode_ (to rollback to a previous commit)
