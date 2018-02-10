@@ -34,7 +34,7 @@ public class TestDriveSystemCommands extends BaseTest {
 		RobotTestUtils.runForSeconds(0.5);
 
 		// we should move about 10 units per second forward, ish
-		assertEquals(driveSubsystem.getXPosition(), 5.0, 1.0);
+		assertEquals(driveSubsystem.getXPosition(), 5.0, 3.0);
 		assertEquals(driveSubsystem.getYPosition(), 0.0, 0.001);
 
 	}

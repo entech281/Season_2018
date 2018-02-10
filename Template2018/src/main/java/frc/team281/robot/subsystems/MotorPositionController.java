@@ -17,26 +17,16 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
  * @author dcowden
  *
  */
-public class PositionController {
+public class MotorPositionController {
 
 	public static final int TIMEOUT_MS = 10;
 	public static final int PID_SLOT = 0;
 	public static final int PROFILE_SLOT = 0;
 
 	private int desiredPosition = 0;
-	private int positionTolerance = 0;
-
-	public int getPositionTolerance() {
-		return positionTolerance;
-	}
-
-	public void setPositionTolerance(int positionTolerance) {
-		this.positionTolerance = positionTolerance;
-	}
-
 	private TalonSRX talon = null;
 
-	private PositionController(TalonSRX talon) {
+	private MotorPositionController(TalonSRX talon) {
 		// private constructor-- use the builder because this is SO complex!
 		this.talon = talon;
 	}
@@ -57,11 +47,6 @@ public class PositionController {
 	public int getDesiredPosition() {
 		return desiredPosition;
 	}
-
-	public boolean hasReachedTarget() {
-		return Math.abs(desiredPosition - getSensorPosition()) < positionTolerance;
-	}
-
 	public static class Builder {
 		private TalonSRX talon;
 
@@ -77,15 +62,18 @@ public class PositionController {
 			talon.setSensorPhase(true);
 			talon.setInverted(false);
 			talon.setSelectedSensorPosition(0, PID_SLOT, TIMEOUT_MS);
-			talon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_SLOT, TIMEOUT_MS);
-		}
-
-		public Builder withDefaultOutputLevels() {
-			talon.configNominalOutputForward(0, TIMEOUT_MS);
-			talon.configNominalOutputReverse(0, TIMEOUT_MS);
-			talon.configPeakOutputForward(1, TIMEOUT_MS);
-			talon.configPeakOutputReverse(-1, TIMEOUT_MS);
-			return this;
+			talon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_SLOT, 0);
+			
+            talon.configNominalOutputForward(0, TIMEOUT_MS);
+            talon.configNominalOutputReverse(0, TIMEOUT_MS);
+            talon.configPeakOutputForward(1, TIMEOUT_MS);
+            talon.configPeakOutputReverse(-1, TIMEOUT_MS);
+            
+            talon.configPeakCurrentLimit(35, TIMEOUT_MS);
+            talon.configPeakCurrentDuration(200, TIMEOUT_MS);
+            talon.configContinuousCurrentLimit(30, TIMEOUT_MS);
+            talon.enableCurrentLimit(true);   
+            
 		}
 
 		public Builder inverted(boolean inverted) {
@@ -117,8 +105,8 @@ public class PositionController {
 			return this;
 		}
 
-		public PositionController build() {
-			return new PositionController(this.talon);
+		public MotorPositionController build() {
+			return new MotorPositionController(this.talon);
 		}
 
 	}

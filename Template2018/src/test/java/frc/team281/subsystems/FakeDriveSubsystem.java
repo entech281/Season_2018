@@ -2,6 +2,7 @@ package frc.team281.subsystems;
 
 import frc.team281.robot.DriveInstructionSource;
 import frc.team281.robot.subsystems.BaseDriveSubsystem;
+import frc.team281.robot.subsystems.Position;
 
 public class FakeDriveSubsystem extends BaseDriveSubsystem {
 
@@ -39,5 +40,29 @@ public class FakeDriveSubsystem extends BaseDriveSubsystem {
 	public void tankDrive(double left, double right) {
 		xPosition += (DISTANCE_PER_CLICK * left);
 	}
+
+    @Override
+    public void drive(Position desiredPosition) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public Position getCurrentPosition() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void resetPosition() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void initialize() {
+        // TODO Auto-generated method stub
+        
+    }
 
 }
