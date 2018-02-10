@@ -6,8 +6,8 @@ import org.junit.Test;
 
 public class ProjectWorksTest {
 
-	@Test
-	public void testThatTheProjectCanRunUnit() {
-		assertEquals(1,1);
-	}
+    @Test
+    public void testThatTheProjectCanRunUnit() {
+        assertEquals(1, 1);
+    }
 }
