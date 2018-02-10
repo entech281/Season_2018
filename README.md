@@ -1,10 +1,14 @@
 # Contents
-- [Build Status](#build-status) 
+- [Build Status](#build-status)
+> Shows the current master branch build status
 - [Java Conventions](#team281-java-conventions)
+> Our most recent conventions for your code
 - [Bash/terminal FAQ](#faq-for-unix-lang-in-bash/terminal)
+> One-stop-shop for all your terminal command needs
 - [Eclipse FAQ](#eclipse-help)
+> Eclipse has lost its mind! - Dave Cowden
 - [Helpful Information](#helpful-information)
-
+> In case the resident stasher is absent
 >- [Dependencies Title](#dependencies-title)
 
 ## Build Status
