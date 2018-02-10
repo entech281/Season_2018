@@ -10,6 +10,8 @@ import frc.team281.robot.*;
 import frc.team281.robot.commands.DriveUsingJoystick;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.SensorCollection;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.kauailabs.navx.frc.*;
 
 public class DriveSubsystem extends Subsystem implements PIDOutput {
@@ -19,6 +21,11 @@ public class DriveSubsystem extends Subsystem implements PIDOutput {
     private WPI_TalonSRX mRearLeftMotor;
     private WPI_TalonSRX mRearRightMotor;
 
+    private SensorCollection mFrontLeftEncoder;
+    private SensorCollection mFrontRightEncoder;
+    private SensorCollection mRearLeftEncoder;
+    private SensorCollection mRearRightEncoder;
+
     private DifferentialDrive mDrive;
 
     private enum DriveState {
@@ -27,6 +34,18 @@ public class DriveSubsystem extends Subsystem implements PIDOutput {
     }
 
     private DriveState mState;
+
+    static final int cEncoderSignalOK = 200;
+    static final int cEncoderSignalBad = 0;
+    private boolean mFrontRightEncoderBad;
+    private boolean mFrontLeftEncoderBad;
+    private boolean mRearRightEncoderBad;
+    private boolean mRearLeftEncoderBad;
+    // Target distances are in encoder pulses
+    private int   mTargetLeftDistance;
+    private int   mTargetRightDistance;
+    private double  mSpeed;
+    private Timer   mTimer;
 
     static final double YAW_P = 0.05;
     static final double YAW_I = 0.0;
@@ -38,7 +57,7 @@ public class DriveSubsystem extends Subsystem implements PIDOutput {
     private boolean mFieldAbsolute;
     private double  mYawHoldAngle;
     private double  mYawCorrection;
-    PIDController mYawController;
+    private PIDController mYawController;
     private double mLastJSforw;
     private double mLastJSturn;
 
@@ -59,10 +78,28 @@ public class DriveSubsystem extends Subsystem implements PIDOutput {
         mRearLeftMotor = new WPI_TalonSRX(RobotMap.rearLeftMotorCANid);
         mRearRightMotor = new WPI_TalonSRX(RobotMap.rearRightMotorCANid);
 
+        mFrontLeftMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder,0,0);
+        mFrontRightMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder,0,0);
+        mRearLeftMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder,0,0);
+        mRearRightMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder,0,0);
+
+        mFrontLeftEncoder = new SensorCollection(mFrontLeftMotor);
+        mFrontRightEncoder = new SensorCollection(mFrontRightMotor);
+        mRearLeftEncoder = new SensorCollection(mRearLeftMotor);
+        mRearRightEncoder = new SensorCollection(mRearRightMotor);
+
         mDrive = new DifferentialDrive(
             new SpeedControllerGroup(mFrontLeftMotor, mRearLeftMotor),
             new SpeedControllerGroup(mFrontRightMotor,mRearRightMotor) );
 
+        // Setup the encoder settings
+        mTimer = new Timer();
+        mFrontLeftEncoderBad = false;
+        mFrontRightEncoderBad = false;
+        mRearLeftEncoderBad = false;
+        mRearRightEncoderBad = false;
+
+        // Setup the Yaw PID controller
         mState = DriveState.kDriveJoystick;
         mFieldAbsolute = false;
         mYawHoldAngle = 0.0;
@@ -89,6 +126,7 @@ public class DriveSubsystem extends Subsystem implements PIDOutput {
 
 	public void stop() {
 		mDrive.tankDrive(0.,0.);
+        mState = DriveState.kDriveJoystick;
 	}
 
 	public void arcadeDrive(double forw, double turn) {
@@ -139,6 +177,74 @@ public class DriveSubsystem extends Subsystem implements PIDOutput {
         mYawController.disable();
     }
 
+    public void driveDistance(double leftDistance, double rightDistance, double speed) {
+        // Convert from inches to encoder clicks
+        // 6in dia wheel
+        // 80 clicks/motor revolution
+        // 2 sets of 14:52 gear reductions
+        mTargetLeftDistance  = (int)(( leftDistance/(6.0*3.14))*80*(52/14)*(52/14));
+        mTargetRightDistance = (int)((rightDistance/(6.0*3.14))*80*(52/14)*(52/14));
+        mSpeed = speed;
+
+        // Reset encoders to zero
+        mFrontLeftEncoder.setQuadraturePosition(0,0);
+        mFrontRightEncoder.setQuadraturePosition(0,0);
+        mRearLeftEncoder.setQuadraturePosition(0,0);
+        mRearRightEncoder.setQuadraturePosition(0,0);
+
+        // Start the timer
+        mTimer.stop();
+        mTimer.reset();
+        mTimer.start();
+
+        // Remember that we are driving by distance
+        mState = DriveState.kDriveDistance;
+    }
+
+    public double getLeftEncoderDistance() {
+        int front = mFrontLeftEncoder.getQuadraturePosition();
+        int rear = mRearLeftEncoder.getQuadraturePosition();
+        if ((Math.abs(front) > cEncoderSignalOK) && (Math.abs(rear) < cEncoderSignalBad)) {
+            mRearLeftEncoderBad = true;
+            return front;
+        }
+        if ((Math.abs(rear) > cEncoderSignalOK) && (Math.abs(front) < cEncoderSignalBad)) {
+            mRearRightEncoderBad = true;
+            return rear;
+        }
+        if ((mTimer.get() > 0.5) && (Math.abs(front) < cEncoderSignalBad)  && (Math.abs(rear) < cEncoderSignalBad)) {
+            mRearLeftEncoderBad = true;
+            mRearRightEncoderBad = true;
+            return 0;
+        }
+        return (front + rear)/2;
+    }
+
+    public int getRightEncoderDistance() {
+        int front = mFrontRightEncoder.getQuadraturePosition();
+        int rear = mRearRightEncoder.getQuadraturePosition();
+        if ((Math.abs(front) > cEncoderSignalOK) && (Math.abs(rear) < cEncoderSignalBad)) {
+            mRearRightEncoderBad = true;
+            return front;
+        }
+        if ((Math.abs(rear) > cEncoderSignalOK) && (Math.abs(front) < cEncoderSignalBad)) {
+            mFrontRightEncoderBad = true;
+            return rear;
+        }
+        if ((mTimer.get() > 0.5) && (Math.abs(front) < cEncoderSignalBad)  && (Math.abs(rear) < cEncoderSignalBad)) {
+            mFrontRightEncoderBad = true;
+            mRearRightEncoderBad = true;
+            return 0;
+        }
+        return (front + rear)/2;
+    }
+
+    public boolean isAtDistance() {
+        if (mState == DriveState.kDriveDistance)
+            return false;
+        return true;
+    }
+
     public void enableFieldAbsolute() {
         mFieldAbsolute = true;
         mYawController.setSetpoint(mNavX.getYaw());
@@ -180,12 +286,59 @@ public class DriveSubsystem extends Subsystem implements PIDOutput {
         SmartDashboard.putNumber("Hold Yaw Angle: ", mYawHoldAngle);
     	SmartDashboard.putNumber("Yaw Correction: ",mYawCorrection);
     	SmartDashboard.putData("YawController:", mYawController);
+    	SmartDashboard.putNumber("FrontLeftEncoder:", mFrontLeftEncoder.getQuadraturePosition());
+    	SmartDashboard.putNumber("FrontRightEncoder:", mFrontRightEncoder.getQuadraturePosition());
+    	SmartDashboard.putNumber("RearLeftEncoder:", mRearLeftEncoder.getQuadraturePosition());
+    	SmartDashboard.putNumber("RearRightEncoder:", mRearRightEncoder.getQuadraturePosition());
         if (mNavXok) {
             SmartDashboard.putData("NavX: ", mNavX);
             SmartDashboard.putNumber("NavX Yaw Angle: ", mNavX.getYaw());
         }
         if (mState == DriveState.kDriveJoystick) {
             return;
+        }
+
+        // Do automatic drive here
+        double left_speed = mSpeed;
+        double right_speed = mSpeed;
+        if (mTimer.get() > 0.2) {
+            if (Math.abs(getLeftEncoderDistance()) < 0.85*Math.abs(mTargetLeftDistance)) {
+                left_speed = mSpeed;
+            } else if (Math.abs(getLeftEncoderDistance()) < Math.abs(mTargetLeftDistance)) {
+                left_speed = 0.75*mSpeed;
+            } else {
+                left_speed = 0.0;
+            }
+            if (mTargetLeftDistance < 0.0){
+                left_speed = -left_speed;
+            }
+            if (Math.abs(getRightEncoderDistance()) < 0.85*Math.abs(mTargetRightDistance)) {
+                right_speed = mSpeed;
+            } else if (Math.abs(getRightEncoderDistance()) < Math.abs(mTargetRightDistance)) {
+                right_speed = 0.75*mSpeed;
+            } else {
+                right_speed = 0.0;
+            }
+            if (mTargetRightDistance < 0.0){
+                right_speed = -right_speed;
+            }
+
+            if ((Math.abs(left_speed) > 0.05) || Math.abs(right_speed) > 0.05) {
+                if (mYawController.isEnabled()) {
+                    left_speed  += mYawCorrection;
+                    right_speed -= mYawCorrection;
+                }
+                mDrive.tankDrive(left_speed, right_speed);
+            } else {
+                mDrive.tankDrive(0.0, 0.0);
+                mState = DriveState.kDriveJoystick;
+            }
+        } else {
+            if (mYawController.isEnabled()) {
+                left_speed  += mYawCorrection;
+                right_speed -= mYawCorrection;
+            }
+            mDrive.tankDrive(left_speed, right_speed);
         }
     }
 }
