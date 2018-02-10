@@ -10,6 +10,7 @@
 - [Helpful Information](#helpful-information)
 > In case the resident stasher is absent
 
+
 ## Build Status
 [![Build Status](https://travis-ci.org/Greenvillians281/Entech281_2018.svg?branch=master)](https://travis-ci.org/Greenvillians281/Entech281_2018)
      
@@ -90,4 +91,4 @@ If you’re going to slow, you need to floor the accelerator, so the value is cl
 
 Say the motor has a voltage input of 12V, and you measure it in 500 encoder counts per second. You’re currently at 200 encoder counts, so 300 short. You multiply 200 by a gain to figure out how far behind you are compared to 1V.
 
-##### Last updated 2/8/18 by Santiago #####
+##### Last updated 2/10/18 by Santiago #####
