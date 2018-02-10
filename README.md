@@ -61,7 +61,7 @@ _Instructions imply you're already in the `Team281_2018` directory_
 * git branch _BranchName_ (to create a branch)
 
 ## External Links
-- [PID controller explanation](https://github.com/entech281/Season_2018/wiki/Understanding-PIDF-and-gains)
+- [Understanding PIDF and gains](https://github.com/entech281/Season_2018/wiki/Understanding-PIDF-and-gains)
 
 <sub><sup>[Back to top](#contents)</sup></sub>
 
