@@ -52,8 +52,6 @@ _Instructions imply you're already in the `Team281_2018` directory_
 
 ### To run a test
 ![Gif showing process](https://media.giphy.com/media/l4pT1dvQZCEPEJBIc/giphy.gif)
-* ./gradlew build to test for bugfixes
-* Right click what you want to be tested in the File Explorer > Run as > JUnit Test
 
 ## Helpful Information 
 * pwd (to find current directory)
