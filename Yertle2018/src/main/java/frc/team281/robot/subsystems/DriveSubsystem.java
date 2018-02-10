@@ -37,10 +37,6 @@ public class DriveSubsystem extends Subsystem implements PIDOutput {
 
     static final int cEncoderSignalOK = 200;
     static final int cEncoderSignalBad = 0;
-    private boolean mFrontRightEncoderBad;
-    private boolean mFrontLeftEncoderBad;
-    private boolean mRearRightEncoderBad;
-    private boolean mRearLeftEncoderBad;
     // Target distances are in encoder pulses
     private int   mTargetLeftDistance;
     private int   mTargetRightDistance;
@@ -94,10 +90,6 @@ public class DriveSubsystem extends Subsystem implements PIDOutput {
 
         // Setup the encoder settings
         mTimer = new Timer();
-        mFrontLeftEncoderBad = false;
-        mFrontRightEncoderBad = false;
-        mRearLeftEncoderBad = false;
-        mRearRightEncoderBad = false;
 
         // Setup the Yaw PID controller
         mState = DriveState.kDriveJoystick;
@@ -205,16 +197,12 @@ public class DriveSubsystem extends Subsystem implements PIDOutput {
         int front = mFrontLeftEncoder.getQuadraturePosition();
         int rear = mRearLeftEncoder.getQuadraturePosition();
         if ((Math.abs(front) > cEncoderSignalOK) && (Math.abs(rear) < cEncoderSignalBad)) {
-            mRearLeftEncoderBad = true;
             return front;
         }
         if ((Math.abs(rear) > cEncoderSignalOK) && (Math.abs(front) < cEncoderSignalBad)) {
-            mRearRightEncoderBad = true;
             return rear;
         }
         if ((mTimer.get() > 0.5) && (Math.abs(front) < cEncoderSignalBad)  && (Math.abs(rear) < cEncoderSignalBad)) {
-            mRearLeftEncoderBad = true;
-            mRearRightEncoderBad = true;
             return 0;
         }
         return (front + rear)/2;
@@ -224,16 +212,12 @@ public class DriveSubsystem extends Subsystem implements PIDOutput {
         int front = mFrontRightEncoder.getQuadraturePosition();
         int rear = mRearRightEncoder.getQuadraturePosition();
         if ((Math.abs(front) > cEncoderSignalOK) && (Math.abs(rear) < cEncoderSignalBad)) {
-            mRearRightEncoderBad = true;
             return front;
         }
         if ((Math.abs(rear) > cEncoderSignalOK) && (Math.abs(front) < cEncoderSignalBad)) {
-            mFrontRightEncoderBad = true;
             return rear;
         }
         if ((mTimer.get() > 0.5) && (Math.abs(front) < cEncoderSignalBad)  && (Math.abs(rear) < cEncoderSignalBad)) {
-            mFrontRightEncoderBad = true;
-            mRearRightEncoderBad = true;
             return 0;
         }
         return (front + rear)/2;
