@@ -24,6 +24,7 @@ public class TestPositionController {
 		int PROFILE_SLOT = 0;
 		int SPEED = 6000;
 		int ACCEL = 15000;
+		
 		//have to mock this-- creating one needs native libraries we dont have loaded.
 		TalonSRX talon = Mockito.mock(TalonSRX.class);
 		

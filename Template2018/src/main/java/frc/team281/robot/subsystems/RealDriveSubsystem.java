@@ -93,19 +93,12 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
                             MotorConstants.D_MOTOR)
 		        .build();
 		
-        MotionSettings rightMotionSettings = MotionSettings.defaults()
-                .motionProfile(MOTOR_ACCELERATION, MOTOR_CRUISE_VELOCITY)
-                .invert()
-                .withGains( MotorConstants.F_MOTOR, 
-                            MotorConstants.P_MOTOR, 
-                            MotorConstants.I_MOTOR, 
-                            MotorConstants.D_MOTOR)
-                .build();		
+        MotionSettings rightMotionSettings = leftMotionSettings.getInvertedClone();
         
         frontLeftMotorPosition = new MotorPositionController(frontLeftMotor,leftMotionSettings);
-        rearLeftMotorPosition = new MotorPositionController(frontLeftMotor,leftMotionSettings);
-        frontRightMotorPosition = new MotorPositionController(frontLeftMotor,rightMotionSettings);
-        rearRightMotorPosition = new MotorPositionController(frontLeftMotor,rightMotionSettings);
+        rearLeftMotorPosition = new MotorPositionController(rearLeftMotor,leftMotionSettings);
+        frontRightMotorPosition = new MotorPositionController(frontRightMotor,rightMotionSettings);
+        rearRightMotorPosition = new MotorPositionController(rearRightMotor,rightMotionSettings);
 	}
 	
 	protected void setSpeedMode( ){

@@ -10,6 +10,17 @@ public class MotionSettings {
     private double iGain = 0.0;
     private double dGain = 0.0;        
     
+    public MotionSettings getInvertedClone(){
+        MotionSettings motionSettings = new MotionSettings();
+        motionSettings.acceleration = this.acceleration;
+        motionSettings.cruiseSpeed = this.cruiseSpeed;
+        motionSettings.dGain = this.dGain;
+        motionSettings.iGain = this.iGain;
+        motionSettings.pGain = this.pGain;
+        motionSettings.fGain = this.fGain;
+        motionSettings.inverted = ! this.inverted;
+        return motionSettings;
+    }
     public int getCruiseSpeed() {
         return cruiseSpeed;
     }
