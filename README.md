@@ -4,6 +4,7 @@
 - [Terminal Help](#terminal-help)
 - [Eclipse Help](#eclipse-help)
 - [Helpful Information](#helpful-information)
+- [External Links](#external-links)
 
 ## Build Status
 [![Build Status](https://travis-ci.org/Greenvillians281/Entech281_2018.svg?branch=master)](https://travis-ci.org/Greenvillians281/Entech281_2018)
@@ -58,6 +59,9 @@ _Instructions imply you're already in the `Team281_2018` directory_
 * git reset --hard (to reset to the last _git pull_'ed version of a branch)
 * git reset -f (to unto a branch checkout)
 * git branch _BranchName_ (to create a branch)
+
+## External Links
+- [PID controller explanation](https://github.com/entech281/Season_2018/wiki/Dave’s-“foot-car-race”-analogy-for-understanding-PIDF-and-gains)
 
 <sub><sup>[Back to top](#contents)</sup></sub>
 
