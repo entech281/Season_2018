@@ -44,7 +44,7 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
     private WPI_TalonSRX rearRightMotor;	
 	
 	//estimated based on 6" diameter wheels, with 80 counts per turn, gear ratio 14/52 * 14/52 13.8:1
-	public static final double ENCODER_CLICKS_PER_INCH = 3.5;
+	public static final double ENCODER_CLICKS_PER_INCH = 40.0833;
 	    
     //units are counts/sec
     //max possible speed:
