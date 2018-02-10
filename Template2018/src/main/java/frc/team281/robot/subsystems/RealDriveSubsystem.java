@@ -62,7 +62,6 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
     // then add d gain at 10 to 100x P
     // finally, add I = 0.01xP
 	public static class MotorConstants{
-	    public static final double K_MOTOR = 0.0;
 	    public static final double I_MOTOR = 0.0;
 	    public static final double P_MOTOR = 0.1;
 	    public static final double D_MOTOR = 0.0;
@@ -84,39 +83,29 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 	    //set up for speed control
 		drive = new DifferentialDrive(new SpeedControllerGroup(frontLeftMotor, rearLeftMotor),
 				new SpeedControllerGroup(frontRightMotor, rearRightMotor));
-	}
-	
-	protected void initPositionControllers(Position desiredPosition){
-	    
-        frontLeftMotorPosition = new MotorPositionController.Builder(frontLeftMotor) 
-                .withGains(MotorConstants.F_MOTOR, MotorConstants.P_MOTOR, 
-                           MotorConstants.I_MOTOR, MotorConstants.D_MOTOR)
-                .withMotionProfile(MOTOR_ACCELERATION, MOTOR_CRUISE_VELOCITY)
-                .inverted(true)
-                .build();
-        frontLeftMotorPosition.setDesiredPosition(convertFromInchesToEncoderCounts(desiredPosition.getLeftInches()));
+		
+		//set up for position control
+		MotionSettings leftMotionSettings = MotionSettings.defaults()
+		        .motionProfile(MOTOR_ACCELERATION, MOTOR_CRUISE_VELOCITY)
+		        .withGains( MotorConstants.F_MOTOR, 
+		                    MotorConstants.P_MOTOR, 
+                            MotorConstants.I_MOTOR, 
+                            MotorConstants.D_MOTOR)
+		        .build();
+		
+        MotionSettings rightMotionSettings = MotionSettings.defaults()
+                .motionProfile(MOTOR_ACCELERATION, MOTOR_CRUISE_VELOCITY)
+                .invert()
+                .withGains( MotorConstants.F_MOTOR, 
+                            MotorConstants.P_MOTOR, 
+                            MotorConstants.I_MOTOR, 
+                            MotorConstants.D_MOTOR)
+                .build();		
         
-        rearLeftMotorPosition = new MotorPositionController.Builder(frontLeftMotor) 
-                .withGains(MotorConstants.F_MOTOR, MotorConstants.P_MOTOR, 
-                        MotorConstants.I_MOTOR, MotorConstants.D_MOTOR)
-             .withMotionProfile(MOTOR_ACCELERATION, MOTOR_CRUISE_VELOCITY)
-             .inverted(true)
-             .build();
-        rearLeftMotorPosition.setDesiredPosition(convertFromInchesToEncoderCounts(desiredPosition.getLeftInches()));
-        
-        frontRightMotorPosition = new MotorPositionController.Builder(frontLeftMotor) 
-                .withGains(MotorConstants.F_MOTOR, MotorConstants.P_MOTOR, 
-                        MotorConstants.I_MOTOR, MotorConstants.D_MOTOR)
-             .withMotionProfile(MOTOR_ACCELERATION, MOTOR_CRUISE_VELOCITY)
-             .build();
-        frontRightMotorPosition.setDesiredPosition(convertFromInchesToEncoderCounts(desiredPosition.getRightInches()));
-        
-        rearRightMotorPosition  = new MotorPositionController.Builder(frontLeftMotor) 
-                .withGains(MotorConstants.F_MOTOR, MotorConstants.P_MOTOR, 
-                        MotorConstants.I_MOTOR, MotorConstants.D_MOTOR)
-             .withMotionProfile(MOTOR_ACCELERATION, MOTOR_CRUISE_VELOCITY)
-             .build();
-        rearRightMotorPosition.setDesiredPosition(convertFromInchesToEncoderCounts(desiredPosition.getRightInches()));
+        frontLeftMotorPosition = new MotorPositionController(frontLeftMotor,leftMotionSettings);
+        rearLeftMotorPosition = new MotorPositionController(frontLeftMotor,leftMotionSettings);
+        frontRightMotorPosition = new MotorPositionController(frontLeftMotor,rightMotionSettings);
+        rearRightMotorPosition = new MotorPositionController(frontLeftMotor,rightMotionSettings);
 	}
 	
 	protected void setSpeedMode( ){
@@ -129,7 +118,9 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 	protected static int convertFromInchesToEncoderCounts(double inches ){
 	    return (int) ( ENCODER_CLICKS_PER_INCH * inches);
 	}
-
+	protected static double convertFromEncoderCountsToInches(int encoderCounts){
+	    return (double)encoderCounts / (double)ENCODER_CLICKS_PER_INCH;
+	}
 
 	public synchronized void stop() {
 	    setSpeedMode();
@@ -148,37 +139,27 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 
     @Override
     public synchronized void drive(Position desiredPosition) {
-        initPositionControllers(desiredPosition);
+        int encoderCountsLeft = convertFromInchesToEncoderCounts(desiredPosition.getLeftInches());
+        int encoderCountsRight = convertFromInchesToEncoderCounts(desiredPosition.getRightInches());
+        
+        frontLeftMotorPosition.setDesiredPosition(encoderCountsLeft);
+        rearLeftMotorPosition.setDesiredPosition(encoderCountsLeft);
+        frontRightMotorPosition.setDesiredPosition(encoderCountsRight);
+        rearRightMotorPosition.setDesiredPosition(encoderCountsRight);        
     }
 
     @Override
     public synchronized Position getCurrentPosition() {
-        //use the front motors as the position
-        if ( frontLeftMotorPosition != null && frontRightMotorPosition != null  ){
-            return new Position( 
-                    frontLeftMotorPosition.getSensorPosition(),
-                    frontRightMotorPosition.getSensorPosition()
-                    );        
-        }
-        else{
-            return new Position(0.0,0.0);
-        }
-    }
+        double frontLeftInches = convertFromEncoderCountsToInches(frontLeftMotorPosition.getCurrentPosition());
+        double rearLeftInches = convertFromEncoderCountsToInches(rearLeftMotorPosition.getCurrentPosition());
+        double frontRightInches = convertFromEncoderCountsToInches(frontRightMotorPosition.getCurrentPosition());
+        double rearRightInches = convertFromEncoderCountsToInches(rearRightMotorPosition.getCurrentPosition());
+        
+        double avgLeftInches = (frontLeftInches + rearLeftInches) / 2.0 ;
+        double avgRightInches = (frontRightInches + rearRightInches) / 2.0 ;
+        //use the average 
+        return new Position(avgLeftInches,avgRightInches);    
 
-    @Override
-    public synchronized void resetPosition() {
-        if ( frontLeftMotorPosition != null ){
-            frontLeftMotorPosition.zeroSensorPosition();
-        }
-        if (rearLeftMotorPosition != null  ){
-            rearLeftMotorPosition.zeroSensorPosition();
-        }
-        if ( frontRightMotorPosition != null ){
-            frontRightMotorPosition.zeroSensorPosition();
-        }
-        if ( rearRightMotorPosition != null ){
-            rearRightMotorPosition.zeroSensorPosition();
-        }                
     }
 
 }

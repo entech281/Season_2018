@@ -33,8 +33,6 @@ public abstract class BaseDriveSubsystem extends BaseSubsystem {
 	public abstract void drive(Position desiredPosition);
 	
 	public abstract Position getCurrentPosition();
-	
-	public abstract void resetPosition();	
 
 	// an example where some functionality is shared for both test and drive
 	// implementation

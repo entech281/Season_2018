@@ -54,12 +54,6 @@ public class FakeDriveSubsystem extends BaseDriveSubsystem {
     }
 
     @Override
-    public void resetPosition() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
     public void initialize() {
         // TODO Auto-generated method stub
         

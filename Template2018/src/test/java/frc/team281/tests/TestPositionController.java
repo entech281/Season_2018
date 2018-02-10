@@ -7,6 +7,7 @@ import org.mockito.Mockito;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import frc.team281.robot.subsystems.MotionSettings;
 import frc.team281.robot.subsystems.MotorPositionController;
 
 public class TestPositionController {
@@ -26,13 +27,15 @@ public class TestPositionController {
 		//have to mock this-- creating one needs native libraries we dont have loaded.
 		TalonSRX talon = Mockito.mock(TalonSRX.class);
 		
-		MotorPositionController pc = new MotorPositionController.Builder(talon) 
-				.withGains(F, P, I, D)
-				.withMotionProfile(ACCEL, SPEED)
-				.build();
+		MotionSettings settings = MotionSettings.defaults()
+                .withGains(F, P, I, D)
+                .motionProfile(ACCEL, SPEED)
+                .build();
+		MotorPositionController pc = new MotorPositionController(talon,settings); 
+
 		
 		pc.setDesiredPosition(DESIRED_POSITION);
-		pc.zeroSensorPosition();
+
 
 		assertEquals(DESIRED_POSITION,pc.getDesiredPosition());
 

@@ -19,7 +19,6 @@ public class DriveToPositionCommand extends BaseCommand{
 
     @Override
     protected void initialize() {
-        driveSubsystem.resetPosition();
         driveSubsystem.drive(desiredPosition);
     }
 
