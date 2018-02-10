@@ -46,9 +46,7 @@ _Instructions imply you're already in the `Team281_2018` directory_
 6. Open eclipse and browse to directory
 
 ### To format your document
-1. Click anywhere in a document or Package Explorer
-2. Click Source
-3. Click Format or Organize Imports
+![Gif showing process](https://media.giphy.com/media/26DN2K5FX5W8GD4mQ/giphy.gif)
 
 ### To run a test
 ![Gif showing process](https://media.giphy.com/media/l4pT1dvQZCEPEJBIc/giphy.gif)
