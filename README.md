@@ -58,7 +58,7 @@ _Instructions imply you're already in the `Team281_2018` directory_
 * git reset --hard _CommitIdentifierCode_ (to rollback to a previous commit)
 * git reset --hard (to reset to the last _git pull_'ed version of a branch)
 * git reset -f (to unto a branch checkout)
-* git branch _BranchName_ (to create a branch)
+* git checkout -b _BranchName_ (to create a branch)
 
 ## External Links
 - [Understanding PIDF and gains](https://github.com/entech281/Season_2018/wiki/Understanding-PIDF-and-gains)
