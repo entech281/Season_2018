@@ -25,8 +25,6 @@ public static Joystick driveJoystick = new Joystick(RobotMap.driveJoystick);
 			return Math.pow(a,RobotMap.JoystickYSoftness);
 		}
 	}
-	
-	
 	public double getDriveJoystickLateral() {
 		double a= driveJoystick.getX();
 		if(a<0) {
@@ -34,6 +32,12 @@ public static Joystick driveJoystick = new Joystick(RobotMap.driveJoystick);
 		} else {
 			return Math.pow(a, RobotMap.JoystickXSoftness);
 		}
+	}
+	public double getJoystickMagnitude() {
+	    return Math.sqrt(Math.pow(getDriveJoystickForward(),2)+Math.pow(getDriveJoystickLateral(),2));
+	}
+	public double getJoystickDirection() {
+	    return Math.atan2(getDriveJoystickForward(), getDriveJoystickLateral());
 	}
 	//// CREATING BUTTONS
 	// One type of button is a joystick button which is any button on a
