@@ -15,11 +15,16 @@ public class DriveSubsystem extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 	
-	WPI_TalonSRX _frontLeftMotor  = new WPI_TalonSRX(RobotMap.frontLeftMotorCANid );
-	WPI_TalonSRX _frontRightMotor = new WPI_TalonSRX(RobotMap.frontRightMotorCANid);
-	WPI_TalonSRX _rearLeftMotor   = new WPI_TalonSRX(RobotMap.rearLeftMotorCANid  );
-	WPI_TalonSRX _rearRightMotor  = new WPI_TalonSRX(RobotMap.rearRightMotorCANid );
-
+	WPI_TalonSRX _frontLeftMotor  = new WPI_TalonSRX(RobotMap.driveMotors.frontLeftMotorCANid );
+	WPI_TalonSRX _frontRightMotor = new WPI_TalonSRX(RobotMap.driveMotors.frontRightMotorCANid);
+	WPI_TalonSRX _rearLeftMotor   = new WPI_TalonSRX(RobotMap.driveMotors.rearLeftMotorCANid  );
+	WPI_TalonSRX _rearRightMotor  = new WPI_TalonSRX(RobotMap.driveMotors.rearRightMotorCANid );
+	
+	/*_frontLeftMotor .configOpenloopRamp(RobotMap.driveMotors.secondsFromNeutralToFull,RobotMap.timeOutMs); 
+	_frontRightMotor.configOpenloopRamp(RobotMap.driveMotors.secondsFromNeutralToFull,RobotMap.timeOutMs);
+	_rearLeftMotor  .configOpenloopRamp(RobotMap.driveMotors.secondsFromNeutralToFull,RobotMap.timeOutMs);
+	_rearRightMotor .configOpenloopRamp(RobotMap.driveMotors.secondsFromNeutralToFull,RobotMap.timeOutMs);
+	*/
 	DifferentialDrive _drive = new DifferentialDrive(
 			new SpeedControllerGroup(_frontLeftMotor, _rearLeftMotor),
 			new SpeedControllerGroup(_frontRightMotor,_rearRightMotor)

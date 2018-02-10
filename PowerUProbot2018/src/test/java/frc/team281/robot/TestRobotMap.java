@@ -18,9 +18,9 @@ public class TestRobotMap {
 	
 	@Test
 	public void testRobotMapItems() {
-		assertPositive(RobotMap.frontLeftMotorCANid );
-		assertPositive(RobotMap.frontRightMotorCANid );
-		assertPositive(RobotMap.rearLeftMotorCANid );
-		assertPositive(RobotMap.rearRightMotorCANid );
+		assertPositive(RobotMap.driveMotors.frontLeftMotorCANid );
+		assertPositive(RobotMap.driveMotors.frontRightMotorCANid );
+		assertPositive(RobotMap.driveMotors.rearLeftMotorCANid );
+		assertPositive(RobotMap.driveMotors.rearRightMotorCANid );
 	}
 }
