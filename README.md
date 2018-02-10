@@ -56,6 +56,7 @@ _Instructions imply you're already in the `Team281_2018` directory_
 * ls (to see the names of all files inside current directory)
 * git reset --hard _CommitIdentifierCode_ (to rollback to a previous commit)
 * git reset --hard (to reset to the last _git pull_'ed version of a branch)
+* git reset -f (to unto a branch checkout)
 * git branch _BranchName_ (to create a branch)
 
 ### Dave’s “foot/car race” analogy for understanding PIDF and gains
