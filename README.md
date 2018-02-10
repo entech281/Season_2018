@@ -3,13 +3,12 @@
 > Shows the current master branch build status
 - [Java Conventions](#team281-java-conventions)
 > Our most recent conventions for your code
-- [Bash/terminal FAQ](#faq-for-unix-lang-in-bash/terminal)
+- [Terminal Help](#terminal-help)
 > One-stop-shop for all your terminal command needs
-- [Eclipse FAQ](#eclipse-help)
+- [Eclipse Help](#eclipse-help)
 > Eclipse has lost its mind! - Dave Cowden
 - [Helpful Information](#helpful-information)
 > In case the resident stasher is absent
->- [Dependencies Title](#dependencies-title)
 
 ## Build Status
 [![Build Status](https://travis-ci.org/Greenvillians281/Entech281_2018.svg?branch=master)](https://travis-ci.org/Greenvillians281/Entech281_2018)
@@ -17,7 +16,7 @@
 ## Team281 Java Conventions
 Eclipse Preferences > Java > Code Style > Formatter > New > Name the profile to Team281 Conventions > Initialize settings with "Java Conventions" > OK > Change Tab policy to "Spaces only" > Set Indentation size to 4 > Set Tab size to 4 > OK
 
-## FAQ for UNIX lang in bash/terminal
+## Terminal Help
 
 _Instructions imply you're already in the `Team281_2018` directory_
 
@@ -39,7 +38,7 @@ _Instructions imply you're already in the `Team281_2018` directory_
 2. ./gradlew deploy
 3. Restart Robot Code in the Driver's Station
 
-## Eclipse help
+## Eclipse Help
 
 >Eclipse has lost its mind! - Dave Cowden
 
