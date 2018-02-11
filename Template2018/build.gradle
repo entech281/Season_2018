@@ -63,7 +63,7 @@ task wrapper(type: Wrapper) {
 }
 
 findbugs{
-    ignoreFailures = false
+    ignoreFailures = true
     reportLevel = "low"
 }
 

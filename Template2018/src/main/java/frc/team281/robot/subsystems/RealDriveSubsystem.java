@@ -32,11 +32,12 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 	private DifferentialDrive drive;
 	
 	//for position control
-	private MotorPositionController frontLeftMotorPosition;
-	private MotorPositionController rearLeftMotorPosition;
-	private MotorPositionController frontRightMotorPosition;
-	private MotorPositionController rearRightMotorPosition;
+	private TalonPositionController frontLeftMotorPosition;
+	private TalonPositionController rearLeftMotorPosition;
+	private TalonPositionController frontRightMotorPosition;
+	private TalonPositionController rearRightMotorPosition;
 
+	
 	//have to hold on to these to change control modes.
     private WPI_TalonSRX frontLeftMotor;
     private WPI_TalonSRX frontRightMotor;
@@ -56,6 +57,7 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
     //lets get to full speed in 1 second
     //not affected by gear ratio
     public static final int MOTOR_ACCELERATION = 4500;
+    public static final int PID_SLOT = 0;
     
     // recommended-- start with all gains but P, and work from there
     // then double the gain until oscillations occur
@@ -84,22 +86,82 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 		drive = new DifferentialDrive(new SpeedControllerGroup(frontLeftMotor, rearLeftMotor),
 				new SpeedControllerGroup(frontRightMotor, rearRightMotor));
 		
-		//set up for position control
-		MotionSettings leftMotionSettings = MotionSettings.defaults()
-		        .motionProfile(MOTOR_ACCELERATION, MOTOR_CRUISE_VELOCITY)
-		        .withGains( MotorConstants.F_MOTOR, 
-		                    MotorConstants.P_MOTOR, 
-                            MotorConstants.I_MOTOR, 
-                            MotorConstants.D_MOTOR)
-		        .build();
-		
-        MotionSettings rightMotionSettings = leftMotionSettings.getInvertedClone();
-        
-        frontLeftMotorPosition = new MotorPositionController(frontLeftMotor,leftMotionSettings);
-        rearLeftMotorPosition = new MotorPositionController(rearLeftMotor,leftMotionSettings);
-        frontRightMotorPosition = new MotorPositionController(frontRightMotor,rightMotionSettings);
-        rearRightMotorPosition = new MotorPositionController(rearRightMotor,rightMotionSettings);
+		//so that we wont time out the drive when we're in position mode
+		drive.setSafetyEnabled(false);        
+
 	}
+	
+	/**
+	 * 
+	 * This method tests that the encoders are working by 
+	 * driving forward a bit, and then making sure we read the encoders
+	 */
+	public void testEncodersAreWorking(){
+		
+		//TODO: drive forward a bit
+		
+		int encoderLeftFront = frontLeftMotor.getSelectedSensorPosition(PID_SLOT);
+		int encoderLeftRear = rearLeftMotor.getSelectedSensorPosition(PID_SLOT);
+		int encoderRightFront = frontRightMotor.getSelectedSensorPosition(PID_SLOT);
+		int encoderRightRear = rearRightMotor.getSelectedSensorPosition(PID_SLOT);
+		
+		//configure based on what we see.
+		//if we dont have good encoders on either side, we're hosed.
+		EncoderCheck check = new EncoderCheck(encoderLeftRear,  encoderLeftFront, encoderRightFront, encoderRightRear);
+		
+		TalonSettings frontLeftSettings =  TalonSettingsBuilder.defaults()
+				.withCurrentLimits(35, 30, 200)
+				.coastInNeutral()
+				.withDirections(false, false)
+				.limitMotorOutputs(0.5, 0.01)
+				.noMotorStartupRamping()
+				.usePositionControl()
+				.withGains(MotorConstants.F_MOTOR, MotorConstants.P_MOTOR, MotorConstants.I_MOTOR, MotorConstants.D_MOTOR)
+				.withMotionProfile(MOTOR_CRUISE_VELOCITY, MOTOR_ACCELERATION)
+				.build();
+
+		TalonSettings frontRightSettings =  TalonSettingsBuilder.inverted(frontLeftSettings, false, true);
+		TalonSettings rearLeftSettings = TalonSettingsBuilder.copy(frontLeftSettings);
+		TalonSettings rearRightSettings = TalonSettingsBuilder.copy(frontRightSettings);
+		
+		//if we have problems but
+		if ( check.hasProblems() ){
+			if ( check.canDrive() ) {
+				if ( check.hasLeftProblems()) {
+					if ( check.isLeftFrontOk()) {
+						rearLeftSettings = TalonSettingsBuilder.follow(frontLeftSettings, RobotMap.CAN.FRONT_LEFT_MOTOR);
+					}
+					//left rear is ok
+					else {
+						frontLeftSettings = TalonSettingsBuilder.follow(rearLeftSettings, RobotMap.CAN.FRONT_RIGHT_MOTOR);
+					}
+				}
+				if ( check.hasRightProblems()) {
+					if ( check.isRightFrontOk()) {
+						rearRightSettings = TalonSettingsBuilder.follow(frontRightSettings, RobotMap.CAN.FRONT_RIGHT_MOTOR);
+					}
+					//left rear is ok
+					else {
+						frontRightSettings = TalonSettingsBuilder.follow(rearRightSettings, RobotMap.CAN.FRONT_RIGHT_MOTOR);
+					}
+				}
+			}
+			//cant drive-- because we have broken encoders on one side
+			//disable all motors
+			else {
+				frontLeftSettings = TalonSettingsBuilder.disabledCopy(rearLeftSettings);
+				frontRightSettings = TalonSettingsBuilder.disabledCopy(rearLeftSettings);
+				rearLeftSettings = TalonSettingsBuilder.disabledCopy(rearLeftSettings);
+				rearRightSettings = TalonSettingsBuilder.disabledCopy(rearLeftSettings);
+			}
+		}
+		
+        frontLeftMotorPosition = new TalonPositionController(frontLeftMotor,frontLeftSettings);
+        rearLeftMotorPosition = new TalonPositionController(rearLeftMotor,frontRightSettings);
+        frontRightMotorPosition = new TalonPositionController(frontRightMotor,rearLeftSettings);
+        rearRightMotorPosition = new TalonPositionController(rearRightMotor,rearRightSettings);		
+	}
+	
 	
 	protected void setSpeedMode( ){
 	    frontLeftMotor.set(ControlMode.Velocity, 0.);
@@ -143,10 +205,10 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 
     @Override
     public synchronized Position getCurrentPosition() {
-        double frontLeftInches = convertFromEncoderCountsToInches(frontLeftMotorPosition.getCurrentPosition());
-        double rearLeftInches = convertFromEncoderCountsToInches(rearLeftMotorPosition.getCurrentPosition());
-        double frontRightInches = convertFromEncoderCountsToInches(frontRightMotorPosition.getCurrentPosition());
-        double rearRightInches = convertFromEncoderCountsToInches(rearRightMotorPosition.getCurrentPosition());
+        double frontLeftInches = convertFromEncoderCountsToInches(frontLeftMotorPosition.getActualPosition());
+        double rearLeftInches = convertFromEncoderCountsToInches(rearLeftMotorPosition.getActualPosition());
+        double frontRightInches = convertFromEncoderCountsToInches(frontRightMotorPosition.getActualPosition());
+        double rearRightInches = convertFromEncoderCountsToInches(rearRightMotorPosition.getActualPosition());
         
         double avgLeftInches = (frontLeftInches + rearLeftInches) / 2.0 ;
         double avgRightInches = (frontRightInches + rearRightInches) / 2.0 ;
