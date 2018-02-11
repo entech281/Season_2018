@@ -1,5 +1,9 @@
 package frc.team281.robot.subsystems;
 
+import java.io.Serializable;
+
+import org.apache.commons.lang3.SerializationUtils;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -21,7 +25,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
  * @author dcowden
  *
  */
-public class TalonSettings implements Cloneable {
+public class TalonSettings implements Serializable{
 
 	
 	/**
@@ -49,12 +53,9 @@ public class TalonSettings implements Cloneable {
 	public FeedbackDevice feedbackDevice = FeedbackDevice.QuadEncoder;
 	public ControlMode controlMode = ControlMode.Disabled;
 	public double demand = DEFAULT_DEMAND;
+	
 	public TalonSettings copy() {
-		try {
-			return (TalonSettings)this.clone();
-		} catch (CloneNotSupportedException e) {
-			throw new RuntimeException(e);
-		}
+		return SerializationUtils.clone( this);
 	}
 	
 	/**
@@ -117,40 +118,40 @@ public class TalonSettings implements Cloneable {
 		talon.set(this.controlMode,this.demand);
 	}
 	
-	public static class Gains implements Cloneable{
+	public static class Gains  implements Serializable{
 		public double f = 0.0;
 		public double p = 0.0;
 		public double i = 0.0;
 		public double d = 0.0;
 	}
 	
-	public static class MotionProfile implements Cloneable{
+	public static class MotionProfile implements Serializable{
 		public int cruiseVelocityEncoderClicksPerSecond = 3200;
 		public int accelerationEncoderClicksPerSecond2 = 1;
 	}
 	
-	public static class CurrentLimits implements Cloneable{
+	public static class CurrentLimits implements Serializable{
 		public int instantaneousPeak = 35;
 		public int continuousPeak = 30;
 		public int continuousPeakMilliseconds = 200;
 		
 	}
-	public static class MotorOutputLimits implements Cloneable{
+	public static class MotorOutputLimits implements Serializable{
 		public double maxMotorOutputForward = 1.0;
 		public double maxMotorOutputBackward = 1.0;
 		public double minMotorOutputForward = -1.0;
 		public double minMotorOutputBackward = -1.0;		
 	}
-	public static class MotorRampUp implements Cloneable{
+	public static class MotorRampUp implements Serializable{
 		public double rampUpSecondsOpenLoop = 0.0;
 		public double rampUpSecondsClosedLoop = 0.0;
 		public double neutralDeadband = 0.001;		
 	}
-	public static class FramePeriods implements Cloneable{
+	public static class FramePeriods implements Serializable{
 		public int motionMagicMilliseconds = DEFAULT_FAST_FRAMERATE_MILLIS;
 		public int pidMilliseconds = DEFAULT_FAST_FRAMERATE_MILLIS;		
 	}
-	public static class MotorDirections implements Cloneable{
+	public static class MotorDirections implements Serializable {
 		public boolean sensorPhase = false;
 		public boolean inverted = false;
 	}	

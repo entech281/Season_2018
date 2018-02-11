@@ -75,7 +75,7 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 	}
 
 	@Override
-	public synchronized void initialize() {
+	public void initialize() {
 	
 	    this.frontLeftMotor = new WPI_TalonSRX(RobotMap.CAN.FRONT_LEFT_MOTOR);
 	    this.frontRightMotor = new WPI_TalonSRX(RobotMap.CAN.FRONT_RIGHT_MOTOR);
@@ -177,23 +177,23 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 	    return (double)encoderCounts / (double)ENCODER_CLICKS_PER_INCH;
 	}
 
-	public synchronized void stop() {
+	public void stop() {
 	    setSpeedMode();
 		drive.tankDrive(0., 0.);
 	}
 
-	public synchronized void arcadeDrive(double forw, double turn) {
+	public void arcadeDrive(double forw, double turn) {
 	    setSpeedMode();
 		drive.arcadeDrive(-forw, turn, true);
 	}
 
-	public synchronized void tankDrive(double left, double right) {
+	public void tankDrive(double left, double right) {
 	    setSpeedMode();
 		drive.tankDrive(left, right, true);
 	}
 
     @Override
-    public synchronized void drive(Position desiredPosition) {
+    public void drive(Position desiredPosition) {
         int encoderCountsLeft = convertFromInchesToEncoderCounts(desiredPosition.getLeftInches());
         int encoderCountsRight = convertFromInchesToEncoderCounts(desiredPosition.getRightInches());
         
@@ -204,7 +204,7 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
     }
 
     @Override
-    public synchronized Position getCurrentPosition() {
+    public Position getCurrentPosition() {
         double frontLeftInches = convertFromEncoderCountsToInches(frontLeftMotorPosition.getActualPosition());
         double rearLeftInches = convertFromEncoderCountsToInches(rearLeftMotorPosition.getActualPosition());
         double frontRightInches = convertFromEncoderCountsToInches(frontRightMotorPosition.getActualPosition());
