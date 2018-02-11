@@ -1,50 +1,49 @@
 package frc.team281.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.team281.robot.Robot;
-import frc.team281.robot.subsystems.ProngsSubsystem;
 import frc.team281.robot.subsystems.ShooterInTakeSubsystem;
 
 /**
  *
  */
 public class ShooterInTake extends Command {
-	private ShooterInTakeSubsystem inTake;
-	public ShooterInTake(ShooterInTakeSubsystem inTake) {
-		// Use requires() here to declare subsystem dependencies
-		this.inTake = inTake;
-		requires(inTake);
-		setTimeout(0.5);
-	}
+    private ShooterInTakeSubsystem inTake;
 
-	// Called just before this Command runs the first time
-	@Override
-	protected void initialize() {
-	}
+    public ShooterInTake(ShooterInTakeSubsystem inTake) {
+        // Use requires() here to declare subsystem dependencies
+        this.inTake = inTake;
+        requires(inTake);
+        setTimeout(0.5);
+    }
 
-	// Called repeatedly when this Command is scheduled to run
-	@Override
-	protected void execute() {
-		inTake.shooterIn();
-		
-	}
+    // Called just before this Command runs the first time
+    @Override
+    protected void initialize() {
+    }
 
-	// Make this return true when this Command no longer needs to run execute()
-	@Override
-	protected boolean isFinished() {
-		return isTimedOut();
-	}
+    // Called repeatedly when this Command is scheduled to run
+    @Override
+    protected void execute() {
+        inTake.shooterIn();
 
-	// Called once after isFinished returns true
-	@Override
-	protected void end() {
+    }
+
+    // Make this return true when this Command no longer needs to run execute()
+    @Override
+    protected boolean isFinished() {
+        return isTimedOut();
+    }
+
+    // Called once after isFinished returns true
+    @Override
+    protected void end() {
         inTake.stop();
-	}
+    }
 
-	// Called when another command which requires one or more of the same
-	// subsystems is scheduled to run
-	@Override
-	protected void interrupted() {
+    // Called when another command which requires one or more of the same
+    // subsystems is scheduled to run
+    @Override
+    protected void interrupted() {
         end();
-	}
+    }
 }
