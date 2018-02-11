@@ -2,6 +2,7 @@
 package frc.team281.robot;
 
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -18,7 +19,7 @@ import frc.team281.robot.subsystems.ShooterOutTakeSubsystem;
  * creating this project, you must also update the manifest file in the resource
  * directory.
  */
-public class Robot extends TimedRobot {
+public class Robot extends IterativeRobot {
 
     public final static DriveSubsystem _driveSubsystem = new DriveSubsystem();
     public final static ProngsSubsystem _prongsSubsystem = new ProngsSubsystem();

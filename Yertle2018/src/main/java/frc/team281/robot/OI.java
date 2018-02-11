@@ -45,7 +45,7 @@ public class OI {
 
         m_Effshooter.whenPressed(new CompleteBallShoot());
 
-        m_MotionMagicButton.whenPressed(new DriveToPositionCommand(Robot._driveSubsystem, new Position(18, 18)));
+        m_MotionMagicButton.whenPressed(new DriveToPositionCommand(Robot._driveSubsystem, new Position(60, 60)));
 
     }
 

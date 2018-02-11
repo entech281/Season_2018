@@ -37,26 +37,17 @@ public class DriveSubsystem extends Subsystem {
         this.frontRightMotor = new WPI_TalonSRX(RobotMap.frontRightMotorCANid);
         this.rearLeftMotor = new WPI_TalonSRX(RobotMap.rearLeftMotorCANid);
         this.rearRightMotor = new WPI_TalonSRX(RobotMap.rearRightMotorCANid);
+        //sets the broken encoder to follow the working encoder
         
+        this.frontRightMotor.setSensorPhase(true);
+        this.rearRightMotor.setSensorPhase(true);
         // set up for speed control
-        //drive = new DifferentialDrive(new SpeedControllerGroup(frontLeftMotor, rearLeftMotor),
-        //        new SpeedControllerGroup(frontRightMotor, rearRightMotor));
+        drive = new DifferentialDrive(new SpeedControllerGroup(frontLeftMotor, rearLeftMotor),
+                new SpeedControllerGroup(frontRightMotor, rearRightMotor));
+                // so the motors won't shut down immediately
+                //drive.setExpiration(15);
+                drive.setSafetyEnabled(false);
         
-        // set up for position control
-        MotionSettings leftMotionSettings = MotionSettings.defaults()
-                .motionProfile(MOTOR_ACCELERATION, MOTOR_CRUISE_VELOCITY).withGains(MotorConstants.F_MOTOR,
-                        MotorConstants.P_MOTOR, MotorConstants.I_MOTOR, MotorConstants.D_MOTOR)
-                .build();
-
-        MotionSettings rightMotionSettings = leftMotionSettings.getInvertedClone();
-
-        frontLeftMotorPosition = new MotorPositionController(frontLeftMotor, leftMotionSettings,
-                "frontLeftMotorPosition");
-        rearLeftMotorPosition = new MotorPositionController(rearLeftMotor, leftMotionSettings, "rearLeftMotorPosition");
-        frontRightMotorPosition = new MotorPositionController(frontRightMotor, rightMotionSettings,
-                "frontRightMotorPosition");
-        rearRightMotorPosition = new MotorPositionController(rearRightMotor, rightMotionSettings,
-                "rearRightMotorPosition");
         
         SmartDashboard.putData(this);
     }
@@ -78,18 +69,18 @@ public class DriveSubsystem extends Subsystem {
 
     // estimated based on 6" diameter wheels, with 80 counts per turn, gear ratio
     // 14/52 * 14/52 13.8:1
-    public static final double ENCODER_CLICKS_PER_INCH = 46;
+    public static final double ENCODER_CLICKS_PER_INCH = 50;
 
     // units are counts/sec
     // max possible speed:
     // estimated at 3200 rev/min * 80 counts/rev * 1 min / 60 sec = 4266 counts/sec
     // note that this speed is not affected by the gear ratio!
     // 75% of that is 3200 counts/sec
-    public static final int MOTOR_CRUISE_VELOCITY = 4500;
+    public static final int MOTOR_CRUISE_VELOCITY = 800;
 
     // lets get to full speed in 1 second
     // not affected by gear ratio
-    public static final int MOTOR_ACCELERATION = 4500;
+    public static final int MOTOR_ACCELERATION = 800;
 
     // recommended-- start with all gains but P, and work from there
     // then double the gain until oscillations occur
@@ -98,15 +89,15 @@ public class DriveSubsystem extends Subsystem {
     
     public static class MotorConstants {
         public static final double I_MOTOR = 0.0;
-        public static final double P_MOTOR = 3.0;
-        public static final double D_MOTOR = 20.0;
+        public static final double P_MOTOR = 1.5;
+        public static final double D_MOTOR = 0.0;
         public static final double F_MOTOR = 0.4;
     }
 
     public void initialize() {
     }
 
-    protected void setSpeedMode() {
+    public void setSpeedMode() {
         frontLeftMotor.set(ControlMode.PercentOutput, 0.);
         frontRightMotor.set(ControlMode.PercentOutput, 0.);
         rearLeftMotor.set(ControlMode.PercentOutput, 0.);
@@ -135,7 +126,7 @@ public class DriveSubsystem extends Subsystem {
 
     public void arcadeDrive(double forw, double turn) {
         //setSpeedMode();
-        //drive.arcadeDrive(-forw, turn, true);
+        drive.arcadeDrive(-forw, turn, true);
     }
 
     public void tankDrive(double left, double right) {
@@ -144,18 +135,48 @@ public class DriveSubsystem extends Subsystem {
     }
 
     public void drive(Position desiredPosition) {
+
+        // set up for position control
+        MotionSettings leftMotionSettings = MotionSettings.defaults()
+                .motionProfile(MOTOR_ACCELERATION, MOTOR_CRUISE_VELOCITY).withGains(MotorConstants.F_MOTOR,
+                        MotorConstants.P_MOTOR, MotorConstants.I_MOTOR, MotorConstants.D_MOTOR)
+                .build();
+
+        MotionSettings rightMotionSettings = leftMotionSettings.getInvertedClone();
+
+        frontLeftMotorPosition = new MotorPositionController(frontLeftMotor, leftMotionSettings,
+                "frontLeftMotorPosition");
+        //rearLeftMotorPosition = new MotorPositionController(rearLeftMotor, leftMotionSettings, "rearLeftMotorPosition");
+        frontRightMotorPosition = new MotorPositionController(frontRightMotor, rightMotionSettings,
+                "frontRightMotorPosition");
+        rearRightMotorPosition = new MotorPositionController(rearRightMotor, rightMotionSettings,
+                "rearRightMotorPosition");
+        
+        this.rearLeftMotor.set(ControlMode.Follower, RobotMap.frontLeftMotorCANid);
         int encoderCountsLeft = convertFromInchesToEncoderCounts(desiredPosition.getLeftInches());
         int encoderCountsRight = convertFromInchesToEncoderCounts(desiredPosition.getRightInches());
 
         frontLeftMotorPosition.setDesiredPosition(encoderCountsLeft);
-        rearLeftMotorPosition.setDesiredPosition(encoderCountsLeft);
+        //rearLeftMotorPosition.setDesiredPosition(encoderCountsLeft);
         frontRightMotorPosition.setDesiredPosition(encoderCountsRight);
         rearRightMotorPosition.setDesiredPosition(encoderCountsRight);
+        
+        double minOutput = 0.5;
+        frontLeftMotor.configNominalOutputForward(minOutput, 10);
+        rearLeftMotor.configNominalOutputForward(minOutput, 10);
+        frontRightMotor.configNominalOutputForward(minOutput, 10);
+        rearRightMotor.configNominalOutputForward(minOutput, 10);
+        
+        frontLeftMotor.configNominalOutputReverse(-minOutput, 10);
+        rearLeftMotor.configNominalOutputReverse(-minOutput, 10);
+        frontRightMotor.configNominalOutputReverse(-minOutput, 10);
+        rearRightMotor.configNominalOutputReverse(-minOutput, 10);
     }
 
     public Position getCurrentPosition() {
         double frontLeftInches = convertFromEncoderCountsToInches(frontLeftMotorPosition.getCurrentPosition());
-        double rearLeftInches = convertFromEncoderCountsToInches(rearLeftMotorPosition.getCurrentPosition());
+        //double rearLeftInches = convertFromEncoderCountsToInches(rearLeftMotorPosition.getCurrentPosition());
+        double rearLeftInches = frontLeftInches;
         double frontRightInches = convertFromEncoderCountsToInches(frontRightMotorPosition.getCurrentPosition());
         double rearRightInches = convertFromEncoderCountsToInches(rearRightMotorPosition.getCurrentPosition());
 
