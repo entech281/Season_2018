@@ -43,9 +43,10 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
     private WPI_TalonSRX frontRightMotor;
     private WPI_TalonSRX rearLeftMotor;
     private WPI_TalonSRX rearRightMotor;	
-	
+
 	//estimated based on 6" diameter wheels, with 80 counts per turn, gear ratio 14/52 * 14/52 13.8:1
-	public static final double ENCODER_CLICKS_PER_INCH = 40.0833;
+    private EncoderInchesConverter encoderConverter = new EncoderInchesConverter(40.0833 );
+
 	    
     //units are counts/sec
     //max possible speed:
@@ -170,12 +171,6 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 	    rearRightMotor.set(ControlMode.Velocity, 0.);    	    
 	}
 
-	protected static int convertFromInchesToEncoderCounts(double inches ){
-	    return (int) ( ENCODER_CLICKS_PER_INCH * inches);
-	}
-	protected static double convertFromEncoderCountsToInches(int encoderCounts){
-	    return (double)encoderCounts / (double)ENCODER_CLICKS_PER_INCH;
-	}
 
 	public void stop() {
 	    setSpeedMode();
@@ -194,8 +189,8 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 
     @Override
     public void drive(Position desiredPosition) {
-        int encoderCountsLeft = convertFromInchesToEncoderCounts(desiredPosition.getLeftInches());
-        int encoderCountsRight = convertFromInchesToEncoderCounts(desiredPosition.getRightInches());
+        int encoderCountsLeft = encoderConverter.toCounts(desiredPosition.getLeftInches());
+        int encoderCountsRight = encoderConverter.toCounts(desiredPosition.getRightInches());
         
         frontLeftMotorPosition.setDesiredPosition(encoderCountsLeft);
         rearLeftMotorPosition.setDesiredPosition(encoderCountsLeft);
@@ -205,10 +200,10 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 
     @Override
     public Position getCurrentPosition() {
-        double frontLeftInches = convertFromEncoderCountsToInches(frontLeftMotorPosition.getActualPosition());
-        double rearLeftInches = convertFromEncoderCountsToInches(rearLeftMotorPosition.getActualPosition());
-        double frontRightInches = convertFromEncoderCountsToInches(frontRightMotorPosition.getActualPosition());
-        double rearRightInches = convertFromEncoderCountsToInches(rearRightMotorPosition.getActualPosition());
+        double frontLeftInches = encoderConverter.toInches(frontLeftMotorPosition.getActualPosition());
+        double rearLeftInches = encoderConverter.toInches(rearLeftMotorPosition.getActualPosition());
+        double frontRightInches = encoderConverter.toInches(frontRightMotorPosition.getActualPosition());
+        double rearRightInches = encoderConverter.toInches(rearRightMotorPosition.getActualPosition());
         
         double avgLeftInches = (frontLeftInches + rearLeftInches) / 2.0 ;
         double avgRightInches = (frontRightInches + rearRightInches) / 2.0 ;
