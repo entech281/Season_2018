@@ -3,141 +3,144 @@ package frc.team281.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
-
 /**
- * Sets up a CAN Talon. Aims to make the process easier
- * to understand.
+ * Sets up a CAN Talon. Aims to make the process easier to understand.
  * 
- * We store a copy of all the settings so that it is possible to
- * re-set the values at any point we'd like 
- * Its annoying, but it makes the sytem much more flexible later on
- * if you're using mixed modes
+ * We store a copy of all the settings so that it is possible to re-set the
+ * values at any point we'd like Its annoying, but it makes the sytem much more
+ * flexible later on if you're using mixed modes
  * 
  * Based on documetnation Here:
  * https://github.com/CrossTheRoadElec/Phoenix-Examples-Languages/blob/master/Java/MotionMagic/src/org/usfirst/frc/team217/robot/Robot.java
  * https://github.com/CrossTheRoadElec/Phoenix-Documentation/raw/master/Talon%20SRX%20Victor%20SPX%20-%20Software%20Reference%20Manual.pdf
+ * 
  * @author dcowden
  *
  */
 public class TalonSettingsBuilder {
-	
-	
+
 	public static SafetySettings defaults() {
 		return new Builder(new TalonSettings());
 	}
-	
+
 	public static SafetySettings copyOf(TalonSettings settings) {
 		return new Builder(settings);
 	}
-	public static TalonSettings copy(TalonSettings settings ) {
+
+	public static TalonSettings copy(TalonSettings settings) {
 		return settings.copy();
 	}
-	public static TalonSettings inverted( TalonSettings settings, boolean invertedSensor, boolean invertedDirection) {
+
+	public static TalonSettings inverted(TalonSettings settings, boolean invertedSensor, boolean invertedDirection) {
 		TalonSettings s = settings.copy();
-		s.motorDirections.inverted =invertedDirection;
+		s.motorDirections.inverted = invertedDirection;
 		s.motorDirections.sensorPhase = invertedSensor;
 		return s;
 	}
 
-	public static TalonSettings follow( TalonSettings other, int otherTalonId) {
+	public static TalonSettings follow(TalonSettings other, int otherTalonId) {
 		TalonSettings s = other.copy();
 		s.controlMode = ControlMode.Follower;
 		s.demand = otherTalonId;
 		return s;
 	}
-	public static TalonSettings disabledCopy(TalonSettings other ) {
+
+	public static TalonSettings disabledCopy(TalonSettings other) {
 		TalonSettings s = other.copy();
 		s.controlMode = ControlMode.Disabled;
 		return s;
 	}
-	
+
 	/**
-	 * Walk through talon configuration step-by-step
-	 * Allows reuiring things that are reuired,
-	 * and provides choices when they are relevant.
+	 * Walk through talon configuration step-by-step Allows reuiring things that are
+	 * reuired, and provides choices when they are relevant.
+	 * 
 	 * @author dcowden
 	 *
 	 */
-	public interface TalonControlMode{
+	public interface TalonControlMode {
 		public PositionControlSettings.GainSettings usePositionControl();
+
 		public SpeedControlSettings useSpeedControl();
 	}
-	
-	//things you set when you are doing position control
+
+	// things you set when you are doing position control
 	public interface PositionControlSettings {
 		public interface GainSettings {
 			ProfileSettings withGains(double f, double p, double i, double d);
 		}
+
 		public interface ProfileSettings {
-			Finish withMotionProfile (int cruiseEncoderClicksPerSecond, int accelerationEncoderClicksPerSecond2 );
+			Finish withMotionProfile(int cruiseEncoderClicksPerSecond, int accelerationEncoderClicksPerSecond2);
 		}
+
 		public interface Finish {
 			public TalonSettings build();
-		}		
+		}
 	}
-	//things you do when you are setting up for speed control
+
+	// things you do when you are setting up for speed control
 	public interface SpeedControlSettings {
-		public TalonSettings build();		
+		public TalonSettings build();
 	}
-	
-	//things you need to do no matter what, for safety reasons
-	public interface SafetySettings{
+
+	// things you need to do no matter what, for safety reasons
+	public interface SafetySettings {
 		public interface BrakeMode {
 			public DirectionSettings brakeInNeutral();
+
 			public DirectionSettings coastInNeutral();
 		}
-		public BrakeMode withPrettySafeCurrentLimits ();
-		public BrakeMode withCurrentLimits ( int maxInstantaneousAmps, int maxSustainedAmps, int sustainedMilliseconds);
+
+		public BrakeMode withPrettySafeCurrentLimits();
+
+		public BrakeMode withCurrentLimits(int maxInstantaneousAmps, int maxSustainedAmps, int sustainedMilliseconds);
 	}
-	
-	//things you have to do so the motor goes the right way
-	public interface DirectionSettings{
+
+	// things you have to do so the motor goes the right way
+	public interface DirectionSettings {
 		public MotorOutputLimits defaultDirectionSettings();
-		public MotorOutputLimits withDirections ( boolean sensorPhase, boolean inverted);
-		
+
+		public MotorOutputLimits withDirections(boolean sensorPhase, boolean inverted);
+
 	}
-	 
-	//things you can do to limit how fast the motor goes
-	public interface MotorOutputLimits{
-		public MotorRamping noMotorOutputLimits();		
+
+	// things you can do to limit how fast the motor goes
+	public interface MotorOutputLimits {
+		public MotorRamping noMotorOutputLimits();
+
 		public MotorRamping limitMotorOutputs(double peakPercent, double minimumPercent);
 	}
-	
-	//things you can do to control how the motor starts up
+
+	// things you can do to control how the motor starts up
 	public interface MotorRamping {
 		public TalonControlMode noMotorStartupRamping();
+
 		public TalonControlMode withMotorRampUpOnStart(double secondsToFullPower);
 	}
-	
-	public static class Builder implements TalonControlMode,
-					PositionControlSettings,
-					PositionControlSettings.GainSettings,
-					PositionControlSettings.ProfileSettings,
-					PositionControlSettings.Finish,
-					SpeedControlSettings,
-					SafetySettings,
-					SafetySettings.BrakeMode,
-					DirectionSettings,
-					MotorOutputLimits,
-					MotorRamping					{
+
+	public static class Builder
+			implements TalonControlMode, PositionControlSettings, PositionControlSettings.GainSettings,
+			PositionControlSettings.ProfileSettings, PositionControlSettings.Finish, SpeedControlSettings,
+			SafetySettings, SafetySettings.BrakeMode, DirectionSettings, MotorOutputLimits, MotorRamping {
 
 		private TalonSettings settings = new TalonSettings();
-				
+
 		private Builder(TalonSettings settings) {
-			this.settings=settings;
+			this.settings = settings;
 		}
 
 		@Override
 		public TalonControlMode noMotorStartupRamping() {
-			settings.rampUp.rampUpSecondsClosedLoop=0;
-			settings.rampUp.rampUpSecondsOpenLoop=0;
-	        return this;
+			settings.rampUp.rampUpSecondsClosedLoop = 0;
+			settings.rampUp.rampUpSecondsOpenLoop = 0;
+			return this;
 		}
 
 		@Override
 		public TalonControlMode withMotorRampUpOnStart(double secondsToFullPower) {
-	        settings.rampUp.rampUpSecondsOpenLoop = secondsToFullPower;
-	        return this;
+			settings.rampUp.rampUpSecondsOpenLoop = secondsToFullPower;
+			return this;
 		}
 
 		@Override
@@ -146,7 +149,7 @@ public class TalonSettingsBuilder {
 			settings.outputLimits.maxMotorOutputForward = 1;
 			settings.outputLimits.minMotorOutputForward = 0;
 			settings.outputLimits.minMotorOutputBackward = 0;
-	        return this;
+			return this;
 		}
 
 		@Override
@@ -155,9 +158,8 @@ public class TalonSettingsBuilder {
 			settings.outputLimits.maxMotorOutputForward = peakPercent;
 			settings.outputLimits.minMotorOutputForward = minimumPercent;
 			settings.outputLimits.minMotorOutputBackward = minimumPercent;
-	        return this;
+			return this;
 		}
-
 
 		@Override
 		public ProfileSettings withGains(double f, double p, double i, double d) {
@@ -165,7 +167,7 @@ public class TalonSettingsBuilder {
 			settings.gains.p = p;
 			settings.gains.i = i;
 			settings.gains.d = d;
-	        return this;
+			return this;
 		}
 
 		@Override
@@ -184,7 +186,7 @@ public class TalonSettingsBuilder {
 		public BrakeMode withCurrentLimits(int maxInstantaneousAmps, int maxSustainedAmps, int sustainedMilliseconds) {
 			settings.currentLimits.instantaneousPeak = maxInstantaneousAmps;
 			settings.currentLimits.continuousPeak = maxSustainedAmps;
-			settings.currentLimits.continuousPeakMilliseconds = sustainedMilliseconds; 
+			settings.currentLimits.continuousPeakMilliseconds = sustainedMilliseconds;
 			return this;
 		}
 
@@ -196,18 +198,16 @@ public class TalonSettingsBuilder {
 
 		@Override
 		public DirectionSettings coastInNeutral() {
-			settings.brakeMode =NeutralMode.Coast;
+			settings.brakeMode = NeutralMode.Coast;
 			return this;
 		}
 
 		@Override
-		public Finish withMotionProfile(int cruiseEncoderClicksPerSecond,
-				int accelerationEncoderClicksPerSecond2) {
+		public Finish withMotionProfile(int cruiseEncoderClicksPerSecond, int accelerationEncoderClicksPerSecond2) {
 			settings.profile.accelerationEncoderClicksPerSecond2 = accelerationEncoderClicksPerSecond2;
 			settings.profile.cruiseVelocityEncoderClicksPerSecond = cruiseEncoderClicksPerSecond;
-	        return this;
+			return this;
 		}
-
 
 		@Override
 		public MotorOutputLimits defaultDirectionSettings() {
@@ -232,10 +232,9 @@ public class TalonSettingsBuilder {
 		public BrakeMode withPrettySafeCurrentLimits() {
 			settings.currentLimits.instantaneousPeak = 5;
 			settings.currentLimits.continuousPeak = 3;
-			settings.currentLimits.continuousPeakMilliseconds = 200; 
+			settings.currentLimits.continuousPeakMilliseconds = 200;
 			return this;
 		}
-
 
 	}
 }

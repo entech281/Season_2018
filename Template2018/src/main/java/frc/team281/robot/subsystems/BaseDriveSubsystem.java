@@ -17,8 +17,7 @@ public abstract class BaseDriveSubsystem extends BaseSubsystem {
 
 	protected DriveInstructionSource driveInstructionSource;
 
-
-    public BaseDriveSubsystem(DriveInstructionSource driveInstructionSource) {
+	public BaseDriveSubsystem(DriveInstructionSource driveInstructionSource) {
 		this.driveInstructionSource = driveInstructionSource;
 	}
 
@@ -31,7 +30,7 @@ public abstract class BaseDriveSubsystem extends BaseSubsystem {
 	public abstract void tankDrive(double left, double right);
 
 	public abstract void drive(Position desiredPosition);
-	
+
 	public abstract Position getCurrentPosition();
 
 	// an example where some functionality is shared for both test and drive

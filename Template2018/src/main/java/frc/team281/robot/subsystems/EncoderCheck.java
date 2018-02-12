@@ -1,8 +1,8 @@
 package frc.team281.robot.subsystems;
 
 /**
- * Checks to see how we should configure motors,
- * based on encoder readings
+ * Checks to see how we should configure motors, based on encoder readings
+ * 
  * @author dcowden
  *
  */
@@ -13,7 +13,7 @@ public class EncoderCheck {
 	private int leftFrontCounts = 0;
 	private int rightFrontCounts = 0;
 
-	public EncoderCheck( int leftRearCounts, int leftFrontCounts, int rightFrontCounts, int rightRearCounts ) {
+	public EncoderCheck(int leftRearCounts, int leftFrontCounts, int rightFrontCounts, int rightRearCounts) {
 		this.leftFrontCounts = leftFrontCounts;
 		this.rightFrontCounts = rightFrontCounts;
 		this.rightRearCounts = rightRearCounts;
@@ -21,43 +21,48 @@ public class EncoderCheck {
 
 	}
 
-	
 	public boolean isLeftRearOk() {
 		return this.leftRearCounts > 0;
 	}
-	
+
 	public boolean isLeftFrontOk() {
 		return this.leftFrontCounts > 0;
-	}	
+	}
+
 	public boolean isRightRearOk() {
 		return this.rightRearCounts > 0;
 	}
-	
+
 	public boolean isRightFrontOk() {
 		return this.rightFrontCounts > 0;
-	}	
+	}
+
 	public boolean isLeftOk() {
 		return isLeftFrontOk() || isLeftRearOk();
 	}
+
 	public boolean isRightOk() {
 		return isRightFrontOk() || isRightRearOk();
-	}	
+	}
+
 	public boolean canDrive() {
 		return isLeftOk() && isRightOk();
 	}
-	
+
 	public boolean hasLeftProblems() {
-		return ! isLeftOk();
+		return !isLeftOk();
 	}
+
 	public boolean hasRightProblems() {
-		return ! isRightOk();
+		return !isRightOk();
 	}
-	
+
 	public boolean hasProblems() {
-		return ! allOk();
+		return !allOk();
 	}
+
 	public boolean allOk() {
 		return isLeftRearOk() && isLeftFrontOk() && isRightRearOk() && isRightFrontOk();
-		
+
 	}
 }
