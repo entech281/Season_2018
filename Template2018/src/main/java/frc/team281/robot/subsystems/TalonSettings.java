@@ -116,6 +116,10 @@ public class TalonSettings implements Serializable {
 	}
 
 	public static class Gains implements Serializable {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -1615614551300215877L;
 		public double f = 0.0;
 		public double p = 0.0;
 		public double i = 0.0;
@@ -123,11 +127,13 @@ public class TalonSettings implements Serializable {
 	}
 
 	public static class MotionProfile implements Serializable {
+		private static final long serialVersionUID = -9034830588710443069L;
 		public int cruiseVelocityEncoderClicksPerSecond = 3200;
 		public int accelerationEncoderClicksPerSecond2 = 1;
 	}
 
 	public static class CurrentLimits implements Serializable {
+		private static final long serialVersionUID = 9098684713948573571L;
 		public int instantaneousPeak = 35;
 		public int continuousPeak = 30;
 		public int continuousPeakMilliseconds = 200;
@@ -135,6 +141,7 @@ public class TalonSettings implements Serializable {
 	}
 
 	public static class MotorOutputLimits implements Serializable {
+		private static final long serialVersionUID = -288486995864831923L;
 		public double maxMotorOutputForward = 1.0;
 		public double maxMotorOutputBackward = 1.0;
 		public double minMotorOutputForward = -1.0;
@@ -142,17 +149,20 @@ public class TalonSettings implements Serializable {
 	}
 
 	public static class MotorRampUp implements Serializable {
+		private static final long serialVersionUID = 7622395199499681872L;
 		public double rampUpSecondsOpenLoop = 0.0;
 		public double rampUpSecondsClosedLoop = 0.0;
 		public double neutralDeadband = 0.001;
 	}
 
 	public static class FramePeriods implements Serializable {
+		private static final long serialVersionUID = 2845750610037826988L;
 		public int motionMagicMilliseconds = DEFAULT_FAST_FRAMERATE_MILLIS;
 		public int pidMilliseconds = DEFAULT_FAST_FRAMERATE_MILLIS;
 	}
 
 	public static class MotorDirections implements Serializable {
+		private static final long serialVersionUID = -331460067125013734L;
 		public boolean sensorPhase = false;
 		public boolean inverted = false;
 	}

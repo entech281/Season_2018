@@ -1,5 +1,6 @@
 package frc.team281.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 public abstract class BaseTalonController {
@@ -20,8 +21,20 @@ public abstract class BaseTalonController {
 		talon.setSelectedSensorPosition(0, TalonSettings.PID_SLOT, TalonSettings.TIMEOUT_MS);
 	}
 
-	public int getActualPosition() {
-		return this.getTalon().getSelectedSensorPosition(TalonSettings.PID_SLOT);
+	/**
+	 * A little tricky-- this is an Integer so that we
+	 * can return Null if this talon is a follower.
+	 * That's because a follower is configured because its encoder is broken!
+	 * @return
+	 */
+	public Integer getActualPosition() {
+		if ( talon.getControlMode().equals(ControlMode.Follower)) {
+			return null;
+		}
+		else {
+			return new Integer(this.getTalon().getSelectedSensorPosition(TalonSettings.PID_SLOT));
+		}
+		
 	}
 
 	public void resetMode() {

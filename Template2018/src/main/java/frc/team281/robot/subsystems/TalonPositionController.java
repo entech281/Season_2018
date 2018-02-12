@@ -10,9 +10,6 @@ public class TalonPositionController extends BaseTalonController {
 		return desiredPosition;
 	}
 
-	public int getActualPosition() {
-		return this.getTalon().getSelectedSensorPosition(TalonSettings.PID_SLOT);
-	}
 
 	/**
 	 * When you call this, the talon will be put in the right mode for control

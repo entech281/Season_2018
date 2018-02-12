@@ -39,7 +39,9 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 	private TalonPositionController rearLeftMotorPosition;
 	private TalonPositionController frontRightMotorPosition;
 	private TalonPositionController rearRightMotorPosition;
-
+	
+	private TalonControllerGroup positionControllerGroup;
+	
 	// have to hold on to these to change control modes.
 	private WPI_TalonSRX frontLeftMotor;
 	private WPI_TalonSRX frontRightMotor;
@@ -142,23 +144,26 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 		rearLeftMotorPosition = new TalonPositionController(rearLeftMotor, frontRightSettings);
 		frontRightMotorPosition = new TalonPositionController(frontRightMotor, rearLeftSettings);
 		rearRightMotorPosition = new TalonPositionController(rearRightMotor, rearRightSettings);
+		
+		positionControllerGroup = new TalonControllerGroup(
+				frontLeftMotorPosition,frontRightMotorPosition,
+				rearLeftMotorPosition, rearRightMotorPosition);
 	}
 
 	protected void enableSpeedModeIfNeeded() {
 		if (!driveMode.equals(DriveMode.SPEED)) {
 			// set up for speed control
-			drive = new DifferentialDrive(new SpeedControllerGroup(frontLeftMotor, rearLeftMotor),
-					new SpeedControllerGroup(frontRightMotor, rearRightMotor));
-
+			drive = new DifferentialDrive(
+					new SpeedControllerGroup(frontLeftMotor, rearLeftMotor),
+						new SpeedControllerGroup(frontRightMotor, rearRightMotor));
+			driveMode = DriveMode.SPEED;
 		}
 	}
 
 	protected void enablePositionModeIfNeeded() {
 		if (!driveMode.equals(DriveMode.POSITION)) {
-			frontLeftMotorPosition.resetMode();
-			rearLeftMotorPosition.resetMode();
-			frontRightMotorPosition.resetMode();
-			rearRightMotorPosition.resetMode();
+			positionControllerGroup.resetMode();
+			driveMode = DriveMode.POSITION;
 		}
 	}
 
@@ -179,26 +184,26 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 	@Override
 	public void drive(Position desiredPosition) {
 		enablePositionModeIfNeeded();
+		
 		int encoderCountsLeft = encoderConverter.toCounts(desiredPosition.getLeftInches());
 		int encoderCountsRight = encoderConverter.toCounts(desiredPosition.getRightInches());
-
-		frontLeftMotorPosition.setDesiredPosition(encoderCountsLeft);
-		rearLeftMotorPosition.setDesiredPosition(encoderCountsLeft);
-		frontRightMotorPosition.setDesiredPosition(encoderCountsRight);
-		rearRightMotorPosition.setDesiredPosition(encoderCountsRight);
+		positionControllerGroup.setDesiredPosition(encoderCountsLeft, encoderCountsRight);
+		
 	}
 
 	@Override
 	public Position getCurrentPosition() {
-		double frontLeftInches = encoderConverter.toInches(frontLeftMotorPosition.getActualPosition());
-		double rearLeftInches = encoderConverter.toInches(rearLeftMotorPosition.getActualPosition());
-		double frontRightInches = encoderConverter.toInches(frontRightMotorPosition.getActualPosition());
-		double rearRightInches = encoderConverter.toInches(rearRightMotorPosition.getActualPosition());
+		//this is tricky since any one of these might be in follower mode
+		//due to a bad encoder. in that case, we get a null integer back
+		
+		int leftEncoderCount = positionControllerGroup.computeLeftEncoderCounts();
+		int rightEncoderCount = positionControllerGroup.computeRightEncoderCounts();
+		
+		double leftInches = encoderConverter.toInches(leftEncoderCount);
+		double rightInches = encoderConverter.toInches(rightEncoderCount);
 
-		double avgLeftInches = (frontLeftInches + rearLeftInches) / 2.0;
-		double avgRightInches = (frontRightInches + rearRightInches) / 2.0;
 		// use the average
-		return new Position(avgLeftInches, avgRightInches);
+		return new Position(leftInches, rightInches);
 
 	}
 
