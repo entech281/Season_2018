@@ -73,9 +73,15 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 		this.rearLeftMotor = new WPI_TalonSRX(RobotMap.CAN.REAR_LEFT_MOTOR);
 		this.rearRightMotor = new WPI_TalonSRX(RobotMap.CAN.REAR_RIGHT_MOTOR);
 
-		this.leftTalonSettings = TalonSettingsBuilder.defaults().withCurrentLimits(35, 30, 200).coastInNeutral()
-				.withDirections(false, false).limitMotorOutputs(0.5, 0.01).noMotorStartupRamping().usePositionControl()
-				.withGains(F_GAIN, P_GAIN, I_GAIN, D_GAIN).withMotionProfile(MOTOR_CRUISE_VELOCITY, MOTOR_ACCELERATION)
+		this.leftTalonSettings = TalonSettingsBuilder.defaults()
+				.withCurrentLimits(35, 30, 200)
+				.coastInNeutral()
+				.withDirections(false, false)
+				.limitMotorOutputs(0.5, 0.01)
+				.noMotorStartupRamping()
+				.usePositionControl()
+				.withGains(F_GAIN, P_GAIN, I_GAIN, D_GAIN)
+				.withMotionProfile(MOTOR_CRUISE_VELOCITY, MOTOR_ACCELERATION)
 				.build();
 
 		this.rightTalonSettings = TalonSettingsBuilder.inverted(leftTalonSettings, false, true);
@@ -89,14 +95,12 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 	 */
 	public void testEncoderMotionForPositionDrive() {
 
-		TalonSpeedController frontLeft = new TalonSpeedController(frontLeftMotor, leftTalonSettings);
-		TalonSpeedController frontRight = new TalonSpeedController(frontRightMotor, rightTalonSettings);
-		TalonSpeedController rearLeft = new TalonSpeedController(rearLeftMotor, leftTalonSettings);
-		TalonSpeedController rearRight = new TalonSpeedController(rearRightMotor, rightTalonSettings);
-
-		MotorEncoderTester tester = new MotorEncoderTester(frontLeft, rearLeft, frontRight, rearRight);
-
-		EncoderCheck check = tester.testMotors();
+		EncoderCheck check = new MotorEncoderTester(
+				new TalonSpeedController(frontLeftMotor, leftTalonSettings),
+				new TalonSpeedController(rearLeftMotor, leftTalonSettings),
+				new TalonSpeedController(frontRightMotor, rightTalonSettings),
+				new TalonSpeedController(rearRightMotor, rightTalonSettings)
+				) .testMotors();
 
 		// unless we detect problems, left and right settings match
 		TalonSettings frontLeftSettings = TalonSettingsBuilder.copy(leftTalonSettings);
@@ -104,7 +108,8 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 		TalonSettings rearLeftSettings = TalonSettingsBuilder.copy(leftTalonSettings);
 		TalonSettings rearRightSettings = TalonSettingsBuilder.copy(rightTalonSettings);
 
-		// if we have problems but
+		//TODO this is just a nasty branch.
+		//how can we clean it up?
 		if (check.hasProblems()) {
 			if (check.canDrive()) {
 				if (check.hasLeftProblems()) {
@@ -183,8 +188,7 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 
 	@Override
 	public void drive(Position desiredPosition) {
-		enablePositionModeIfNeeded();
-		
+		enablePositionModeIfNeeded();		
 		int encoderCountsLeft = encoderConverter.toCounts(desiredPosition.getLeftInches());
 		int encoderCountsRight = encoderConverter.toCounts(desiredPosition.getRightInches());
 		positionControllerGroup.setDesiredPosition(encoderCountsLeft, encoderCountsRight);
@@ -193,8 +197,6 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 
 	@Override
 	public Position getCurrentPosition() {
-		//this is tricky since any one of these might be in follower mode
-		//due to a bad encoder. in that case, we get a null integer back
 		
 		int leftEncoderCount = positionControllerGroup.computeLeftEncoderCounts();
 		int rightEncoderCount = positionControllerGroup.computeRightEncoderCounts();
