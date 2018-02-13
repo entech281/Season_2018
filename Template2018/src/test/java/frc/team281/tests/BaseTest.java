@@ -1,4 +1,4 @@
-package frc.team281.commands;
+package frc.team281.tests;
 
 import org.junit.Before;
 import org.junit.Test;

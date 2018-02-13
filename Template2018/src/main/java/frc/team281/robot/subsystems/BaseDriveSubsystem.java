@@ -21,7 +21,7 @@ public abstract class BaseDriveSubsystem extends BaseSubsystem {
 		this.driveInstructionSource = driveInstructionSource;
 	}
 
-	// these should be implemted using wpilib for the real system,
+	// these should be implemented using wpilib for the real system,
 	// and using fake data for the test system
 	public abstract void stop();
 
@@ -29,11 +29,9 @@ public abstract class BaseDriveSubsystem extends BaseSubsystem {
 
 	public abstract void tankDrive(double left, double right);
 
-	@Override
-	public void initialize() {
-		// TODO Auto-generated method stub
+	public abstract void drive(Position desiredPosition);
 
-	}
+	public abstract Position getCurrentPosition();
 
 	// an example where some functionality is shared for both test and drive
 	// implementation
@@ -41,7 +39,6 @@ public abstract class BaseDriveSubsystem extends BaseSubsystem {
 	@Override
 	protected void initDefaultCommand() {
 		setDefaultCommand(new JoystickDriveCommand(this, driveInstructionSource));
-
 	}
 
 }

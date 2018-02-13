@@ -11,7 +11,7 @@ package frc.team281.robot;
  */
 public class RobotMap {
 
-	public class CAN {
+	public static class CAN {
 		public static final int FRONT_LEFT_MOTOR = 0;
 		public static final int FRONT_RIGHT_MOTOR = 2;
 		public static final int REAR_LEFT_MOTOR = 1;
@@ -23,11 +23,11 @@ public class RobotMap {
 
 	}
 
-	public class JoystickPorts {
+	public static class JoystickPorts {
 		public static final int JOYSTICK_1 = 1;
 	}
 
-	public class JoystickButtons {
+	public static class JoystickButtons {
 		public static final int SHOOTER = 1;
 		public static final int INTAKE = 2;
 		public static final int LIFTER_UP = 3;
@@ -35,13 +35,13 @@ public class RobotMap {
 
 	}
 
-	public class PCMChannel {
+	public static class PCMChannel {
 		public static final int LIFTER_UP_SOLENOID = 2;
 		public static final int LIFTER_DOWN_SOLENOID = 3;
 
 	}
 
-	public class DigitalIO {
+	public static class DigitalIO {
 		public static final int UPPER_LIFTER_LIMIT = 0;
 		public static final int LOWER_LFTER_LIMIT = 1;
 

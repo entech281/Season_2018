@@ -9,7 +9,7 @@ package frc.team281.robot.logger;
  */
 public abstract class DataLogger {
 
-	public final String SEPARATOR = ".";
+	public final static String SEPARATOR = ".";
 	private String name = "";
 
 	public DataLogger(String name) {

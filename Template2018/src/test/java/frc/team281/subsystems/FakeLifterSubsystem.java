@@ -12,14 +12,14 @@ import frc.team281.robot.subsystems.BaseLifterSubsystem;
  * @author dcowden
  *
  */
-public class TestLifterSubsystem extends BaseLifterSubsystem {
+public class FakeLifterSubsystem extends BaseLifterSubsystem {
 
 	public static final int POSITION_BOTTOM = 0;
 
 	private int position = POSITION_BOTTOM;
 	private int maxPosition = 0;
 
-	public TestLifterSubsystem(int maxPosition) {
+	public FakeLifterSubsystem(int maxPosition) {
 		super();
 		this.maxPosition = maxPosition;
 	}

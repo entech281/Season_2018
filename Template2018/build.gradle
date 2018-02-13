@@ -8,9 +8,12 @@ plugins {
     id "findbugs"
 }
 
+
 allprojects {
     repositories { mavenCentral() }
 }
+
+
 
 def TEAM = 281
 def ROBOT_CLASS = "frc.team281.robot.Robot"
@@ -37,6 +40,8 @@ dependencies {
     compile ctre()
     compile navx()
     compile openrio.powerup.matchData()
+	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
+    
     testCompile 'junit:junit:4.12'
 	
 	testCompile 'org.powermock:powermock-api-mockito:1.6.1'

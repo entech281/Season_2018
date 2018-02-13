@@ -1,8 +1,9 @@
-package frc.team281.robot;
+package frc.team281.tests;
 
 import org.junit.Test;
 
 import frc.team281.robot.RobotMap;
+import frc.team281.robot.RobotMap.CAN;
 
 import static org.junit.Assert.assertTrue;
 
