@@ -59,4 +59,17 @@ public class FakeDriveSubsystem extends BaseDriveSubsystem {
         
     }
 
+
+	@Override
+	public void startCalibration() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void finishCalibration() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

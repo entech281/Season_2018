@@ -1,4 +1,4 @@
-package frc.team281.tests;
+package frc.team281.tests.learning;
 
 import static org.junit.Assert.*;
 

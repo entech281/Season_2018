@@ -19,8 +19,8 @@ public class TestCompositeLogger {
 		cdl.log("foo3", 0.0);
 		cdl.log("foo4", (int)0);
 		cdl.log("foo5",new Object() );
-		
-		assertEquals(10, logger1.getCounter() + logger2.getCounter());
+		cdl.warn("foo5");
+		assertEquals(12, logger1.getCounter() + logger2.getCounter());
 	}
 }
 
@@ -60,5 +60,10 @@ class FakeDataLogger extends DataLogger{
 	}		
 	public int getCounter() {
 		return counter;
+	}
+	@Override
+	public void warn(String message) {
+		counter++;	
+		
 	}
 }

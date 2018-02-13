@@ -5,7 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import frc.team281.robot.subsystems.EncoderCheck;
+import frc.team281.robot.controllers.EncoderCheck;
 
 public class TestEncoderCheck {
 
@@ -26,6 +26,10 @@ public class TestEncoderCheck {
 		assertTrue(ec.isRightRearOk());
 		assertTrue(ec.isLeftFrontOk());
 		assertTrue(ec.isLeftRearOk());
+		assertFalse(ec.shouldLeftRearFollowLeftFront());
+		assertFalse(ec.shouldRightFrontFollowRightRear());
+		assertFalse(ec.shouldRightRearFollowRightFront());
+		assertFalse(ec.shouldLeftFrontFollowLeftRear());			
 	}
 	
 	@Test
@@ -37,6 +41,10 @@ public class TestEncoderCheck {
 		assertTrue(ec.isLeftOk());
 		assertFalse(ec.isLeftRearOk());
 		assertTrue(ec.isLeftFrontOk());
+		assertTrue(ec.shouldLeftRearFollowLeftFront());
+		assertFalse(ec.shouldRightFrontFollowRightRear());
+		assertFalse(ec.shouldRightRearFollowRightFront());
+		assertFalse(ec.shouldLeftFrontFollowLeftRear());
 	}
 	
 	@Test
@@ -48,6 +56,10 @@ public class TestEncoderCheck {
 		assertTrue(ec.isRightOk());
 		assertFalse(ec.isRightFrontOk());
 		assertTrue(ec.isRightRearOk());
+		assertFalse(ec.shouldLeftRearFollowLeftFront());
+		assertTrue(ec.shouldRightFrontFollowRightRear());
+		assertFalse(ec.shouldRightRearFollowRightFront());
+		assertFalse(ec.shouldLeftFrontFollowLeftRear());		
 	}	
 	
 	@Test
@@ -61,5 +73,9 @@ public class TestEncoderCheck {
 		assertTrue(ec.isRightRearOk());	
 		assertFalse(ec.isLeftFrontOk());
 		assertFalse(ec.isLeftRearOk());
+		assertFalse(ec.shouldLeftRearFollowLeftFront());
+		assertFalse(ec.shouldRightFrontFollowRightRear());
+		assertFalse(ec.shouldRightRearFollowRightFront());
+		assertFalse(ec.shouldLeftFrontFollowLeftRear());			
 	}
 }

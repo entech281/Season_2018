@@ -6,9 +6,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-
-import frc.team281.robot.subsystems.TalonControllerGroup;
-import frc.team281.robot.subsystems.TalonPositionController;
+import frc.team281.robot.controllers.TalonControllerGroup;
+import frc.team281.robot.controllers.TalonPositionController;
 
 public class TestTalonControllerGroup {
 

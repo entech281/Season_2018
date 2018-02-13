@@ -1,5 +1,8 @@
 package frc.team281.robot.subsystems;
 
+import frc.team281.robot.controllers.EncoderCheck;
+import frc.team281.robot.controllers.TalonSpeedController;
+
 /**
  * Moves four motors ahead, just enough to test that the encoders work.
  * 
@@ -9,7 +12,6 @@ package frc.team281.robot.subsystems;
 public class MotorEncoderTester {
 
 	public static final double TEST_SPEED = 0.2;
-	public static final long TEST_TIME_MS = 200;
 
 	protected TalonSpeedController leftFrontMotor;
 	protected TalonSpeedController leftRearMotor;
@@ -24,9 +26,8 @@ public class MotorEncoderTester {
 		this.rightFrontMotor = rightFrontMotor;
 		this.rightRearMotor = rightRearMotor;
 	}
-
-	public EncoderCheck testMotors() {
-
+	
+	public void startTest() {
 		leftFrontMotor.resetPosition();
 		leftRearMotor.resetPosition();
 		rightFrontMotor.resetPosition();
@@ -36,8 +37,10 @@ public class MotorEncoderTester {
 		leftRearMotor.setDesiredSpeed(TEST_SPEED);
 		rightFrontMotor.setDesiredSpeed(TEST_SPEED);
 		rightRearMotor.setDesiredSpeed(TEST_SPEED);
-
-		sleep(TEST_TIME_MS);
+		
+	}
+	
+	public EncoderCheck finishTest() {
 
 		leftFrontMotor.setDesiredSpeed(0);
 		leftRearMotor.setDesiredSpeed(0);

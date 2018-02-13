@@ -49,4 +49,10 @@ public class ConsoleDataLogger extends DataLogger {
 		printMessage("%s", key, Boolean.toString(value));
 	}
 
+	@Override
+	public void warn(String message) {
+		printMessage("%s", "", message);
+		
+	}
+
 }

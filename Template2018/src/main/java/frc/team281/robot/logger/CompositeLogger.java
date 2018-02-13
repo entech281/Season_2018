@@ -57,4 +57,11 @@ public class CompositeLogger extends DataLogger {
 		}
 	}
 
+	@Override
+	public void warn(String message) {
+		for (DataLogger l : loggers) {
+			l.warn(message);
+		}
+	}
+
 }

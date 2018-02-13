@@ -24,6 +24,8 @@ public abstract class DataLogger {
 		return getName() + SEPARATOR + key;
 	}
 
+	public abstract void warn(String message);
+	
 	public abstract void log(String key, Object value);
 
 	public abstract void log(String key, double value);

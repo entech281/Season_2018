@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.team281.robot.DriveInstructionSource;
 import frc.team281.robot.RobotMap;
+import frc.team281.robot.controllers.TalonControllerGroup;
+import frc.team281.robot.subsystems.DriveSystemMode.StateResult;
 
 /**
  * This is the drive system that will run in the robot. All the wpilib stuff
@@ -35,13 +37,9 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 	private DifferentialDrive drive;
 
 	// for position control
-	private TalonPositionController frontLeftMotorPosition;
-	private TalonPositionController rearLeftMotorPosition;
-	private TalonPositionController frontRightMotorPosition;
-	private TalonPositionController rearRightMotorPosition;
-	
 	private TalonControllerGroup positionControllerGroup;
-	
+	private FourWheelTankTalonCalibrator calibrator = new FourWheelTankTalonCalibrator();
+
 	// have to hold on to these to change control modes.
 	private WPI_TalonSRX frontLeftMotor;
 	private WPI_TalonSRX frontRightMotor;
@@ -55,11 +53,6 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 	// 14/52 * 14/52 13.8:1
 	private EncoderInchesConverter encoderConverter = new EncoderInchesConverter(46.0);
 
-	public enum DriveMode {
-		SPEED, POSITION, DISABLED
-	}
-
-	private DriveMode driveMode = DriveMode.DISABLED;
 
 	public RealDriveSubsystem(DriveInstructionSource driveInstructionSource) {
 		super(driveInstructionSource);
@@ -88,110 +81,77 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 
 	}
 
+
 	/**
 	 * 
 	 * This method tests that the encoders are working by driving forward a bit, and
 	 * then making sure we read the encoders
 	 */
-	public void testEncoderMotionForPositionDrive() {
-
-		EncoderCheck check = new MotorEncoderTester(
-				new TalonSpeedController(frontLeftMotor, leftTalonSettings),
-				new TalonSpeedController(rearLeftMotor, leftTalonSettings),
-				new TalonSpeedController(frontRightMotor, rightTalonSettings),
-				new TalonSpeedController(rearRightMotor, rightTalonSettings)
-				) .testMotors();
-
-		// unless we detect problems, left and right settings match
-		TalonSettings frontLeftSettings = TalonSettingsBuilder.copy(leftTalonSettings);
-		TalonSettings frontRightSettings = TalonSettingsBuilder.copy(rightTalonSettings);
-		TalonSettings rearLeftSettings = TalonSettingsBuilder.copy(leftTalonSettings);
-		TalonSettings rearRightSettings = TalonSettingsBuilder.copy(rightTalonSettings);
-
-		//TODO this is just a nasty branch.
-		//how can we clean it up?
-		if (check.hasProblems()) {
-			if (check.canDrive()) {
-				if (check.hasLeftProblems()) {
-					if (check.isLeftFrontOk()) {
-						rearLeftSettings = TalonSettingsBuilder.follow(frontLeftSettings,
-								RobotMap.CAN.FRONT_LEFT_MOTOR);
-					}
-					// left rear is ok
-					else {
-						frontLeftSettings = TalonSettingsBuilder.follow(rearLeftSettings,
-								RobotMap.CAN.FRONT_RIGHT_MOTOR);
-					}
-				}
-				if (check.hasRightProblems()) {
-					if (check.isRightFrontOk()) {
-						rearRightSettings = TalonSettingsBuilder.follow(frontRightSettings,
-								RobotMap.CAN.FRONT_RIGHT_MOTOR);
-					}
-					// left rear is ok
-					else {
-						frontRightSettings = TalonSettingsBuilder.follow(rearRightSettings,
-								RobotMap.CAN.FRONT_RIGHT_MOTOR);
-					}
-				}
-			}
-			// cant drive-- because we have broken encoders on one side
-			// disable all motors
-			else {
-				frontLeftSettings = TalonSettingsBuilder.disabledCopy(rearLeftSettings);
-				frontRightSettings = TalonSettingsBuilder.disabledCopy(rearLeftSettings);
-				rearLeftSettings = TalonSettingsBuilder.disabledCopy(rearLeftSettings);
-				rearRightSettings = TalonSettingsBuilder.disabledCopy(rearLeftSettings);
-			}
-		}
-
-		frontLeftMotorPosition = new TalonPositionController(frontLeftMotor, frontLeftSettings);
-		rearLeftMotorPosition = new TalonPositionController(rearLeftMotor, frontRightSettings);
-		frontRightMotorPosition = new TalonPositionController(frontRightMotor, rearLeftSettings);
-		rearRightMotorPosition = new TalonPositionController(rearRightMotor, rearRightSettings);
-		
-		positionControllerGroup = new TalonControllerGroup(
-				frontLeftMotorPosition,frontRightMotorPosition,
-				rearLeftMotorPosition, rearRightMotorPosition);
+	public void startCalibration() {
+		StateResult r = driveMode.enterCalibrate();
+		if ( r == StateResult.ENTERED) {
+			calibrator.startCalibration( frontLeftMotor, rearLeftMotor, frontRightMotor, rearRightMotor, 
+					leftTalonSettings, rightTalonSettings);	
+		}		
 	}
 
-	protected void enableSpeedModeIfNeeded() {
-		if (!driveMode.equals(DriveMode.SPEED)) {
-			// set up for speed control
+	public void finishCalibration() {
+		this.positionControllerGroup = calibrator.finishCalibration();
+		driveMode.finishCalibrating();
+	}
+	
+	
+	protected boolean enterSpeedMode() {
+		StateResult r = driveMode.enterSpeed();
+		if ( r == StateResult.REJECTED) {
+			return false;
+		}
+		if ( r == StateResult.ENTERED) {
 			drive = new DifferentialDrive(
 					new SpeedControllerGroup(frontLeftMotor, rearLeftMotor),
 						new SpeedControllerGroup(frontRightMotor, rearRightMotor));
-			driveMode = DriveMode.SPEED;
-		}
+		}		
+		return true;
+
 	}
 
-	protected void enablePositionModeIfNeeded() {
-		if (!driveMode.equals(DriveMode.POSITION)) {
-			positionControllerGroup.resetMode();
-			driveMode = DriveMode.POSITION;
+	protected boolean enterPositionMode() {
+		StateResult r = driveMode.enterPosition();
+		if ( r == StateResult.REJECTED) {
+			return false;
 		}
+		if ( r == StateResult.ENTERED) {
+			positionControllerGroup.resetMode();
+		}		
+		return true;		
 	}
 
 	public void stop() {
-		drive.tankDrive(0., 0.);
+		if ( enterSpeedMode() ) {
+			drive.tankDrive(0., 0.);
+		}
+		
 	}
 
 	public void arcadeDrive(double forw, double turn) {
-		enableSpeedModeIfNeeded();
-		drive.arcadeDrive(-forw, turn, true);
+		if ( enterSpeedMode() ) {
+			drive.arcadeDrive(-forw, turn, true);
+		}		
 	}
 
 	public void tankDrive(double left, double right) {
-		enableSpeedModeIfNeeded();
-		drive.tankDrive(left, right, true);
+		if ( enterSpeedMode() ) {
+			drive.tankDrive(left, right, true);
+		}
 	}
 
 	@Override
 	public void drive(Position desiredPosition) {
-		enablePositionModeIfNeeded();		
-		int encoderCountsLeft = encoderConverter.toCounts(desiredPosition.getLeftInches());
-		int encoderCountsRight = encoderConverter.toCounts(desiredPosition.getRightInches());
-		positionControllerGroup.setDesiredPosition(encoderCountsLeft, encoderCountsRight);
+		if ( enterPositionMode() ) {
+			int encoderCountsLeft = encoderConverter.toCounts(desiredPosition.getLeftInches());
+			int encoderCountsRight = encoderConverter.toCounts(desiredPosition.getRightInches());
+			positionControllerGroup.setDesiredPosition(encoderCountsLeft, encoderCountsRight);			
+		}
 		
 	}
 

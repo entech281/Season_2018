@@ -1,5 +1,6 @@
 package frc.team281.robot.logger;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -43,6 +44,12 @@ public class SmartDashboardLogger extends DataLogger {
 	@Override
 	public void log(String key, boolean value) {
 		SmartDashboard.putBoolean(computePath(key), value);
+	}
+
+	@Override
+	public void warn(String message) {
+		DriverStation.reportWarning(message, true);
+		
 	}
 
 }

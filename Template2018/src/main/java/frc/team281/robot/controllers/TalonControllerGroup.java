@@ -1,4 +1,4 @@
-package frc.team281.robot.subsystems;
+package frc.team281.robot.controllers;
 
 /**
  * Utilities for operating on a group of controllers

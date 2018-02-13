@@ -16,11 +16,17 @@ import frc.team281.robot.commands.JoystickDriveCommand;
 public abstract class BaseDriveSubsystem extends BaseSubsystem {
 
 	protected DriveInstructionSource driveInstructionSource;
-
+	protected DriveSystemMode driveMode = new DriveSystemMode();
+	
 	public BaseDriveSubsystem(DriveInstructionSource driveInstructionSource) {
 		this.driveInstructionSource = driveInstructionSource;
 	}
 
+	
+	public abstract void startCalibration();
+	
+	public abstract void finishCalibration();
+	
 	// these should be implemented using wpilib for the real system,
 	// and using fake data for the test system
 	public abstract void stop();

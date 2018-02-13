@@ -1,6 +1,8 @@
-package frc.team281.robot.subsystems;
+package frc.team281.robot.controllers;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
+import frc.team281.robot.subsystems.TalonSettings;
 
 public class TalonPositionController extends BaseTalonController {
 
