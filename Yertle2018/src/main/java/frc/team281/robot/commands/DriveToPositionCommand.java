@@ -11,7 +11,7 @@ public class DriveToPositionCommand extends Command {
     private Position desiredPosition;
     private DriveSubsystem driveSubsystem;
 
-    public static final double TOLERANCE = 1.0;
+    public static final double TOLERANCE = 8.0;
     private int counter =0;
     public DriveToPositionCommand(DriveSubsystem subsystem, Position position) {
         this.desiredPosition = position;

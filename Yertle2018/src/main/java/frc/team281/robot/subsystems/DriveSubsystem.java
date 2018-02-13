@@ -76,11 +76,11 @@ public class DriveSubsystem extends Subsystem {
     // estimated at 3200 rev/min * 80 counts/rev * 1 min / 60 sec = 4266 counts/sec
     // note that this speed is not affected by the gear ratio!
     // 75% of that is 3200 counts/sec
-    public static final int MOTOR_CRUISE_VELOCITY = 800;
+    public static final int MOTOR_CRUISE_VELOCITY = 600;
 
     // lets get to full speed in 1 second
     // not affected by gear ratio
-    public static final int MOTOR_ACCELERATION = 800;
+    public static final int MOTOR_ACCELERATION = 600;
 
     // recommended-- start with all gains but P, and work from there
     // then double the gain until oscillations occur
