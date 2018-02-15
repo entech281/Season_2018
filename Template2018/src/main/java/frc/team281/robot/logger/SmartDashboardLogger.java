@@ -1,7 +1,9 @@
 package frc.team281.robot.logger;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.team281.robot.subsystems.BaseSubsystem;
 
 /**
  * A datalogger that sends data to the smartDashboard. Dont' create them
@@ -51,5 +53,10 @@ public class SmartDashboardLogger extends DataLogger {
 		DriverStation.reportWarning(message, true);
 		
 	}
+
+    @Override
+    public void log(BaseSubsystem subsystem) {
+        SmartDashboard.putData((Subsystem)subsystem);
+    }
 
 }

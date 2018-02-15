@@ -1,5 +1,7 @@
 package frc.team281.robot.logger;
 
+import frc.team281.robot.subsystems.BaseSubsystem;
+
 /**
  * logs data to the console ( system.out ) . Useful for unit testing.
  * 
@@ -54,5 +56,11 @@ public class ConsoleDataLogger extends DataLogger {
 		printMessage("%s", "", message);
 		
 	}
+
+    @Override
+    public void log(BaseSubsystem subsystem) {
+        printMessage("%s","",subsystem.getName() + " initializing.");
+        
+    }
 
 }

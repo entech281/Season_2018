@@ -132,8 +132,8 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 		if ( r == StateResult.ENTERED) {
 			drive = new DifferentialDrive(
 					new SpeedControllerGroup(frontLeftMotor, rearLeftMotor),
-						new SpeedControllerGroup(frontRightMotor, rearRightMotor));
-		}
+					new SpeedControllerGroup(frontRightMotor, rearRightMotor));
+		}		
 		return true;
 
 	}
@@ -181,7 +181,9 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 		if ( enterPositionMode() ) {
 			int encoderCountsLeft = encoderConverter.toCounts(desiredPosition.getLeftInches());
 			int encoderCountsRight = encoderConverter.toCounts(desiredPosition.getRightInches());
-			positionControllerGroup.setDesiredPosition(encoderCountsLeft, encoderCountsRight);
+			positionControllerGroup.setDesiredPosition(encoderCountsLeft, encoderCountsRight);	
+			dataLogger.log("DesiredPositionLeft", encoderCountsLeft);
+			dataLogger.log("DesiredPositionRight",encoderCountsRight );
 		}
 
 	}
