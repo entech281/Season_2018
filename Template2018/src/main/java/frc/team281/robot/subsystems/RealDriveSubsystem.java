@@ -32,6 +32,7 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 
 	public static final int MOTOR_CRUISE_VELOCITY = 1200;
 	public static final int MOTOR_ACCELERATION = 800;
+	public static final int NAVX_CALIBRATION_LOOP_TIME_MS = 50;  // in ms
 	public static final double I_GAIN = 0.0;
 	public static final double P_GAIN = 0.1;
 	public static final double D_GAIN = 0.0;
@@ -97,7 +98,7 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 		if (this.navX != null) {
 			while (this.navX.isCalibrating()) {
 				try {
-					Thread.sleep(50);  // 50ms
+					Thread.sleep(NAVX_CALIBRATION_LOOP_TIME_MS);
 				} catch (InterruptedException e) {
 				}
 			}
