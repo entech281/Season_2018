@@ -3,12 +3,11 @@ package frc.team281.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.SerialPort;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.smartdashboard.*;
 import frc.team281.robot.DriveInstructionSource;
 import frc.team281.robot.RobotMap;
+import frc.team281.robot.logger.DataLogger;
 import frc.team281.robot.controllers.TalonControllerGroup;
 import frc.team281.robot.subsystems.DriveSystemMode.StateResult;
 
@@ -74,7 +73,7 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
         }
         catch(Exception e) {
 			this.navX = null;
-            DriverStation.reportError("Trouble with NavX MXP",false);
+            dataLogger.warn("Trouble with NavX MXP");
         }
 
 		this.frontLeftMotor = new WPI_TalonSRX(RobotMap.CAN.FRONT_LEFT_MOTOR);
@@ -172,8 +171,8 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 	public void periodic() {
         // method called by scheduler automatically
 		if (this.navX != null) {
-            SmartDashboard.putData("NavX: ", this.navX);
-            SmartDashboard.putNumber("NavX Yaw Angle: ", this.navX.getYaw());
+            dataLogger.log("NavX: ", this.navX);
+            dataLogger.log("NavX Yaw Angle: ", this.navX.getYaw());
 		}
 	}
 
