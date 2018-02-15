@@ -1,5 +1,7 @@
 package frc.team281.robot.logger;
 
+import frc.team281.robot.subsystems.BaseSubsystem;
+
 /**
  * Base class for DataLoggers. Each logger has a name, and sends data somewhere
  * for logging and display later.
@@ -37,5 +39,7 @@ public abstract class DataLogger {
 	public abstract void log(String key, long value);
 
 	public abstract void log(String key, boolean value);
+	
+	public abstract void log(BaseSubsystem subsystem);
 
 }

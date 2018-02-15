@@ -7,6 +7,8 @@ import frc.team281.robot.controllers.EncoderCheck;
 import frc.team281.robot.controllers.TalonControllerGroup;
 import frc.team281.robot.controllers.TalonPositionController;
 import frc.team281.robot.controllers.TalonSpeedController;
+import frc.team281.robot.logger.DataLogger;
+import frc.team281.robot.logger.DataLoggerFactory;
 
 /**
  * Given four CAN Talons and some desired settings,
@@ -17,6 +19,9 @@ import frc.team281.robot.controllers.TalonSpeedController;
  */
 public class FourWheelTankTalonCalibrator {
 
+    
+    private static DataLogger log = DataLoggerFactory.getLoggerFactory().createDataLogger("FourWheelTankTalonCalibrator");
+    
 	private boolean calibrated = false;
 	private MotorEncoderTester tester = null;
 	private TalonSettings leftTalonSettings;
@@ -50,6 +55,7 @@ public class FourWheelTankTalonCalibrator {
 				new TalonSpeedController(rearRightMotor, rightTalonSettings)
 				);
 		
+		log.log("Calibration Finished", false);
 		tester.startTest();
 
 		
@@ -64,7 +70,12 @@ public class FourWheelTankTalonCalibrator {
 		TalonSettings rearRightSettings = TalonSettingsBuilder.copy(rightTalonSettings);
 
 		EncoderCheck checker = tester.finishTest();
-
+		log.log("Calibration Finished", true);
+		log.log("LeftFrontMotorGood",checker.isLeftFrontOk());
+		log.log("LeftRearMotorGood",checker.isLeftRearOk());
+		log.log("RightFrontMotorGood",checker.isRightFrontOk());
+		log.log("RightRearMotorGood",checker.isRightRearOk());
+		
 		if ( checker.shouldDisableAll()) {
 			frontLeftSettings = TalonSettingsBuilder.disabledCopy(rearLeftSettings);
 			frontRightSettings = TalonSettingsBuilder.disabledCopy(rearLeftSettings);

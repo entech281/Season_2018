@@ -1,5 +1,7 @@
 package frc.team281.robot.logger;
 
+import frc.team281.robot.subsystems.BaseSubsystem;
+
 /**
  * This data logger sends everything to a list of other loggers
  * 
@@ -63,5 +65,12 @@ public class CompositeLogger extends DataLogger {
 			l.warn(message);
 		}
 	}
+
+    @Override
+    public void log(BaseSubsystem subsystem) {
+        for (DataLogger l : loggers) {
+            l.log(subsystem);
+        }     
+    }
 
 }

@@ -41,9 +41,14 @@ public class DriveSystemMode {
 		
 	}
 	
+	protected void setState(DriveMode newMode){
+	    mode = newMode;
+	    log.log("Enter State",newMode + "");
+	}
+	
 	public StateResult enterCalibrate() {
 		if ( isDisabled() ) {
-			mode = DriveMode.CALIBRATING;
+		    setState(DriveMode.CALIBRATING);
 			return StateResult.ENTERED;
 		}
 		log.warn("Attempt to Calibrate when in mode:" + mode);
@@ -52,7 +57,7 @@ public class DriveSystemMode {
 	
 	public StateResult finishCalibrating() {
 		this.calibrated = true;
-		mode = DriveMode.READY;
+		setState(DriveMode.READY);
 		return StateResult.ENTERED;
 	}
 	
@@ -65,7 +70,7 @@ public class DriveSystemMode {
 			return StateResult.REJECTED;			
 		}
 		else {
-			mode = DriveMode.SPEED;
+			setState(DriveMode.SPEED);
 			return StateResult.ENTERED;
 		}
 	}
@@ -83,7 +88,7 @@ public class DriveSystemMode {
 			return StateResult.REJECTED;
 		}
 		else {
-			mode = DriveMode.POSITION;
+			setState(DriveMode.POSITION);
 			return StateResult.ENTERED;
 		}		
 	}
