@@ -60,6 +60,7 @@ public class PositionDriveController extends BaseDriveController {
 		dataLogger.log("isFinished", isFinished());
 		dataLogger.log("desiredPosition", desiredPosition);
 		dataLogger.log("currentPosition", getCurrentPosition());
+		
 		if (isFinished()) {
 			Position p = positionSource.getNextPosition();
 			dataLogger.log("nextPositon", p + "");

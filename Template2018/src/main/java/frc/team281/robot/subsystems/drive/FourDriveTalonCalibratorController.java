@@ -17,8 +17,9 @@ public class FourDriveTalonCalibratorController extends BaseDriveController {
 	private MotorEncoderTester tester;
 	private long calibrationTimeMs = 0;
 	private long startTimeMillis = 0;
-	private FourTalonsWithSettings talons;
-
+	private FourTalonsWithSettings talons;	
+	private EncoderCheck checker;
+	
 	public FourDriveTalonCalibratorController(FourTalonsWithSettings talons, long calibrationTimeMs) {
 		this.talons = talons;
 		this.calibrationTimeMs = calibrationTimeMs;
@@ -35,56 +36,47 @@ public class FourDriveTalonCalibratorController extends BaseDriveController {
 				new TalonSpeedController(talons.getRearRight(), talons.getRearRightSettings()), calibrationTimeMs);
 
 		tester.startTest();
-
+		
 		startTimeMillis = System.currentTimeMillis();
 
 	}
 
-	protected void finishCalibration() {
+	public void adjustTalonSettingsToWorkAroundBrokenEncoders(FourTalonsWithSettings originalTalons) {
 
-		EncoderCheck checker = tester.finishTest();
-
+		if ( checker == null ) {
+			dataLogger.warn("Attempt to get calibration result when calibration is not finished.");
+			return;
+		}
+		
 		dataLogger.log("Calibration Finished", true);
 		dataLogger.log("LeftFrontMotorGood", checker.isLeftFrontOk());
 		dataLogger.log("LeftRearMotorGood", checker.isLeftRearOk());
 		dataLogger.log("RightFrontMotorGood", checker.isRightFrontOk());
 		dataLogger.log("RightRearMotorGood", checker.isRightRearOk());
-
-		if (checker.shouldDisableAll()) {
-			talons.disableAllSettings();
-		} else {
-			if (checker.shouldLeftFrontFollowLeftRear()) {
-				talons.setFrontLeftSettings(
-						TalonSettingsBuilder.follow(talons.getRearLeftSettings(), RobotMap.CAN.FRONT_RIGHT_MOTOR));
-			}
-			if (checker.shouldLeftRearFollowLeftFront()) {
-				talons.setRearLeftSettings(
-						TalonSettingsBuilder.follow(talons.getFrontLeftSettings(), RobotMap.CAN.FRONT_LEFT_MOTOR));
-			}
-			if (checker.shouldRightFrontFollowRightRear()) {
-				talons.setFrontRightSettings(
-						TalonSettingsBuilder.follow(talons.getRearRightSettings(), RobotMap.CAN.FRONT_RIGHT_MOTOR));
-			}
-			if (checker.shouldRightRearFollowRightFront()) {
-				talons.setRearRightSettings(
-						TalonSettingsBuilder.follow(talons.getFrontRightSettings(), RobotMap.CAN.FRONT_RIGHT_MOTOR));
-
-			}
-		}
-
+		checker.adjustTalonSettingsToWorkAroundBrokenEncoders(originalTalons);
+		
 	}
 
 	public boolean isCalibrationReady() {
-		long currentTime = System.currentTimeMillis();
-		return currentTime > (startTimeMillis + this.calibrationTimeMs);
+		if ( tester == null ) {
+			return false;
+		}
+		else if ( tester.isRunning() ) {
+			long currentTime = System.currentTimeMillis();
+			return currentTime > (startTimeMillis + this.calibrationTimeMs);			
+		}
+		else {
+			return false;
+		}
+
 	}
 
 	@Override
 	public void periodic() {
 		boolean calibrated = isCalibrationReady();
 		dataLogger.log("CalibrationComplete", calibrated);
-		if (isCalibrationReady()) {
-			finishCalibration();
+		if ( calibrated && checker == null ) {
+			checker = tester.finishTest();
 		}
 
 	}
