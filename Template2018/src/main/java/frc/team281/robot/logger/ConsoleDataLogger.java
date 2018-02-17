@@ -60,7 +60,6 @@ public class ConsoleDataLogger extends DataLogger {
 
     @Override
     public void warn(String message) {
-        // TODO Auto-generated method stub
         
     }
 }

@@ -28,7 +28,7 @@ public class TestCompositeLogger extends BaseTest {
 		cdl.log("foo5",new Object() );
 		cdl.warn("foo5");
 
-		assertEquals(12, logger1.getCounter() + logger2.getCounter());
+		assertEquals(16, logger1.getCounter() + logger2.getCounter());
 	}
 }
 
