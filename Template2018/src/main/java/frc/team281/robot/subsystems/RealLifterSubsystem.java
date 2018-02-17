@@ -12,52 +12,52 @@ import frc.team281.robot.RobotMap;
  */
 public class RealLifterSubsystem extends BaseLifterSubsystem {
 
-	private Solenoid upSolenoid;
-	private Solenoid downSolenoid;
-	private DigitalInput upperLimit;
-	private DigitalInput lowerLimit;
+    private Solenoid upSolenoid;
+    private Solenoid downSolenoid;
+    private DigitalInput upperLimit;
+    private DigitalInput lowerLimit;
 
-	public RealLifterSubsystem() {
-		super();
-	}
+    public RealLifterSubsystem() {
+        super();
+    }
 
-	@Override
-	public void initialize() {
-		upperLimit = new DigitalInput(RobotMap.DigitalIO.UPPER_LIFTER_LIMIT);
-		lowerLimit = new DigitalInput(RobotMap.DigitalIO.LOWER_LFTER_LIMIT);
-		upSolenoid = new Solenoid(RobotMap.CAN.LIFTER_UP_SOLENOID, RobotMap.PCMChannel.LIFTER_UP_SOLENOID);
-		downSolenoid = new Solenoid(RobotMap.CAN.LIFTER_UP_SOLENOID, RobotMap.PCMChannel.LIFTER_DOWN_SOLENOID);
-	}
+    @Override
+    public void initialize() {
+        upperLimit = new DigitalInput(RobotMap.DigitalIO.UPPER_LIFTER_LIMIT);
+        lowerLimit = new DigitalInput(RobotMap.DigitalIO.LOWER_LFTER_LIMIT);
+        upSolenoid = new Solenoid(RobotMap.CAN.LIFTER_UP_SOLENOID, RobotMap.PCMChannel.LIFTER_UP_SOLENOID);
+        downSolenoid = new Solenoid(RobotMap.CAN.LIFTER_UP_SOLENOID, RobotMap.PCMChannel.LIFTER_DOWN_SOLENOID);
+    }
 
-	@Override
-	public void raise() {
-		upSolenoid.set(true);
-		downSolenoid.set(false);
-		dataLogger.log("raise", true);
-	}
+    @Override
+    public void raise() {
+        upSolenoid.set(true);
+        downSolenoid.set(false);
+        dataLogger.log("raise", true);
+    }
 
-	@Override
-	public void lower() {
-		upSolenoid.set(true);
-		downSolenoid.set(false);
-		dataLogger.log("raise", true);
-	}
+    @Override
+    public void lower() {
+        upSolenoid.set(true);
+        downSolenoid.set(false);
+        dataLogger.log("raise", true);
+    }
 
-	@Override
-	public boolean isAtTop() {
-		// TODO Auto-generated method stub
-		return upperLimit.get();
-	}
+    @Override
+    public boolean isAtTop() {
+        // TODO Auto-generated method stub
+        return upperLimit.get();
+    }
 
-	@Override
-	public boolean isAtBottom() {
-		// TODO Auto-generated method stub
-		return lowerLimit.get();
-	}
+    @Override
+    public boolean isAtBottom() {
+        // TODO Auto-generated method stub
+        return lowerLimit.get();
+    }
 
-	@Override
-	protected void initDefaultCommand() {
+    @Override
+    protected void initDefaultCommand() {
 
-	}
+    }
 
 }

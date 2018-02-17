@@ -5,8 +5,11 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import frc.team281.robot.subsystems.BaseSubsystem;
+import frc.team281.subsystems.FakeLifterSubsystem;
+import frc.team281.tests.BaseTest;
 
-public class TestCompositeLogger {
+public class TestCompositeLogger extends BaseTest {
+
 
 	@Test
 	public void testCompositeLogger() {
@@ -18,10 +21,18 @@ public class TestCompositeLogger {
 		cdl.log("foo", "bar");
 		cdl.log("foo2", true);
 		cdl.log("foo3", 0.0);
+<<<<<<< HEAD
 		cdl.log("foo4", (int) 0);
 		cdl.log("foo5", new Object());
+=======
+		cdl.log("foo4", (int)0);
+		cdl.log("foo5", new Object() );
+		cdl.log("foo6", new FakeLifterSubsystem(10));
+		cdl.log("foo5",new Object() );
+>>>>>>> origin/PL_testingBranch
 		cdl.warn("foo5");
-		assertEquals(12, logger1.getCounter() + logger2.getCounter());
+
+		assertEquals(16, logger1.getCounter() + logger2.getCounter());
 	}
 }
 
@@ -31,7 +42,11 @@ class FakeDataLogger extends DataLogger {
 	public FakeDataLogger(String name) {
 		super(name);
 	}
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> origin/PL_testingBranch
 	@Override
 	public void log(String key, Object value) {
 		counter++;
@@ -65,6 +80,11 @@ class FakeDataLogger extends DataLogger {
 	public int getCounter() {
 		return counter;
 	}
+<<<<<<< HEAD
+=======
+	
+	// Adds the remote to the tester
+>>>>>>> origin/PL_testingBranch
 
 	@Override
 	public void warn(String message) {
@@ -78,3 +98,4 @@ class FakeDataLogger extends DataLogger {
 
 	}
 }
+

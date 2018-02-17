@@ -23,6 +23,7 @@ import frc.team281.robot.subsystems.drive.RealDriveSubsystem;
  */
 public class Robot extends IterativeRobot implements CommandFactory {
 
+<<<<<<< HEAD
 	private RealDriveSubsystem driveSubsystem;
 	private RealLifterSubsystem lifterSubsystem;
 	private OperatorInterface operatorInterface;
@@ -96,4 +97,79 @@ public class Robot extends IterativeRobot implements CommandFactory {
 	public LifterLowerCommand createLowerCommand() {
 		return new LifterLowerCommand(this.lifterSubsystem);
 	}
+=======
+    private RealDriveSubsystem driveSubsystem;
+    private RealLifterSubsystem lifterSubsystem;
+    private OperatorInterface operatorInterface;
+
+    /**
+     * This function is run when the robot is first started up and should be used
+     * for any initialization code.
+     */
+    @Override
+    public void robotInit() {
+
+        // create the objects for the real match
+        DataLoggerFactory.configureForMatch();
+
+        lifterSubsystem = new RealLifterSubsystem();
+        operatorInterface = new OperatorInterface(this);
+        driveSubsystem = new RealDriveSubsystem(operatorInterface);
+
+        driveSubsystem.initialize();
+        operatorInterface.initialize();
+        operatorInterface.initialize();
+    }
+
+    @Override
+    public void autonomousInit() {
+        // m_AutonomousCommand.start();
+    }
+
+    /**
+     * This function is called periodically during operator control
+     */
+    @Override
+    public void autonomousPeriodic() {
+        Scheduler.getInstance().run();
+    }
+
+    @Override
+    public void disabledInit() {
+
+    }
+
+    /**
+     * This function is called once each time the robot enters Disabled mode. You
+     * can use it to reset any subsystem information you want to clear when the
+     * robot is disabled.
+     */
+
+    @Override
+    public void disabledPeriodic() {
+        Scheduler.getInstance().run();
+    }
+
+    @Override
+    public void teleopInit() {
+    }
+
+    /**
+     * This function is called periodically during operator control
+     */
+    @Override
+    public void teleopPeriodic() {
+        Scheduler.getInstance().run();
+    }
+
+    @Override
+    public LifterRaiseCommand createRaiseCommand() {
+        return new LifterRaiseCommand(this.lifterSubsystem);
+    }
+
+    @Override
+    public LifterLowerCommand createLowerCommand() {
+        return new LifterLowerCommand(this.lifterSubsystem);
+    }
+>>>>>>> origin/PL_testingBranch
 }

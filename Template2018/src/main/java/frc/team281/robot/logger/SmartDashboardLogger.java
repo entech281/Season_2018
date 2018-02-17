@@ -14,39 +14,47 @@ import frc.team281.robot.subsystems.BaseSubsystem;
  */
 public class SmartDashboardLogger extends DataLogger {
 
-	public SmartDashboardLogger(String name) {
-		super(name);
-	}
 
-	@Override
-	public void log(String key, Object value) {
-		SmartDashboard.putString(computePath(key), value.toString());
-	}
+    public SmartDashboardLogger(String name) {
+        super(name);
+    }
 
-	@Override
-	public void log(String key, double value) {
-		SmartDashboard.putNumber(computePath(key), value);
-	}
+    @Override
+    public void log(String key, Object value) {
+        SmartDashboard.putString(computePath(key), value.toString());
+    }
 
-	@Override
-	public void log(String key, int value) {
-		SmartDashboard.putNumber(computePath(key), value);
-	}
+    @Override
+    public void log(String key, double value) {
+        SmartDashboard.putNumber(computePath(key), value);
+    }
 
-	@Override
-	public void log(String key, String value) {
-		SmartDashboard.putString(computePath(key), value);
-	}
+    @Override
+    public void log(String key, int value) {
+        SmartDashboard.putNumber(computePath(key), value);
+    }
 
-	@Override
-	public void log(String key, long value) {
-		SmartDashboard.putNumber(computePath(key), value);
-	}
+    @Override
+    public void log(String key, String value) {
+        SmartDashboard.putString(computePath(key), value);
+    }
 
-	@Override
-	public void log(String key, boolean value) {
-		SmartDashboard.putBoolean(computePath(key), value);
-	}
+    @Override
+    public void log(String key, long value) {
+        SmartDashboard.putNumber(computePath(key), value);
+    }
+
+    @Override
+    public void log(String key, boolean value) {
+        SmartDashboard.putBoolean(computePath(key), value);
+    }
+
+    // Displays the Subsystem log data
+    @Override
+    public void log(BaseSubsystem subsystem) {
+        SmartDashboard.putData(subsystem);
+
+    }
 
 	@Override
 	public void warn(String message) {
@@ -54,9 +62,12 @@ public class SmartDashboardLogger extends DataLogger {
 
 	}
 
+<<<<<<< HEAD
 	@Override
 	public void log(BaseSubsystem subsystem) {
 		SmartDashboard.putData((Subsystem) subsystem);
 	}
 
+=======
+>>>>>>> origin/PL_testingBranch
 }

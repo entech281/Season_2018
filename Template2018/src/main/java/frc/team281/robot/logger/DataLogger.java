@@ -11,35 +11,48 @@ import frc.team281.robot.subsystems.BaseSubsystem;
  */
 public abstract class DataLogger {
 
-	public final static String SEPARATOR = ".";
-	private String name = "";
+    public final static String SEPARATOR = ".";
+    private String name = "";
 
-	public DataLogger(String name) {
-		this.name = name;
-	}
+    public DataLogger(String name) {
+        this.name = name;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String computePath(String key) {
-		return getName() + SEPARATOR + key;
-	}
+    public String computePath(String key) {
+        return getName() + SEPARATOR + key;
+    }
+
+    public abstract void log(String key, Object value);
+
+
+    public abstract void log(String key, double value);
 
 	public abstract void warn(String message);
+<<<<<<< HEAD
 
 	public abstract void log(String key, Object value);
+=======
+>>>>>>> origin/PL_testingBranch
 
-	public abstract void log(String key, double value);
+    public abstract void log(String key, int value);
 
-	public abstract void log(String key, int value);
+    public abstract void log(String key, String value);
 
-	public abstract void log(String key, String value);
+    public abstract void log(String key, long value);
 
-	public abstract void log(String key, long value);
+    public abstract void log(String key, boolean value);
 
+<<<<<<< HEAD
 	public abstract void log(String key, boolean value);
 
 	public abstract void log(BaseSubsystem subsystem);
+=======
+    // Creates a Log method that takes BaseSubsystem as a parameter
+    public abstract void log(BaseSubsystem subsystem);
+>>>>>>> origin/PL_testingBranch
 
 }

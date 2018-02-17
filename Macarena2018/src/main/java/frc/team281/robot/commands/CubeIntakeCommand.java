@@ -6,6 +6,7 @@ import frc.team281.robot.logger.DataLoggerFactory;
 import frc.team281.robot.subsystems.CubeGripperSubsystem;
 
 public class CubeIntakeCommand extends BaseCommand {
+	
 	private CubeGripperSubsystem _CGS;
 	
 	public CubeIntakeCommand (CubeGripperSubsystem CGS) {

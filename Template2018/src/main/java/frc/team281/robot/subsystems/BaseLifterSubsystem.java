@@ -11,16 +11,16 @@ package frc.team281.robot.subsystems;
  */
 public abstract class BaseLifterSubsystem extends BaseSubsystem {
 
-	public static final double LIFTER_TIMEOUT = 2.0;
+    public static final double LIFTER_TIMEOUT = 2.0;
 
-	// these should be implemted using wpilib for the real system,
-	// and using fake data for the test system
-	public abstract void raise();
+    // these should be implemted using wpilib for the real system,
+    // and using fake data for the test system
+    public abstract void raise();
 
-	public abstract void lower();
+    public abstract void lower();
 
-	public abstract boolean isAtTop();
+    public abstract boolean isAtTop();
 
-	public abstract boolean isAtBottom();
+    public abstract boolean isAtBottom();
 
 }

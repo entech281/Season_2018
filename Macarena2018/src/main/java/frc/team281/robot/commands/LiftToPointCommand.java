@@ -8,15 +8,18 @@ import frc.team281.robot.subsystems.ElevatorSubsystem;
 
 public class LiftToPointCommand extends BaseCommand {
 
-	public ElevatorSubsystem _ES;
-	public LiftToPointCommand (ElevatorSubsystem ES) {
+	private ElevatorSubsystem _ES;
+	private double height;
+	
+	public LiftToPointCommand (ElevatorSubsystem ES, double height) {
 		super(ES);
 		this._ES = ES;
+		this.height = height;
 		requires (_ES);
 	}
 	
 	protected void execute() {
-		
+		_ES.setHeight(height);
 	}
 
 	@Override
