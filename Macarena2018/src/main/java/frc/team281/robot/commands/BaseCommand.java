@@ -19,6 +19,7 @@ public abstract class BaseCommand extends Command {
 
     public BaseCommand(BaseSubsystem subsystem) {
         this(subsystem, UNLIMITED_TIMEOUT);
+        requires(subsystem);
     }
 
     /**

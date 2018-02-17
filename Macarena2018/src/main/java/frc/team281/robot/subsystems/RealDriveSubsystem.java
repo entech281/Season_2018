@@ -1,12 +1,16 @@
 package frc.team281.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team281.robot.DriveInstructionSource;
 import frc.team281.robot.RobotMap;
 import frc.team281.robot.controllers.TalonControllerGroup;
+import frc.team281.robot.controllers.TalonPositionController;
 import frc.team281.robot.subsystems.DriveSystemMode.StateResult;
 
 /**
@@ -26,12 +30,12 @@ import frc.team281.robot.subsystems.DriveSystemMode.StateResult;
  */
 public class RealDriveSubsystem extends BaseDriveSubsystem {
 
-    public static final int MOTOR_CRUISE_VELOCITY = 1200;
-    public static final int MOTOR_ACCELERATION = 800;
+    public static final int MOTOR_CRUISE_VELOCITY = 600;
+    public static final int MOTOR_ACCELERATION = 600;
     public static final double I_GAIN = 0.0;
-    public static final double P_GAIN = 0.1;
+    public static final double P_GAIN = 1.5;
     public static final double D_GAIN = 0.0;
-    public static final double F_GAIN = 0.0;
+    public static final double F_GAIN = 0.4;
 
     // for speed control
     private DifferentialDrive drive;
@@ -55,9 +59,24 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 
     public RealDriveSubsystem(DriveInstructionSource driveInstructionSource) {
         super(driveInstructionSource);
+        SmartDashboard.putData(this);
     }
 
+    
+    
+    
     @Override
+	public void periodic() {
+		SmartDashboard.putNumber("frontLeftEncoder", frontLeftMotor.getSelectedSensorPosition(0));
+		SmartDashboard.putNumber("frontRightEncoder", frontRightMotor.getSelectedSensorPosition(0));
+		SmartDashboard.putNumber("rearLeftEncoder", rearLeftMotor.getSelectedSensorPosition(0));
+		SmartDashboard.putNumber("rearRightEncoder", rearRightMotor.getSelectedSensorPosition(0));		
+    }
+
+
+
+
+	@Override
     public void initialize() {
 
         this.frontLeftMotor = new WPI_TalonSRX(RobotMap.CAN.FRONT_LEFT_MOTOR);
@@ -68,8 +87,8 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
         this.leftTalonSettings = TalonSettingsBuilder.defaults()
                 .withCurrentLimits(35, 30, 200)
                 .coastInNeutral()
-                .withDirections(true, true)
-                .limitMotorOutputs(0.5, 0.01)
+                .withDirections(true, false)
+                .limitMotorOutputs(1.0,0.3)
                 .noMotorStartupRamping()
                 .usePositionControl()
                 .withGains(F_GAIN, P_GAIN, I_GAIN, D_GAIN)
@@ -77,7 +96,18 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
                 .build();
 
         this.rightTalonSettings = TalonSettingsBuilder.inverted(leftTalonSettings, false, true);
-
+        TalonSettings leftRearSettings = this.leftTalonSettings.copy();
+        
+        leftRearSettings.controlMode = ControlMode.Follower;
+        leftRearSettings.demand = RobotMap.CAN.FRONT_LEFT_MOTOR;
+        
+        
+        this.positionControllerGroup = new TalonControllerGroup (  
+        		    new TalonPositionController(frontLeftMotor, leftTalonSettings),
+                new TalonPositionController(frontRightMotor, rightTalonSettings),
+                new TalonPositionController(rearLeftMotor, leftRearSettings),
+                new TalonPositionController(rearRightMotor, rightTalonSettings));
+        this.positionControllerGroup.configureAll();
     }
 
     /**
@@ -94,7 +124,7 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
     }
 
     public void finishCalibration() {
-        this.positionControllerGroup = calibrator.finishCalibration();
+        //this.positionControllerGroup = calibrator.finishCalibration();
         driveMode.finishCalibrating();
     }
 
@@ -106,6 +136,7 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
         if (r == StateResult.ENTERED) {
             drive = new DifferentialDrive(new SpeedControllerGroup(frontLeftMotor, rearLeftMotor),
                     new SpeedControllerGroup(frontRightMotor, rearRightMotor));
+            drive.setSafetyEnabled(false);
         }
         return true;
 
@@ -147,6 +178,7 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
     @Override
     public void drive(Position desiredPosition) {
         if (enterPositionMode()) {
+        		DriverStation.reportWarning("Setting Positions", false);
             int encoderCountsLeft = encoderConverter.toCounts(desiredPosition.getLeftInches());
             int encoderCountsRight = encoderConverter.toCounts(desiredPosition.getRightInches());
             positionControllerGroup.setDesiredPosition(encoderCountsLeft, encoderCountsRight);
@@ -159,7 +191,6 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 
         int leftEncoderCount = positionControllerGroup.computeLeftEncoderCounts();
         int rightEncoderCount = positionControllerGroup.computeRightEncoderCounts();
-
         double leftInches = encoderConverter.toInches(leftEncoderCount);
         double rightInches = encoderConverter.toInches(rightEncoderCount);
 

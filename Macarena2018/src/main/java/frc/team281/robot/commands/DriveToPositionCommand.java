@@ -24,8 +24,10 @@ public class DriveToPositionCommand extends BaseCommand {
     @Override
     protected boolean isFinished() {
         Position currentPosition = driveSubsystem.getCurrentPosition();
-        dataLogger.log("PositionLeft", currentPosition.getLeftInches());
-        dataLogger.log("PositionRight", currentPosition.getRightInches());
+        dataLogger.log("CurrentPositionLeft", currentPosition.getLeftInches());
+        dataLogger.log("CurrentPositionRight", currentPosition.getRightInches());
+        dataLogger.log("DesiredPositionLeft", desiredPosition.getLeftInches());
+        dataLogger.log("DesiredPositionRight", desiredPosition.getRightInches());
         return this.desiredPosition.isCloseTo(currentPosition, TOLERANCE);
     }
 

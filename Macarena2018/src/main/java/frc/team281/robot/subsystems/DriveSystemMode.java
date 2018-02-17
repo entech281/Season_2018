@@ -69,13 +69,14 @@ public class DriveSystemMode {
         if (isPositionMode()) {
             return StateResult.CURRENT;
         }
-        if (isDisabled() || isCalibrating()) {
-            log.warn("Attempt to enter position mode when in mode:" + mode);
-            return StateResult.REJECTED;
-        } else if (!calibrated) {
-            log.warn("Cannot use position mode until calibrated");
-            return StateResult.REJECTED;
-        } else {
+        //if (isDisabled() || isCalibrating()) {
+        //    log.warn("Attempt to enter position mode when in mode:" + mode);
+        //s    return StateResult.REJECTED;
+        //} else if (!calibrated) {
+        //    log.warn("Cannot use position mode until calibrated");
+        //    return StateResult.REJECTED;
+        //}
+        else {
             mode = DriveMode.POSITION;
             return StateResult.ENTERED;
         }

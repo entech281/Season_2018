@@ -22,6 +22,7 @@ public abstract class BaseSubsystem extends Subsystem {
 
     public BaseSubsystem() {
         this.dataLogger = DataLoggerFactory.getLoggerFactory().createDataLogger(this.getName());
+        
     }
 
     public abstract void initialize();

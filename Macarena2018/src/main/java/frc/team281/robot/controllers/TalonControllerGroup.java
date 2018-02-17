@@ -21,6 +21,12 @@ public class TalonControllerGroup {
         this.rearRight = rearRight;
     }
 
+    public void configureAll() {
+    		frontLeft.configure();
+    		frontRight.configure();
+    		rearLeft.configure();
+    		rearRight.configure();
+    }
     public void resetMode() {
         frontLeft.resetMode();
         frontRight.resetMode();
@@ -36,19 +42,19 @@ public class TalonControllerGroup {
     }
 
     public int computeLeftEncoderCounts() {
-        int total = 0;
-        int count = 0;
-        Integer pos = frontLeft.getActualPosition();
-        if (pos != null) {
-            total += pos;
-            count += 1;
-        }
-        pos = rearLeft.getActualPosition();
-        if (pos != null) {
-            total += pos;
-            count += 1;
-        }
-        return total / count;
+        //int total = 0;
+        //int count = 0;
+        //Integer pos = frontLeft.getActualPosition();
+        //if (pos != null) {
+         //   total += pos;
+         //   count += 1;
+       // }
+        //pos = rearLeft.getActualPosition();
+        //if (pos != null) {
+        //    total += pos;
+        //    count += 1;
+        //}
+        return frontLeft.getActualPosition();
     }
 
     public int computeRightEncoderCounts() {
