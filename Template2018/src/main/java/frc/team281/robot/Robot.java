@@ -7,6 +7,7 @@ import frc.team281.robot.commands.LifterLowerCommand;
 import frc.team281.robot.commands.LifterRaiseCommand;
 import frc.team281.robot.logger.DataLoggerFactory;
 import frc.team281.robot.subsystems.RealLifterSubsystem;
+import frc.team281.robot.subsystems.drive.BaseDriveSubsystem.DriveMode;
 import frc.team281.robot.subsystems.drive.RealDriveSubsystem;
 
 /**
@@ -48,12 +49,12 @@ public class Robot extends IterativeRobot implements CommandFactory {
 
 	@Override
 	public void autonomousInit() {
-		// m_AutonomousCommand.start();
+		driveSubsystem.setMode(DriveMode.CALIBRATE);
+		
+		//Now run some commands.
 	}
 
-	/**
-	 * This function is called periodically during operator control
-	 */
+
 	@Override
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
@@ -61,14 +62,9 @@ public class Robot extends IterativeRobot implements CommandFactory {
 
 	@Override
 	public void disabledInit() {
+		driveSubsystem.setMode(DriveMode.DISABLED);
 
 	}
-
-	/**
-	 * This function is called once each time the robot enters Disabled mode. You
-	 * can use it to reset any subsystem information you want to clear when the
-	 * robot is disabled.
-	 */
 
 	@Override
 	public void disabledPeriodic() {
@@ -77,11 +73,9 @@ public class Robot extends IterativeRobot implements CommandFactory {
 
 	@Override
 	public void teleopInit() {
+		driveSubsystem.setMode(DriveMode.SPEED_DRIVE);
 	}
 
-	/**
-	 * This function is called periodically during operator control
-	 */
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();

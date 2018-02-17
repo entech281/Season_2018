@@ -23,8 +23,7 @@ public class FourTalonsWithSettings {
 	protected TalonSettings rearRightSettings;
 
 	
-	public FourTalonsWithSettings(WPI_TalonSRX frontLeft, WPI_TalonSRX rearLeft, WPI_TalonSRX frontRight,
-			WPI_TalonSRX rearRight) {
+	public FourTalonsWithSettings(WPI_TalonSRX frontLeft, WPI_TalonSRX rearLeft, WPI_TalonSRX frontRight,WPI_TalonSRX rearRight) {
 		this.frontLeft = frontLeft;
 		this.frontRight = frontRight;
 		this.rearLeft = rearLeft;

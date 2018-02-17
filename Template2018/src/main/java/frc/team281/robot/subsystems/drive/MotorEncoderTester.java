@@ -16,6 +16,11 @@ public class MotorEncoderTester {
 	protected TalonSpeedController rightFrontMotor;
 	protected TalonSpeedController rightRearMotor;
 	private double testSpeed = 0.2;
+	private boolean running = false;
+	
+	public boolean isRunning() {
+		return running;
+	}
 
 	public MotorEncoderTester(TalonSpeedController leftFrontMotor, TalonSpeedController leftRearMotor,
 			TalonSpeedController rightFrontMotor, TalonSpeedController rightRearMotor, double testSpeed) {
@@ -37,7 +42,7 @@ public class MotorEncoderTester {
 		leftRearMotor.setDesiredSpeed(testSpeed);
 		rightFrontMotor.setDesiredSpeed(testSpeed);
 		rightRearMotor.setDesiredSpeed(testSpeed);
-
+		this.running = true;
 	}
 
 	public EncoderCheck finishTest() {
@@ -46,7 +51,7 @@ public class MotorEncoderTester {
 		leftRearMotor.setDesiredSpeed(0);
 		rightFrontMotor.setDesiredSpeed(0);
 		rightRearMotor.setDesiredSpeed(0);
-
+		this.running = false;
 		return new EncoderCheck(leftRearMotor.getActualPosition(), leftFrontMotor.getActualPosition(),
 				rightFrontMotor.getActualPosition(), rightRearMotor.getActualPosition());
 

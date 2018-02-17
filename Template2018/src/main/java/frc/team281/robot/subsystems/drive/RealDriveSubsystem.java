@@ -39,6 +39,9 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 	private PositionDriveController positionDrive;
 	private DriveInstructionSource driveInstructionSource;
 	
+	private FourTalonsWithSettings speedModeTalons;
+	private FourTalonsWithSettings positionModeTalons;
+	
 	public RealDriveSubsystem(DriveInstructionSource driveInstructionSource) {
 		this.driveInstructionSource = driveInstructionSource;
 	}
@@ -63,13 +66,13 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 
 		TalonSettings rightSpeedSettings = TalonSettingsBuilder.inverted(leftSpeedSettings, false, true);
 
-		FourTalonsWithSettings talonsInSpeedMode = new FourTalonsWithSettings(
+		speedModeTalons = new FourTalonsWithSettings(
 				new WPI_TalonSRX(RobotMap.CAN.FRONT_LEFT_MOTOR),
 				new WPI_TalonSRX(RobotMap.CAN.FRONT_RIGHT_MOTOR), 
 				new WPI_TalonSRX(RobotMap.CAN.REAR_LEFT_MOTOR),
 				new WPI_TalonSRX(RobotMap.CAN.REAR_RIGHT_MOTOR));
 		
-		talonsInSpeedMode.applySettings(leftSpeedSettings, rightSpeedSettings);
+		speedModeTalons.applySettings(leftSpeedSettings, rightSpeedSettings);
 
 		TalonSettings leftPositionSettings = TalonSettingsBuilder.defaults()
 				.withCurrentLimits(35, 30, 200)
@@ -84,17 +87,17 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 
 		TalonSettings rightPositionSettings = TalonSettingsBuilder.inverted(leftPositionSettings, false, true);
 		
-		FourTalonsWithSettings talonsInPositionMode = new FourTalonsWithSettings(
+		positionModeTalons = new FourTalonsWithSettings(
 				new WPI_TalonSRX(RobotMap.CAN.FRONT_LEFT_MOTOR),
 				new WPI_TalonSRX(RobotMap.CAN.FRONT_RIGHT_MOTOR), 
 				new WPI_TalonSRX(RobotMap.CAN.REAR_LEFT_MOTOR),
 				new WPI_TalonSRX(RobotMap.CAN.REAR_RIGHT_MOTOR));
 		
-		talonsInPositionMode.applySettings(leftPositionSettings, rightPositionSettings);
+		positionModeTalons.applySettings(leftPositionSettings, rightPositionSettings);
 		
-		arcadeDrive = new BasicArcadeDriveController(talonsInSpeedMode, driveInstructionSource);
-		positionDrive = new PositionDriveController(talonsInPositionMode, getPositionBuffer(), new EncoderInchesConverter(ENCODER_TICKS_PER_INCH));
-		calibrator = new FourDriveTalonCalibratorController(talonsInPositionMode, CALIBRATION_DRIVE_TIME_MS);
+		arcadeDrive = new BasicArcadeDriveController(speedModeTalons, driveInstructionSource);
+		positionDrive = new PositionDriveController(positionModeTalons, getPositionBuffer(), new EncoderInchesConverter(ENCODER_TICKS_PER_INCH));
+		calibrator = new FourDriveTalonCalibratorController(speedModeTalons, CALIBRATION_DRIVE_TIME_MS);
 		
 		
 	}
@@ -105,7 +108,9 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 		if (driveMode == DriveMode.CALIBRATE) {
 			runController(calibrator);
 			if (calibrator.isCalibrationReady()) {
-				driveMode = DriveMode.READY;
+				calibrator.adjustTalonSettingsToWorkAroundBrokenEncoders(speedModeTalons);
+				calibrator.adjustTalonSettingsToWorkAroundBrokenEncoders(positionModeTalons);
+				setMode(DriveMode.SPEED_DRIVE);
 			}
 		} else if (driveMode == DriveMode.POSITION_DRIVE) {
 			runController(positionDrive);

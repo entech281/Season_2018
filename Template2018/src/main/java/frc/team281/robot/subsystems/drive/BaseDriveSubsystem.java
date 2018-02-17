@@ -23,7 +23,32 @@ public abstract class BaseDriveSubsystem extends BaseSubsystem {
 	protected DriveMode driveMode = DriveMode.DISABLED;
 	protected BaseDriveController currentController;
 	protected PositionBuffer positionBuffer = new PositionBuffer();
-
+	protected boolean calibrated = false;
+	
+	
+	/**
+	 * Changes modes, and returns true if the change worked, false if it didnt
+	 * @param newDriveMode
+	 * @return
+	 */
+	public boolean setMode ( DriveMode newDriveMode) {
+		if ( ! calibrated) {
+			if ( newDriveMode == DriveMode.SPEED_DRIVE || newDriveMode == DriveMode.POSITION_DRIVE) {
+				dataLogger.warn("Cannot change mode to "+ newDriveMode + "-->calibration not completed.");
+				return false;
+			}
+		}
+		if ( newDriveMode == driveMode) {
+			dataLogger.warn("Stayed in mode " + newDriveMode );
+			return false;
+		}
+		
+		driveMode = newDriveMode;
+		dataLogger.warn("Drive Mode Changed:" + driveMode + "-->" + newDriveMode);
+		return true;
+		
+	}
+	
 	public void runController(BaseDriveController newController) {
 
 		if (!newController.equals(currentController)) {
