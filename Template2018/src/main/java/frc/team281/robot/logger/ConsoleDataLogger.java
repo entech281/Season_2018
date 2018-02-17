@@ -54,13 +54,13 @@ public class ConsoleDataLogger extends DataLogger {
 	@Override
 	public void warn(String message) {
 		printMessage("%s", "", message);
-		
+
 	}
 
-    @Override
-    public void log(BaseSubsystem subsystem) {
-        printMessage("%s","",subsystem.getName() + " initializing.");
-        
-    }
+	@Override
+	public void log(BaseSubsystem subsystem) {
+		printMessage("%s", "", subsystem.getName() + " initializing.");
+
+	}
 
 }

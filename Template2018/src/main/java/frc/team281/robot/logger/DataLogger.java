@@ -27,7 +27,7 @@ public abstract class DataLogger {
 	}
 
 	public abstract void warn(String message);
-	
+
 	public abstract void log(String key, Object value);
 
 	public abstract void log(String key, double value);
@@ -39,7 +39,7 @@ public abstract class DataLogger {
 	public abstract void log(String key, long value);
 
 	public abstract void log(String key, boolean value);
-	
+
 	public abstract void log(BaseSubsystem subsystem);
 
 }

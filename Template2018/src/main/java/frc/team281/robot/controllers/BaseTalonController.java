@@ -24,19 +24,19 @@ public abstract class BaseTalonController {
 	}
 
 	/**
-	 * A little tricky-- this is an Integer so that we
-	 * can return Null if this talon is a follower.
-	 * That's because a follower is configured because its encoder is broken!
+	 * A little tricky-- this is an Integer so that we can return Null if this talon
+	 * is a follower. That's because a follower is configured because its encoder is
+	 * broken!
+	 * 
 	 * @return
 	 */
 	public Integer getActualPosition() {
-		if ( talon.getControlMode().equals(ControlMode.Follower)) {
+		if (talon.getControlMode().equals(ControlMode.Follower)) {
 			return null;
-		}
-		else {
+		} else {
 			return new Integer(this.getTalon().getSelectedSensorPosition(TalonSettings.PID_SLOT));
 		}
-		
+
 	}
 
 	public void resetMode() {

@@ -51,12 +51,12 @@ public class SmartDashboardLogger extends DataLogger {
 	@Override
 	public void warn(String message) {
 		DriverStation.reportWarning(message, true);
-		
+
 	}
 
-    @Override
-    public void log(BaseSubsystem subsystem) {
-        SmartDashboard.putData((Subsystem)subsystem);
-    }
+	@Override
+	public void log(BaseSubsystem subsystem) {
+		SmartDashboard.putData((Subsystem) subsystem);
+	}
 
 }

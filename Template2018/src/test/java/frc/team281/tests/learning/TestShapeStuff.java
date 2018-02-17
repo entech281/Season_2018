@@ -1,6 +1,6 @@
 package frc.team281.tests.learning;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 

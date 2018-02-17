@@ -90,7 +90,7 @@ DriveSubsystem::DriveSubsystem(EntechRobot *pRobot, std::string name)
     , m_yawAngle(0.0)
     , m_currentYawAngle(0.0)
 
-    , m_fieldAbsolute(true)
+    , m_fieldAbsolute(false)
     , m_useFieldAbsForDeadRec(true)
 
     , m_fieldAbsoluteToggleButton(NULL)
@@ -797,7 +797,7 @@ void DriveSubsystem::DoDriveManual()
     jsAngle = 360.0;
     if (m_joystick) {
         jsX = m_joystick->GetX();
-        jsY = m_joystick->GetY();
+        jsY = -m_joystick->GetY();
         if ((fabs(jsX) > 0.1) || (fabs(jsY) > 0.1)) {
             jsAngle = 180.0*atan2(jsX,-jsY)/M_PI;
         }
