@@ -15,8 +15,8 @@ public abstract class BaseDriveController {
 	protected String name;
 
 	public BaseDriveController() {
-		this.dataLogger = DataLoggerFactory.getLoggerFactory().createDataLogger(getClass().getName());
-		this.name = getClass().getName();
+		this.dataLogger = DataLoggerFactory.getLoggerFactory().createDataLogger(getClass().getSimpleName());
+		this.name = getClass().getSimpleName();
 	}
 
 	public String getName() {

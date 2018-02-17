@@ -1,5 +1,6 @@
 package frc.team281.tests;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 import org.junit.Test;
@@ -41,7 +42,12 @@ public class TestFourDriveTalonCalibratorController extends BaseTest{
 		
 		FourDriveTalonCalibratorController controller = new FourDriveTalonCalibratorController(settings,CALIBRATION_TIME_MS);
 		assertFalse(controller.isCalibrationReady());
-		//TODO: make sure calling before returns unmodified objectgs
+		
+		assertEquals("FourDriveTalonCalibratorController",controller.getName());
+		assertEquals(controller,controller);
+		
+		controller.initialize();
+		
 		
 		
 	}
