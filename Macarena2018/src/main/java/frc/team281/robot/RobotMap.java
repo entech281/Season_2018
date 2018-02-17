@@ -18,8 +18,11 @@ public class RobotMap {
         public static final int REAR_RIGHT_MOTOR = 3;
         
         public static final int RIGHT_CUBE_BELT_MOTOR=0;//UNKNOWN
-        public static final int LEFT_CUBE_BELT_MOTOR=0; //UNKNOWN
-        public static final int CUBE_GRIPPER_MOTOR=0;
+        public static final int LEFT_CUBE_BELT_MOTOR =0;//UNKNOWN
+        public static final int CUBE_GRIPPER_MOTOR   =0;//UNKNOWN
+        public static final int ELEVATOR_MOTOR       =0;//UNKNOWN
+        public static final int LEFT_RAMP_MOTOR      =0;//UNKNOWN
+        public static final int RIGHT_RAMP_MOTOR     =0;//UNKNOWN
         public static final int PC_MODULE = 10;
 
     }
