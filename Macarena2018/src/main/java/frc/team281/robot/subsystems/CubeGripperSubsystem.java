@@ -11,7 +11,7 @@ public class CubeGripperSubsystem extends BaseSubsystem {
     WPI_TalonSRX clawMotor = new WPI_TalonSRX(RobotMap.CAN.CUBE_GRIPPER_MOTOR);
 
     public void initDefaultCommand() {
-
+        
     }
     public void leftBeltSet(double d) {
         

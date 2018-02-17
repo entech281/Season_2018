@@ -8,11 +8,13 @@ public class ElevatorSubsystem extends BaseSubsystem {
 
     WPI_TalonSRX elevatorMotor = new WPI_TalonSRX(RobotMap.CAN.ELEVATOR_MOTOR);
     
-
+    
     public void initDefaultCommand() {
 
     }
-
+    public void setHeight(double d) {
+        
+    }
 
     @Override
     public void initialize() {
