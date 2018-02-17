@@ -93,4 +93,6 @@ public class Robot extends TimedRobot implements CommandFactory {
     public DriveToPositionCommand createPositionCommand() {
         return new DriveToPositionCommand(this.driveSubsystem, new Position(120,120));
     }
+    
+    public static double Elevatorheight = 0;
 }

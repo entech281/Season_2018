@@ -25,7 +25,7 @@ public class LiftToPointCommand extends BaseCommand {
 	@Override
 	protected boolean isFinished() {
 		// TODO Auto-generated method stub
-		return false;
+		return !_ES.lifting;
 	}
 	 public void end() {
 	    }
