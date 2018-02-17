@@ -1,14 +1,16 @@
 package frc.team281.robot.commands;
 
-import frc.team281.robot.Robot;
 import frc.team281.robot.subsystems.DriveSubsystem;
 
-public class DriveUsingJoystick extends BaseCommand {
+public class TurnToThetaRadians extends BaseCommand {
     private DriveSubsystem drive;
+    private double x;
 
-    public DriveUsingJoystick(DriveSubsystem drive) {
+    public TurnToThetaRadians(DriveSubsystem drive, double theta) {
         this.drive = drive;
+        this.x = theta;
         requires(drive);
+        setTimeout(x);
     }
 
     @Override
@@ -17,12 +19,12 @@ public class DriveUsingJoystick extends BaseCommand {
 
     @Override
     protected void execute() {
-        drive.arcadeDrive(Robot.oi.getDriveJoystickForward(), Robot.oi.getDriveJoystickLateral());
+        drive.arcadeDrive(0, 1);
     }
 
     @Override
     protected boolean isFinished() {
-        return false;
+        return isTimedOut();
     }
 
     @Override

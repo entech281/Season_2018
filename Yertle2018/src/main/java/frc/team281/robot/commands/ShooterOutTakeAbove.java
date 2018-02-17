@@ -15,7 +15,7 @@ public class ShooterOutTakeAbove extends Command {
 		// Use requires() here to declare subsystem dependencies
 		this.inTake = inTake;
 		requires(inTake);
-		setTimeout(0.05);
+		setTimeout(.2);
 	}
 
 	// Called just before this Command runs the first time

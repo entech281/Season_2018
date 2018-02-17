@@ -18,7 +18,9 @@ public class DriveSubsystem extends Subsystem {
 	WPI_TalonSRX _frontRightMotor = new WPI_TalonSRX(RobotMap.frontRightMotorCANid);
 	WPI_TalonSRX _rearLeftMotor = new WPI_TalonSRX(RobotMap.rearLeftMotorCANid);
 	WPI_TalonSRX _rearRightMotor = new WPI_TalonSRX(RobotMap.rearRightMotorCANid);
-
+	
+	private double m_heading;
+	private double m_distance;
 	DifferentialDrive _drive = new DifferentialDrive(
 			new SpeedControllerGroup(_frontLeftMotor, _rearLeftMotor),
 			new SpeedControllerGroup(_frontRightMotor,_rearRightMotor) );
@@ -38,5 +40,16 @@ public class DriveSubsystem extends Subsystem {
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
         setDefaultCommand(new DriveUsingJoystick(this));
+    }
+    public void setHeading(double angle) {
+    		m_heading=angle;
+    		//input motor details here
+    }
+    public void driveForward(double distance) {
+    		m_distance=distance;
+    		//input motor details here
+    }
+    public boolean isFinished() {
+    		return true;
     }
 }

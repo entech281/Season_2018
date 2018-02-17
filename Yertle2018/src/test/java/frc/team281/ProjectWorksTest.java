@@ -1,7 +1,6 @@
 package frc.team281;
 
 import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
 
 public class ProjectWorksTest {
