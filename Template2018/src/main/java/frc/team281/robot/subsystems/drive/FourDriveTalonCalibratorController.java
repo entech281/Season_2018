@@ -53,29 +53,8 @@ public class FourDriveTalonCalibratorController extends BaseDriveController {
 		dataLogger.log("LeftRearMotorGood", checker.isLeftRearOk());
 		dataLogger.log("RightFrontMotorGood", checker.isRightFrontOk());
 		dataLogger.log("RightRearMotorGood", checker.isRightRearOk());
-
-		if (checker.shouldDisableAll()) {
-			originalTalons.disableAllSettings();
-		} else {
-			if (checker.shouldLeftFrontFollowLeftRear()) {
-				originalTalons.setFrontLeftSettings(
-						TalonSettingsBuilder.follow(originalTalons.getRearLeftSettings(), RobotMap.CAN.FRONT_RIGHT_MOTOR));
-			}
-			if (checker.shouldLeftRearFollowLeftFront()) {
-				originalTalons.setRearLeftSettings(
-						TalonSettingsBuilder.follow(originalTalons.getFrontLeftSettings(), RobotMap.CAN.FRONT_LEFT_MOTOR));
-			}
-			if (checker.shouldRightFrontFollowRightRear()) {
-				originalTalons.setFrontRightSettings(
-						TalonSettingsBuilder.follow(originalTalons.getRearRightSettings(), RobotMap.CAN.FRONT_RIGHT_MOTOR));
-			}
-			if (checker.shouldRightRearFollowRightFront()) {
-				originalTalons.setRearRightSettings(
-						TalonSettingsBuilder.follow(talons.getFrontRightSettings(), RobotMap.CAN.FRONT_RIGHT_MOTOR));
-
-			}
-		}
-
+		checker.adjustTalonSettingsToWorkAroundBrokenEncoders(originalTalons);
+		
 	}
 
 	public boolean isCalibrationReady() {

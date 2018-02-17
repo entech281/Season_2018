@@ -22,23 +22,8 @@ public class TestFourDriveTalonCalibratorController extends BaseTest{
 		//TODO: mock out the talons to return bad encoder readings
 		
 		long CALIBRATION_TIME_MS = 200;
-		WPI_TalonSRX frontLeft = Mockito.mock(WPI_TalonSRX.class);
-		WPI_TalonSRX frontRight = Mockito.mock(WPI_TalonSRX.class);
-		WPI_TalonSRX rearLeft = Mockito.mock(WPI_TalonSRX.class);
-		WPI_TalonSRX rearRight = Mockito.mock(WPI_TalonSRX.class);
-		
-		FourTalonsWithSettings settings = new FourTalonsWithSettings(frontLeft,frontRight,rearLeft,rearRight);
+		FourTalonsWithSettings settings = makeFakeTalonSettingsGroup();
 
-
-		
-		TalonSettings leftSpeedSettingsToAdjust = TalonSettingsBuilder.defaults().withCurrentLimits(35, 30, 200).coastInNeutral()
-				.withDirections(false, false).noMotorOutputLimits().noMotorStartupRamping().useSpeedControl().build();
-
-		TalonSettings rightSpeedSettingsToAdjust = TalonSettingsBuilder.defaults().withCurrentLimits(35, 30, 200).coastInNeutral()
-				.withDirections(false, false).noMotorOutputLimits().noMotorStartupRamping().useSpeedControl().build();
-		
-		
-		settings.applySettings(leftSpeedSettingsToAdjust, rightSpeedSettingsToAdjust);
 		
 		FourDriveTalonCalibratorController controller = new FourDriveTalonCalibratorController(settings,CALIBRATION_TIME_MS);
 		assertFalse(controller.isCalibrationReady());
