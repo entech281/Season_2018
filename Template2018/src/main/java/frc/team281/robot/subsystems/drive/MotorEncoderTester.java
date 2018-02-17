@@ -1,4 +1,4 @@
-package frc.team281.robot.subsystems;
+package frc.team281.robot.subsystems.drive;
 
 import frc.team281.robot.controllers.EncoderCheck;
 import frc.team281.robot.controllers.TalonSpeedController;
@@ -11,35 +11,35 @@ import frc.team281.robot.controllers.TalonSpeedController;
  */
 public class MotorEncoderTester {
 
-	public static final double TEST_SPEED = 0.2;
-
 	protected TalonSpeedController leftFrontMotor;
 	protected TalonSpeedController leftRearMotor;
 	protected TalonSpeedController rightFrontMotor;
 	protected TalonSpeedController rightRearMotor;
+	private double testSpeed = 0.2;
 
 	public MotorEncoderTester(TalonSpeedController leftFrontMotor, TalonSpeedController leftRearMotor,
-			TalonSpeedController rightFrontMotor, TalonSpeedController rightRearMotor) {
+			TalonSpeedController rightFrontMotor, TalonSpeedController rightRearMotor, double testSpeed) {
 
 		this.leftFrontMotor = leftFrontMotor;
 		this.leftRearMotor = leftRearMotor;
 		this.rightFrontMotor = rightFrontMotor;
 		this.rightRearMotor = rightRearMotor;
+		this.testSpeed = testSpeed;
 	}
-	
+
 	public void startTest() {
 		leftFrontMotor.resetPosition();
 		leftRearMotor.resetPosition();
 		rightFrontMotor.resetPosition();
 		rightRearMotor.resetPosition();
 
-		leftFrontMotor.setDesiredSpeed(TEST_SPEED);
-		leftRearMotor.setDesiredSpeed(TEST_SPEED);
-		rightFrontMotor.setDesiredSpeed(TEST_SPEED);
-		rightRearMotor.setDesiredSpeed(TEST_SPEED);
-		
+		leftFrontMotor.setDesiredSpeed(testSpeed);
+		leftRearMotor.setDesiredSpeed(testSpeed);
+		rightFrontMotor.setDesiredSpeed(testSpeed);
+		rightRearMotor.setDesiredSpeed(testSpeed);
+
 	}
-	
+
 	public EncoderCheck finishTest() {
 
 		leftFrontMotor.setDesiredSpeed(0);
@@ -50,14 +50,6 @@ public class MotorEncoderTester {
 		return new EncoderCheck(leftRearMotor.getActualPosition(), leftFrontMotor.getActualPosition(),
 				rightFrontMotor.getActualPosition(), rightRearMotor.getActualPosition());
 
-	}
-
-	public void sleep(long millisToSleep) {
-		try {
-			Thread.sleep(millisToSleep);
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 }

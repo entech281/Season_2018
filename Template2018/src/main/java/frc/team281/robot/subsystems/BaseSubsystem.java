@@ -27,4 +27,9 @@ public abstract class BaseSubsystem extends Subsystem {
 
 	public abstract void initialize();
 
+	@Override
+	protected void initDefaultCommand() {
+
+	}
+
 }

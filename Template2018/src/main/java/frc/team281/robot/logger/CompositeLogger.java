@@ -66,11 +66,11 @@ public class CompositeLogger extends DataLogger {
 		}
 	}
 
-    @Override
-    public void log(BaseSubsystem subsystem) {
-        for (DataLogger l : loggers) {
-            l.log(subsystem);
-        }     
-    }
+	@Override
+	public void log(BaseSubsystem subsystem) {
+		for (DataLogger l : loggers) {
+			l.log(subsystem);
+		}
+	}
 
 }

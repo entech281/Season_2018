@@ -1,8 +1,5 @@
 package frc.team281.robot.controllers;
 
-import frc.team281.robot.RobotMap;
-import frc.team281.robot.subsystems.TalonSettingsBuilder;
-
 /**
  * Checks to see how we should configure motors, based on encoder readings
  * 
@@ -25,21 +22,25 @@ public class EncoderCheck {
 	}
 
 	public boolean shouldLeftFrontFollowLeftRear() {
-		return hasProblems() && canDrive() && isLeftRearOk() && ( ! isLeftFrontOk() );
+		return hasProblems() && canDrive() && isLeftRearOk() && (!isLeftFrontOk());
 	}
+
 	public boolean shouldLeftRearFollowLeftFront() {
-		return hasProblems() && canDrive() && isLeftFrontOk() && ( ! isLeftRearOk() );
+		return hasProblems() && canDrive() && isLeftFrontOk() && (!isLeftRearOk());
 	}
+
 	public boolean shouldRightRearFollowRightFront() {
-		return hasProblems() && canDrive() && isRightFrontOk() && ( ! isRightRearOk() );
+		return hasProblems() && canDrive() && isRightFrontOk() && (!isRightRearOk());
 	}
+
 	public boolean shouldRightFrontFollowRightRear() {
-		return hasProblems() && canDrive() && isRightRearOk() && ( ! isRightFrontOk() );
+		return hasProblems() && canDrive() && isRightRearOk() && (!isRightFrontOk());
 	}
+
 	public boolean shouldDisableAll() {
-		return this.hasProblems() && ! this.canDrive();
+		return this.hasProblems() && !this.canDrive();
 	}
-	
+
 	public boolean isLeftRearOk() {
 		return this.leftRearCounts > 0;
 	}

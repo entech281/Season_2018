@@ -1,11 +1,10 @@
 package frc.team281.tests;
 
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 
 import frc.team281.robot.RobotMap;
-import frc.team281.robot.RobotMap.CAN;
-
-import static org.junit.Assert.assertTrue;
 
 /**
  * some really simple tests to prove that robot map works ok.

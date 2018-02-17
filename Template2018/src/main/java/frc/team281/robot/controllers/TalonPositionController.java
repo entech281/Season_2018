@@ -12,7 +12,6 @@ public class TalonPositionController extends BaseTalonController {
 		return desiredPosition;
 	}
 
-
 	/**
 	 * When you call this, the talon will be put in the right mode for control
 	 * 
