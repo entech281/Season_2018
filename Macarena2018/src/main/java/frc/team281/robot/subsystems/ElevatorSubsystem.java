@@ -9,6 +9,8 @@ public class ElevatorSubsystem extends BaseSubsystem {
 
 
 
+    public boolean lifting = false;
+
     WPI_TalonSRX elevatorMotor = new WPI_TalonSRX(RobotMap.CAN.ELEVATOR_MOTOR);
     
     
