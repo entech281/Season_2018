@@ -13,7 +13,18 @@ public class CubeGripperSubsystem extends BaseSubsystem {
     public void initDefaultCommand() {
 
     }
-
+    public void leftBeltSet(double d) {
+        
+    }
+    public void rightBeltSet(double d) {
+        
+    }
+    public void clawOpen() {
+        
+    }
+    public void clawClose() {
+        
+    }
     @Override
     public void initialize() {
         // TODO Auto-generated method stub
