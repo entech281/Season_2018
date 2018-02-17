@@ -2,8 +2,8 @@ package frc.team281.robot.subsystems;
 
 public class Position {
 
-    private double leftInches = 0;
-    private double rightInches = 0;
+    private double leftInches = 10;
+    private double rightInches = 10;
 
     public Position(double leftInches, double rightInches) {
         this.leftInches = leftInches;

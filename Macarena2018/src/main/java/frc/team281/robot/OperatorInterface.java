@@ -1,7 +1,8 @@
 package frc.team281.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.buttons.JoystickButton;;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import frc.team281.robot.subsystems.BaseDriveSubsystem;
 
 /**
  * Reads the hardware that interfaces with real users, and issues commands to a
@@ -17,7 +18,8 @@ public class OperatorInterface implements DriveInstructionSource {
     private Joystick driveJoystick;
     private JoystickButton positionButton;
     private CommandFactory factory;
-
+    private BaseDriveSubsystem driveSubsystem;
+    
     public OperatorInterface(CommandFactory factory) {
         this.factory = factory;
     }
@@ -26,6 +28,7 @@ public class OperatorInterface implements DriveInstructionSource {
         driveJoystick = new Joystick(RobotMap.JoystickPorts.JOYSTICK_1);
         positionButton = new JoystickButton(driveJoystick, RobotMap.JoystickButtons.POSITION);
         positionButton.whenPressed(factory.createPositionCommand());
+        
     }
 
     @Override
