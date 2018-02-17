@@ -40,6 +40,8 @@ dependencies {
     compile ctre()
     compile navx()
     compile openrio.powerup.matchData()
+	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
+    
     testCompile 'junit:junit:4.12'
 	
 	testCompile 'org.powermock:powermock-api-mockito:1.6.1'
@@ -64,7 +66,7 @@ task wrapper(type: Wrapper) {
 
 findbugs{
     ignoreFailures = false
-    reportLevel = "low"
+    reportLevel = "high"
 }
 
 tasks.withType(FindBugs) {

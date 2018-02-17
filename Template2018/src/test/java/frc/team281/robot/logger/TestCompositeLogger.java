@@ -10,6 +10,7 @@ import frc.team281.tests.BaseTest;
 
 public class TestCompositeLogger extends BaseTest {
 
+
 	
 	@Test
 	public void testCompositeLogger() {
@@ -24,7 +25,9 @@ public class TestCompositeLogger extends BaseTest {
 		cdl.log("foo4", (int)0);
 		cdl.log("foo5", new Object() );
 		cdl.log("foo6", new FakeLifterSubsystem(10));
-		
+		cdl.log("foo5",new Object() );
+		cdl.warn("foo5");
+
 		assertEquals(12, logger1.getCounter() + logger2.getCounter());
 	}
 }
@@ -69,9 +72,16 @@ class FakeDataLogger extends DataLogger{
 	}
 	
 	// Adds the remote to the tester
+
+	@Override
+	public void warn(String message) {
+		counter++;	
+		
+	}
     @Override
     public void log(BaseSubsystem subsystem) {
-        counter++;
+        counter++;  
         
     }
 }
+

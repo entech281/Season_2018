@@ -20,12 +20,14 @@ public abstract class BaseSubsystem extends Subsystem {
 
     protected DataLogger dataLogger;
 
-    public BaseSubsystem() {
-        this.dataLogger = DataLoggerFactory.getLoggerFactory().createDataLogger(this.getName());
+
+	public BaseSubsystem() {
+		this.dataLogger = DataLoggerFactory.getLoggerFactory().createDataLogger(this.getName());
+		dataLogger.log(this);
+	}
+
 
         // Sets BaseSubsystem as a reference in the log method
-        this.dataLogger.log(this);
-    }
 
     public abstract void initialize();
 

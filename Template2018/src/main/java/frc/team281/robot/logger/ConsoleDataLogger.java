@@ -57,4 +57,10 @@ public class ConsoleDataLogger extends DataLogger {
         printMessage("%s", subsystem.getName(), subsystem);
 
     }
+
+    @Override
+    public void warn(String message) {
+        // TODO Auto-generated method stub
+        
+    }
 }

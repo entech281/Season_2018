@@ -9,15 +9,28 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.team281.robot.DriveInstructionSource;
 import frc.team281.robot.RobotMap;
+import frc.team281.robot.controllers.TalonControllerGroup;
+import frc.team281.robot.subsystems.DriveSystemMode.StateResult;
+
+import com.kauailabs.navx.frc.*;
 
 /**
  * This is the drive system that will run in the robot. All the wpilib stuff
  * goes here.
- * 
+ *
+ * ref https://www.chiefdelphi.com/forums/showthread.php?p=1633629 motionMagic
+ * is basically a trade name for a trapezoidal motion profile a java example :
+ * https://github.com/CrossTheRoadElec/Phoenix-Examples-Languages/tree/master/Java/MotionMagic/src/org/usfirst/frc/team217/robot
+ * ctre api doc
+ * http://www.ctr-electronics.com/downloads/api/java/html/index.html software
+ * manual
+ * https://github.com/CrossTheRoadElec/Phoenix-Documentation/raw/master/Talon%20SRX%20Victor%20SPX%20-%20Software%20Reference%20Manual.pdf
+ *
  * @author dcowden
  *
  */
 public class RealDriveSubsystem extends BaseDriveSubsystem {
+
 
     private WPI_TalonSRX frontLeftMotor;
     private WPI_TalonSRX frontRightMotor;
@@ -129,24 +142,134 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 
     }
 
-    public synchronized void stop() {
-        if (!positionDrivingMode) {
-            drive.tankDrive(0., 0.);
-        }
 
-    }
 
-    public synchronized void arcadeDrive(double forw, double turn) {
-        if (!positionDrivingMode) {
-            drive.arcadeDrive(-forw, turn, true);
-        }
+    
 
-    }
 
-    public synchronized void tankDrive(double left, double right) {
-        if (!positionDrivingMode) {
-            drive.tankDrive(left, right, true);
-        }
-    }
+	public static final int NAVX_CALIBRATION_LOOP_TIME_MS = 50;  // in ms
+	public static final double I_GAIN = 0.0;
+	public static final double P_GAIN = 0.1;
+	public static final double D_GAIN = 0.0;
+	public static final double F_GAIN = 0.0;
+
+	// for speed control
+
+
+	// for position control
+	private TalonControllerGroup positionControllerGroup;
+	private FourWheelTankTalonCalibrator calibrator = new FourWheelTankTalonCalibrator();
+
+	// have to hold on to these to change control modes.
+	
+
+	private TalonSettings leftTalonSettings;
+	private TalonSettings rightTalonSettings;
+
+	// estimated based on 6" diameter wheels, with 80 counts per turn, gear ratio
+	// 14/52 * 14/52 13.8:1
+	private EncoderInchesConverter encoderConverter = new EncoderInchesConverter(46.0);
+
+    private AHRS navX;
+
+	
+
+
+
+	/**
+	 *
+	 * This method tests that the encoders are working by driving forward a bit, and
+	 * then making sure we read the encoders
+	 */
+	public void startCalibration() {
+		StateResult r = driveMode.enterCalibrate();
+		if ( r == StateResult.ENTERED) {
+			calibrator.startCalibration( frontLeftMotor, rearLeftMotor, frontRightMotor, rearRightMotor,
+					leftTalonSettings, rightTalonSettings);
+		}
+	}
+
+	public void finishCalibration() {
+		this.positionControllerGroup = calibrator.finishCalibration();
+		driveMode.finishCalibrating();
+	}
+
+	protected boolean enterSpeedMode() {
+		StateResult r = driveMode.enterSpeed();
+		if ( r == StateResult.REJECTED) {
+			return false;
+		}
+		if ( r == StateResult.ENTERED) {
+			drive = new DifferentialDrive(
+					new SpeedControllerGroup(frontLeftMotor, rearLeftMotor),
+					new SpeedControllerGroup(frontRightMotor, rearRightMotor));
+		}		
+		return true;
+
+	}
+
+	protected boolean enterPositionMode() {
+		StateResult r = driveMode.enterPosition();
+		if ( r == StateResult.REJECTED) {
+			return false;
+		}
+		if ( r == StateResult.ENTERED) {
+			positionControllerGroup.resetMode();
+		}
+		return true;
+	}
+
+	public void stop() {
+		if ( enterSpeedMode() ) {
+			drive.tankDrive(0., 0.);
+		}
+	}
+
+	public void arcadeDrive(double forw, double turn) {
+		if ( enterSpeedMode() ) {
+			drive.arcadeDrive(-forw, turn, true);
+		}
+	}
+
+	public void tankDrive(double left, double right) {
+		if ( enterSpeedMode() ) {
+			drive.tankDrive(left, right, true);
+		}
+	}
+
+	@Override
+	public void periodic() {
+        // method called by scheduler automatically
+		if (this.navX != null) {
+            dataLogger.log("NavX: ", this.navX);
+            dataLogger.log("NavX Yaw Angle: ", this.navX.getYaw());
+		}
+	}
+
+	@Override
+	public void drive(Position desiredPosition) {
+		if ( enterPositionMode() ) {
+			int encoderCountsLeft = encoderConverter.toCounts(desiredPosition.getLeftInches());
+			int encoderCountsRight = encoderConverter.toCounts(desiredPosition.getRightInches());
+			positionControllerGroup.setDesiredPosition(encoderCountsLeft, encoderCountsRight);	
+			dataLogger.log("DesiredPositionLeft", encoderCountsLeft);
+			dataLogger.log("DesiredPositionRight",encoderCountsRight );
+		}
+
+	}
+
+	@Override
+	public Position getCurrentPosition() {
+
+		int leftEncoderCount = positionControllerGroup.computeLeftEncoderCounts();
+		int rightEncoderCount = positionControllerGroup.computeRightEncoderCounts();
+
+		double leftInches = encoderConverter.toInches(leftEncoderCount);
+		double rightInches = encoderConverter.toInches(rightEncoderCount);
+
+		// use the average
+		return new Position(leftInches, rightInches);
+
+	}
 
 }

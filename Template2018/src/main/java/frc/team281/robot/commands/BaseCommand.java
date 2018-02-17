@@ -13,13 +13,10 @@ import frc.team281.robot.subsystems.BaseSubsystem;
  *
  */
 public abstract class BaseCommand extends Command {
-
     protected DataLogger dataLogger;
     public static final double UNLIMITED_TIMEOUT = 100000000;
 
-    public BaseCommand(BaseSubsystem subsystem) {
-        this(subsystem, UNLIMITED_TIMEOUT);
-    }
+    
 
     /**
      * Save subclasses from needing to do this code
@@ -34,8 +31,17 @@ public abstract class BaseCommand extends Command {
         if (subsystem != null) {
             requires(subsystem);
         }
-
     }
+
+
+	/**
+	 * Save subclasses from needing to do this code
+	 * 
+	 * @param subsystem
+	 * @param timeOut
+	 */
+	
+
 
     // these methods are protected in the base class.
     // we open them up so that they can be called in unti testing.
@@ -48,5 +54,6 @@ public abstract class BaseCommand extends Command {
     public synchronized boolean isCanceled() {
         return super.isCanceled();
     }
+
 
 }
