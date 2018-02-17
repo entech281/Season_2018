@@ -7,7 +7,7 @@
 - [External Links](#external-links)
 
 ## Build Status
-[![Build Status](https://travis-ci.org/entech281/Season_2018.svg?branch=master)](https://travis-ci.org/Greenvillians281/Entech281_2018)
+[![Build Status](https://travis-ci.org/entech281/Season_2018.svg?branch=master)](https://travis-ci.org/entech281/Season_2018)
      
 ## Java Conventions
 Eclipse Preferences > Java > Code Style > Formatter > New > Name the profile to Team281 Conventions > Initialize settings with "Java Conventions" > OK > Change Tab policy to "Spaces only" > Set Indentation size to 4 > Set Tab size to 4 > OK
