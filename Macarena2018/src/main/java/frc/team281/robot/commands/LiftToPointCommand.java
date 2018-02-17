@@ -21,7 +21,7 @@ public class LiftToPointCommand extends BaseCommand {
 	protected void execute() {
 		_ES.setHeight(height);
 	}
-
+ 
 	@Override
 	protected boolean isFinished() {
 		// TODO Auto-generated method stub
