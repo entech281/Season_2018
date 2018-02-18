@@ -2,6 +2,8 @@ package frc.team281.subsystems;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.List;
+
 import org.junit.Test;
 
 import frc.team281.robot.subsystems.Position;
@@ -15,15 +17,15 @@ public class TestPositionCalculator {
     @Test
     public void testTurningRigth() {
         
-        Position p = calculator.turnRight(90);  
-        assertEquals(-21.6, p.getLeftInches(), TOLERANCE);
-        assertEquals(21.6, p.getRightInches(), TOLERANCE);
+        Position p = PositionCalculator.turnRight(90);  
+        assertEquals(21.6, p.getLeftInches(), TOLERANCE);
+        assertEquals(-21.6, p.getRightInches(), TOLERANCE);
         
     }
     @Test
     public void testGoForward() {
         
-        Position p = calculator.goForward(5);   
+        Position p = PositionCalculator.goForward(5);   
         assertEquals(5, p.getLeftInches(), TOLERANCE);
         assertEquals(5, p.getRightInches(), TOLERANCE);
         
@@ -31,23 +33,35 @@ public class TestPositionCalculator {
     @Test
     public void testTurningLeft() {
         
-        Position p = calculator.turnLeft(90);   
-        assertEquals(21.6, p.getLeftInches(), TOLERANCE);
-        assertEquals(-21.6, p.getRightInches(), TOLERANCE);
-        
-    }
-    @Test
-    public void testNegativeTurningLeft() {
-        Position p = calculator.turnLeft(-90);  
+        Position p = PositionCalculator.turnLeft(90);   
         assertEquals(-21.6, p.getLeftInches(), TOLERANCE);
         assertEquals(21.6, p.getRightInches(), TOLERANCE);
         
     }
     @Test
-    public void testNegativeTurningRight() {
-        Position p = calculator.turnRight(-90); 
+    public void testNegativeTurningLeft() {
+        Position p = PositionCalculator.turnLeft(-90);  
         assertEquals(21.6, p.getLeftInches(), TOLERANCE);
         assertEquals(-21.6, p.getRightInches(), TOLERANCE);
         
+    }
+    @Test
+    public void testNegativeTurningRight() {
+        Position p = PositionCalculator.turnRight(-90); 
+        assertEquals(-21.6, p.getLeftInches(), TOLERANCE);
+        assertEquals(21.6, p.getRightInches(), TOLERANCE);
+        
+    }
+    
+    @Test
+    public void testBuildingListOfPositions() {
+    	List<Position> positions = PositionCalculator.builder()
+    			.forward(20)
+    			.left(30)
+    			.forward(100)
+    			.right(10)
+    			.build();
+    	
+    	assertEquals(4, positions.size());
     }
 }

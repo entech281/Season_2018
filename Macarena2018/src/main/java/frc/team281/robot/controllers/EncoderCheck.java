@@ -1,5 +1,6 @@
 package frc.team281.robot.controllers;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import frc.team281.robot.RobotMap;
 import frc.team281.robot.subsystems.TalonSettingsBuilder;
 import frc.team281.robot.subsystems.drive.FourTalonsWithSettings;
@@ -22,9 +23,14 @@ public class EncoderCheck {
 		this.rightFrontCounts = rightFrontCounts;
 		this.rightRearCounts = rightRearCounts;
 		this.leftRearCounts = leftRearCounts;
-
 	}
 	
+	public EncoderCheck(FourTalonsWithSettings talons ) {
+		this(   talons.getRearLeft().getSelectedSensorPosition(0),
+				talons.getFrontLeft().getSelectedSensorPosition(0),
+				talons.getFrontRight().getSelectedSensorPosition(0),
+				talons.getRearRight().getSelectedSensorPosition(0) );
+	}
 	
 	public void adjustTalonSettingsToWorkAroundBrokenEncoders(FourTalonsWithSettings originalTalons) {
 		if (shouldDisableAll()) {

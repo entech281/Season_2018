@@ -25,18 +25,13 @@ public class OperatorInterface implements DriveInstructionSource {
     public void initialize() {
         driveJoystick = new Joystick(RobotMap.JoystickPorts.JOYSTICK_1);
         positionButton = new JoystickButton(driveJoystick, RobotMap.JoystickButtons.POSITION);
-        positionButton.whenPressed(factory.createPositionCommand());
     }
 
     @Override
     public DriveInstruction getNextInstruction() {
         return new DriveInstruction(
-                driveJoystick.getY(),
-                driveJoystick.getX()
-                //adjustJoystickSoftness(RobotMap.JOYSTICK_Y_SOFTNESS, driveJoystick.getY()),
-                
-                //adjustJoystickSoftness(RobotMap.JOYSTICK_X_SOFTNESS, driveJoystick.getX())
-                
+                -(1.0)*driveJoystick.getX(),
+                driveJoystick.getY()
                 );
     }
 

@@ -1,5 +1,8 @@
 package frc.team281.robot.controllers;
 
+import frc.team281.robot.subsystems.Position;
+import frc.team281.robot.subsystems.drive.EncoderInchesConverter;
+
 /**
  * Utilities for operating on a group of controllers
  * 
@@ -51,36 +54,57 @@ public class TalonPositionControllerGroup {
 		frontRight.setDesiredPosition(rightPosition);
 		rearRight.setDesiredPosition(rightPosition);
 	}
+	public Position getCurrentPosition(EncoderInchesConverter converter) {
 
+		double leftInches = converter.toInches(computeLeftEncoderCounts());
+		double rightInches = converter.toInches(computeRightEncoderCounts());
+
+		// use the average
+		return new Position(leftInches, rightInches);
+
+	}	
+
+	//TODO: needs tests!
 	public int computeLeftEncoderCounts() {
 		int total = 0;
 		int count = 0;
 		Integer pos = frontLeft.getActualPosition();
-		if (pos != null) {
+		if (pos != null && Math.abs(pos) > 0) {
 			total += pos;
 			count += 1;
 		}
 		pos = rearLeft.getActualPosition();
-		if (pos != null) {
+		if (pos != null && Math.abs(pos) > 0) {
 			total += pos;
 			count += 1;
 		}
-		return total / count;
+		if ( count == 0){
+		    return 0;
+		}
+		else{
+		    return total / count;
+		}
+		
 	}
 
 	public int computeRightEncoderCounts() {
 		int total = 0;
 		int count = 0;
 		Integer pos = frontRight.getActualPosition();
-		if (pos != null || pos == 0 ) {
+		if (pos != null &&  Math.abs(pos) > 0 ) {
 			total += pos;
 			count += 1;
 		}
 		pos = rearRight.getActualPosition();
-		if (pos != null || pos == 0 ) {
+		if (pos != null &&  Math.abs(pos) > 0 ) {
 			total += pos;
 			count += 1;
 		}
-		return total / count;
+        if ( count == 0){
+            return 0;
+        }
+        else{
+            return total / count;
+        }
 	}
 }

@@ -31,10 +31,15 @@ public class TalonSettingsBuilder {
 		return settings.copy();
 	}
 
-	public static TalonSettings inverted(TalonSettings settings, boolean invertedSensor, boolean invertedDirection) {
+	public static TalonSettings withDirectionSettings(TalonSettings settings, boolean invertedSensor, boolean invertedDirection) {
 		TalonSettings s = settings.copy();
 		s.motorDirections.inverted = invertedDirection;
 		s.motorDirections.sensorPhase = invertedSensor;
+		return s;
+	}
+	public static TalonSettings inverted(TalonSettings settings) {
+		TalonSettings s = settings.copy();
+		s.motorDirections.inverted = ! settings.motorDirections.inverted;
 		return s;
 	}
 
@@ -71,7 +76,7 @@ public class TalonSettingsBuilder {
 		}
 
 		public interface ProfileSettings {
-			Finish withMotionProfile(int cruiseEncoderClicksPerSecond, int accelerationEncoderClicksPerSecond2);
+			Finish withMotionProfile(int cruiseEncoderClicksPerSecond, int accelerationEncoderClicksPerSecond2, int allowableError);
 		}
 
 		public interface Finish {
@@ -157,7 +162,7 @@ public class TalonSettingsBuilder {
 			settings.outputLimits.maxMotorOutputBackward = -peakPercent;
 			settings.outputLimits.maxMotorOutputForward = peakPercent;
 			settings.outputLimits.minMotorOutputForward = minimumPercent;
-			settings.outputLimits.minMotorOutputBackward = minimumPercent;
+			settings.outputLimits.minMotorOutputBackward = -minimumPercent;
 			return this;
 		}
 
@@ -203,9 +208,10 @@ public class TalonSettingsBuilder {
 		}
 
 		@Override
-		public Finish withMotionProfile(int cruiseEncoderClicksPerSecond, int accelerationEncoderClicksPerSecond2) {
+		public Finish withMotionProfile(int cruiseEncoderClicksPerSecond, int accelerationEncoderClicksPerSecond2, int allowableError) {
 			settings.profile.accelerationEncoderClicksPerSecond2 = accelerationEncoderClicksPerSecond2;
 			settings.profile.cruiseVelocityEncoderClicksPerSecond = cruiseEncoderClicksPerSecond;
+			settings.profile.allowableClosedLoopError = allowableError;
 			return this;
 		}
 

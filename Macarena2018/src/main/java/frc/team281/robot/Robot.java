@@ -4,6 +4,7 @@ package frc.team281.robot;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import frc.team281.robot.commands.DriveToPositionCommand;
+import frc.team281.robot.commands.FollowPositionPathCommand;
 import frc.team281.robot.logger.DataLoggerFactory;
 import frc.team281.robot.subsystems.Position;
 import frc.team281.robot.subsystems.PositionCalculator;
@@ -52,26 +53,34 @@ public class Robot extends IterativeRobot implements CommandFactory {
     @Override
     public void autonomousInit() {
         driveSubsystem.setMode(DriveMode.POSITION_DRIVE);
-        
-        //PositionCalculator calculator = new PositionCalculator ();
-        //DriveToPositionCommand move1 = new DriveToPositionCommand(driveSubsystem, new Position(60, 60));;
-        //DriveToPositionCommand move2 = new DriveToPositionCommand(driveSubsystem, calculator.turnLeft(55));
+        DriveToPositionCommand move1 = new DriveToPositionCommand(driveSubsystem, PositionCalculator.goForward(60.0));
+        DriveToPositionCommand move2 = new DriveToPositionCommand(driveSubsystem, PositionCalculator.turnLeft(90));
+        DriveToPositionCommand move3 = new DriveToPositionCommand(driveSubsystem, PositionCalculator.goForward(140));
         //DriveToPositionCommand move3 = new DriveToPositionCommand(driveSubsystem, calculator.goForward(108.));
         //DriveToPositionCommand move4 = new DriveToPositionCommand(driveSubsystem, calculator.turnRight(55));
         //DriveToPositionCommand move5 = new DriveToPositionCommand(driveSubsystem, calculator.goForward(44));
         //DriveToPositionCommand move6 = new DriveToPositionCommand(driveSubsystem, calculator.turnRight(90));
         //DriveToPositionCommand move7 = new DriveToPositionCommand(driveSubsystem, calculator.goForward(21));
-        //CommandGroup m_AutonomousCommand = new CommandGroup();
-        //  m_AutonomousCommand.addSequential(move1);
-            //m_AutonomousCommand.addSequential(move2);
-            //m_AutonomousCommand.addSequential(move3);
+        CommandGroup m_AutonomousCommand = new CommandGroup();
+        m_AutonomousCommand.addSequential(move1);
+        m_AutonomousCommand.addSequential(move2);
+        m_AutonomousCommand.addSequential(move3);
             //m_AutonomousCommand.addSequential(move4);
             //m_AutonomousCommand.addSequential(move5);
             //m_AutonomousCommand.addSequential(move6);
             //m_AutonomousCommand.addSequential(move7);
-        //  m_AutonomousCommand.start();
 
-        //move1.start();
+
+        //m_AutonomousCommand.start();
+        
+        FollowPositionPathCommand followPath = new FollowPositionPathCommand(driveSubsystem, 
+                PositionCalculator.builder()
+                .forward(60)
+                .left(90)
+                .forward(40)
+                .build()
+        );
+        followPath.start();
     }
 
 
@@ -83,7 +92,6 @@ public class Robot extends IterativeRobot implements CommandFactory {
     @Override
     public void disabledInit() {
         driveSubsystem.setMode(DriveMode.DISABLED);
-
     }
 
     @Override
@@ -101,9 +109,4 @@ public class Robot extends IterativeRobot implements CommandFactory {
         Scheduler.getInstance().run();
     }
 
-    @Override
-    public DriveToPositionCommand createPositionCommand() {
-        // TODO Auto-generated method stub
-        return null;
-    }
 }

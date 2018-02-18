@@ -28,15 +28,18 @@ import frc.team281.robot.subsystems.TalonSettingsBuilder;
 public class RealDriveSubsystem extends BaseDriveSubsystem {
 
 	public static final int NAVX_CALIBRATION_LOOP_TIME_MS = 50;
-	public static final int CALIBRATION_DRIVE_TIME_MS = 200;
 	public static final double ENCODER_TICKS_PER_INCH = 43.0;
 
+	public static final int POSITION_ENCODER_TOLERANCE = 20;
+	public static final double POSITION_TOLERANCE_INCHES = (double)POSITION_ENCODER_TOLERANCE/ ENCODER_TICKS_PER_INCH;
+	
 	//protected FourTalonGroup talons;
 	private AHRS navX;
 
-	private FourDriveTalonCalibratorController calibrator;
+	//private FourDriveTalonCalibratorController calibrator;
 	private BasicArcadeDriveController arcadeDrive;
 	private PositionDriveController positionDrive;
+	protected DoNothingDriveController doNothing = new DoNothingDriveController();
 	private DriveInstructionSource driveInstructionSource;
 	
 	private FourTalonsWithSettings speedModeTalons;
@@ -56,82 +59,74 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 
 		this.navX = new NavXIntializer(SerialPort.Port.kMXP,NAVX_CALIBRATION_LOOP_TIME_MS).getCalibratedNavX();	
 		
-		/**
-		 * These are the intial (base) settings for the talons
-		 * Sub-controllers may change them as needed to do their work!
-		 */
-		TalonSettings leftSpeedSettings = TalonSettingsBuilder.defaults()
-				.withCurrentLimits(35, 30, 200)
-				.coastInNeutral()
-				.withDirections(true, true)
-				.limitMotorOutputs(0.5, 0.1)
-				.noMotorStartupRamping()
-				.useSpeedControl()
-				.build();
-
-		TalonSettings rightSpeedSettings = TalonSettingsBuilder.inverted(leftSpeedSettings, false, true);
 
 		frontLeftMotor = new WPI_TalonSRX(RobotMap.CAN.FRONT_LEFT_MOTOR);
 		frontRightMotor = new WPI_TalonSRX(RobotMap.CAN.FRONT_RIGHT_MOTOR);
 		rearLeftMotor = new WPI_TalonSRX(RobotMap.CAN.REAR_LEFT_MOTOR);
 		rearRightMotor = new WPI_TalonSRX(RobotMap.CAN.REAR_RIGHT_MOTOR);
+		
+		TalonSettings leftSpeedSettings = TalonSettingsBuilder.defaults()
+				.withCurrentLimits(35, 30, 200)
+				.coastInNeutral()
+				.withDirections(false, false)
+				.limitMotorOutputs(1.0, 0.1)
+				.noMotorStartupRamping()
+				.useSpeedControl()
+				.build();
+		TalonSettings rightSpeedSettings = TalonSettingsBuilder.inverted(leftSpeedSettings);
+		
+
 		speedModeTalons = new FourTalonsWithSettings(
 		        frontLeftMotor,
-		        frontRightMotor, 
 		        rearLeftMotor,
-		        rearRightMotor);
-		
-		speedModeTalons.applySettings(leftSpeedSettings, rightSpeedSettings);
+		        frontRightMotor, 		        
+		        rearRightMotor,
+		        leftSpeedSettings,
+		        rightSpeedSettings);		
 
 		TalonSettings leftPositionSettings = TalonSettingsBuilder.defaults()
 				.withCurrentLimits(35, 30, 200)
 				.coastInNeutral()
-				.withDirections(true, true)
-				.limitMotorOutputs(0.5, 0.1)
+				.withDirections(false, false)
+				.limitMotorOutputs(1.0, 0.15)
 				.noMotorStartupRamping()
 				.usePositionControl()
-				.withGains(0.3,0.2, 0.0, 0.0)
-				.withMotionProfile(600, 600)
+				.withGains(0.3,0.7, 0.0, 0.0)
+				.withMotionProfile(800, 800,POSITION_ENCODER_TOLERANCE)
 				.build();
 
-		TalonSettings rightPositionSettings = TalonSettingsBuilder.inverted(leftPositionSettings, false, true);
+		TalonSettings rightPositionSettings = TalonSettingsBuilder.inverted(leftPositionSettings);
+
 		
 		positionModeTalons = new FourTalonsWithSettings(
                 frontLeftMotor,
+                rearLeftMotor,                
                 frontRightMotor, 
-                rearLeftMotor,
-                rearRightMotor);
-		
-		positionModeTalons.applySettings(leftPositionSettings, rightPositionSettings);
-		
+                rearRightMotor,
+                leftPositionSettings,
+                rightPositionSettings);
+				
 		arcadeDrive = new BasicArcadeDriveController(speedModeTalons, driveInstructionSource);
-		positionDrive = new PositionDriveController(positionModeTalons, getPositionBuffer(), new EncoderInchesConverter(ENCODER_TICKS_PER_INCH));
-		calibrator = new FourDriveTalonCalibratorController(speedModeTalons, CALIBRATION_DRIVE_TIME_MS);
-		
+		positionDrive = new PositionDriveController(positionModeTalons, getPositionBuffer(), 
+				        new EncoderInchesConverter(ENCODER_TICKS_PER_INCH));	
 		
 	}
 
 	@Override
 	public void periodic() {
 		dataLogger.log("DriveMode", driveMode + "");
+		
 		dataLogger.log("frontLeftEncoder", frontLeftMotor.getSelectedSensorPosition(0));
 		dataLogger.log("frontRightEncoder", frontRightMotor.getSelectedSensorPosition(0));
 		dataLogger.log("rearLeftEncoder", rearLeftMotor.getSelectedSensorPosition(0));
 		dataLogger.log("rearRightEncoder", rearRightMotor.getSelectedSensorPosition(0));		
 		
-		if (driveMode == DriveMode.CALIBRATE) {
-			runController(calibrator);
-			if (calibrator.isCalibrationReady()) {
-				calibrator.adjustTalonSettingsToWorkAroundBrokenEncoders(speedModeTalons);
-				calibrator.adjustTalonSettingsToWorkAroundBrokenEncoders(positionModeTalons);
-				setMode(DriveMode.SPEED_DRIVE);
-			}
-		} else if (driveMode == DriveMode.POSITION_DRIVE) {
+		if (driveMode == DriveMode.POSITION_DRIVE) {
 			runController(positionDrive);
 		} else if (driveMode == DriveMode.SPEED_DRIVE) {
 			runController(arcadeDrive);
 		} else {
-			// do nothing
+			runController(doNothing);
 		}
 	}
 
