@@ -8,3 +8,4 @@ linux_simulate/
 .gradle
 .classpath
 .settings
+.DS_Store
