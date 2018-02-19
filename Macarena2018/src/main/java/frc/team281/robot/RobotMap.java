@@ -7,7 +7,7 @@ package frc.team281.robot;
  * floating around.
  * 
  * Note use of inner classes. Subscoping is much more powerful and expressive
- * than concatentation
+ * than concatenation
  */
 public class RobotMap {
 
@@ -17,23 +17,51 @@ public class RobotMap {
         public static final int REAR_LEFT_MOTOR = 1;
         public static final int REAR_RIGHT_MOTOR = 3;
         
+
         public static final int RIGHT_CUBE_BELT_MOTOR = 0;//UNKNOWN
         public static final int LEFT_CUBE_BELT_MOTOR  = 0;//UNKNOWN
         public static final int CUBE_GRIPPER_MOTOR    = 0;//UNKNOWN
         public static final int ELEVATOR_MOTOR        = 0;//UNKNOWN
         public static final int LEFT_RAMP_MOTOR       = 0;//UNKNOWN
         public static final int RIGHT_RAMP_MOTOR      = 0;//UNKNOWN
+
+        public static class Lifter {
+            public static final int MOTOR_ONE = 4;
+            public static final int MOTOR_TWO = 5;  
+        }
+        
+        public static class Grabber {
+            public static final int MOTOR_LEFT = 6;
+            public static final int MOTOR_RIGHT = 7;
+        }
+        
+
         public static final int PC_MODULE = 10;
 
     }
 
-    public static class JoystickPorts {
-        public static final int JOYSTICK_1 = 0;
+    public static class DriveJoystick {
+        public static final int PORT = 0;
+        public static class Buttons {   
+            public static final int LIFTER_RAISE = 5;
+            public static final int LIFTER_LOWER = 3;
+            public static final int LIFTER_SCALE_HIGH = 8;
+            public static final int LIFTER_SCALE_MID = 9;
+            public static final int LIFTER_SCALE_LOW = 10;
+            public static final int LIFTER_SCALE_FENCE = 11;
+            public static final int LIFTER_SCALE_GROUND = 12;
+        }
     }
-
-    public static class JoystickButtons {
-        public static final int POSITION = 7;
-
+    
+    public static class ControlPanel {
+        public static final int PORT = 1;
+        public static class Buttons {
+            public static final int GRABBER_LOAD = 7;
+            public static final int GRABBER_SHOOT = 8;
+            public static final int GRABBER_STOP = 9;
+            public static final int GRABBER_OPEN = 10;
+            public static final int GRABBER_CLOSE = 11;
+        }
     }
 
     public static class PCMChannel {
@@ -41,11 +69,25 @@ public class RobotMap {
     }
 
     public static class DigitalIO {
-        public static final int UPPER_LIFTER_LIMIT = 0;
-        public static final int LOWER_LFTER_LIMIT = 1;
-
+        public static final int LIFTER_AT_BOTTOM = 0;
+        public static final int GRABBER_CUBE_LOADED = 1;
+        public static final int WRIST_AT_BOTTOM = 2;
     }
-
+    
+    public static class PCM {
+        public static class Grabber {
+            public static final int LEFT_OUTSIDE = 1;
+            public static final int RIGHT_OUTSIDE = 2;
+            public static final int LEFT_INSIDE = 3;
+            public static final int RIGHT_INSIDE = 4;
+        }
+        
+        public static class Wrist {
+            public static final int UP = 5;
+            public static final int DOWN = 6;
+        }
+    }
+    
     public static final double JOYSTICK_Y_SOFTNESS = 1.5;
     public static final double JOYSTICK_X_SOFTNESS = 1.5;
 
