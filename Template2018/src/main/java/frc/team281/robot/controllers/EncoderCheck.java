@@ -2,6 +2,7 @@ package frc.team281.robot.controllers;
 
 import frc.team281.robot.RobotMap;
 import frc.team281.robot.subsystems.TalonSettingsBuilder;
+import frc.team281.robot.subsystems.drive.FourTalonsWithSettings;
 
 /**
  * Checks to see how we should configure motors, based on encoder readings
@@ -23,23 +24,52 @@ public class EncoderCheck {
 		this.leftRearCounts = leftRearCounts;
 
 	}
+	
+	
+	public void adjustTalonSettingsToWorkAroundBrokenEncoders(FourTalonsWithSettings originalTalons) {
+		if (shouldDisableAll()) {
+			originalTalons.disableAllSettings();
+		} else {
+			if (shouldLeftFrontFollowLeftRear()) {
+				originalTalons.setFrontLeftSettings(
+						TalonSettingsBuilder.follow(originalTalons.getRearLeftSettings(), RobotMap.CAN.FRONT_RIGHT_MOTOR));
+			}
+			if (shouldLeftRearFollowLeftFront()) {
+				originalTalons.setRearLeftSettings(
+						TalonSettingsBuilder.follow(originalTalons.getFrontLeftSettings(), RobotMap.CAN.FRONT_LEFT_MOTOR));
+			}
+			if (shouldRightFrontFollowRightRear()) {
+				originalTalons.setFrontRightSettings(
+						TalonSettingsBuilder.follow(originalTalons.getRearRightSettings(), RobotMap.CAN.FRONT_RIGHT_MOTOR));
+			}
+			if (shouldRightRearFollowRightFront()) {
+				originalTalons.setRearRightSettings(
+						TalonSettingsBuilder.follow(originalTalons.getFrontRightSettings(), RobotMap.CAN.FRONT_RIGHT_MOTOR));
+
+			}
+		}		
+	}
 
 	public boolean shouldLeftFrontFollowLeftRear() {
-		return hasProblems() && canDrive() && isLeftRearOk() && ( ! isLeftFrontOk() );
+		return hasProblems() && canDrive() && isLeftRearOk() && (!isLeftFrontOk());
 	}
+
 	public boolean shouldLeftRearFollowLeftFront() {
-		return hasProblems() && canDrive() && isLeftFrontOk() && ( ! isLeftRearOk() );
+		return hasProblems() && canDrive() && isLeftFrontOk() && (!isLeftRearOk());
 	}
+
 	public boolean shouldRightRearFollowRightFront() {
-		return hasProblems() && canDrive() && isRightFrontOk() && ( ! isRightRearOk() );
+		return hasProblems() && canDrive() && isRightFrontOk() && (!isRightRearOk());
 	}
+
 	public boolean shouldRightFrontFollowRightRear() {
-		return hasProblems() && canDrive() && isRightRearOk() && ( ! isRightFrontOk() );
+		return hasProblems() && canDrive() && isRightRearOk() && (!isRightFrontOk());
 	}
+
 	public boolean shouldDisableAll() {
-		return this.hasProblems() && ! this.canDrive();
+		return this.hasProblems() && !this.canDrive();
 	}
-	
+
 	public boolean isLeftRearOk() {
 		return this.leftRearCounts > 0;
 	}

@@ -20,8 +20,8 @@ const int c_compressorPCMid = 10;
 // Drive motor inversion states
 const bool c_kflmotor_inverted = false;
 const bool c_krlmotor_inverted = false;
-const bool c_kfrmotor_inverted = true;
-const bool c_krrmotor_inverted = true;
+const bool c_kfrmotor_inverted = false;
+const bool c_krrmotor_inverted = false;
 
 // Driver Joystick buttons
 const int c_jsautodrive_BTNid     = 11;
