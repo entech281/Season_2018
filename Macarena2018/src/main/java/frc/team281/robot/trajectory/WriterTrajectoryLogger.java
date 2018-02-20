@@ -6,7 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 
-public class WriterTrajectoryLogger {
+public class WriterTrajectoryLogger implements TrajectoryLogger{
 
     
     public static final String ROBORIO_FLASH_DRIVE = "/media/sda1";
@@ -15,16 +15,9 @@ public class WriterTrajectoryLogger {
     public static final String FOOTER="************************************"; 
     private Writer writer;
     
-    public static WriterTrajectoryLogger roboRioFlashDriveLogger(){
-        try{
-            return new WriterTrajectoryLogger( new BufferedWriter(new FileWriter( new File(ROBORIO_FLASH_DRIVE))));
-        }
-        catch ( IOException ioe){
-            throw new RuntimeException(ioe);
-        }        
-    }
+
     
-    public WriterTrajectoryLogger(Writer writer){
+    public WriterTrajectoryLogger(Writer writer) {
         this.writer = new BufferedWriter(writer);
     }
     
