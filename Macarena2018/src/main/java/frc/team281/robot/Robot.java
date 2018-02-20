@@ -50,10 +50,10 @@ public class Robot extends TimedRobot implements CommandFactory {
     public void autonomousInit() {
     		
     		PositionCalculator calculator = new PositionCalculator ();
-    		DriveToPositionCommand move1 = new DriveToPositionCommand(driveSubsystem, new Position(60, 60));;
-    		//DriveToPositionCommand move2 = new DriveToPositionCommand(driveSubsystem, calculator.turnLeft(55));
+    		DriveToPositionCommand move1 = new DriveToPositionCommand(driveSubsystem, calculator.goForward(24));;
+    		//DriveToPositionCommand move2 = new DriveToPositionCommand(driveSubsystem, calculator.turnLeft(35));
     		//DriveToPositionCommand move3 = new DriveToPositionCommand(driveSubsystem, calculator.goForward(108.));
-    		//DriveToPositionCommand move4 = new DriveToPositionCommand(driveSubsystem, calculator.turnRight(55));
+    		//DriveToPositionCommand move4 = new DriveToPositionCommand(driveSubsystem, calculator.turnRight(35));
     		//DriveToPositionCommand move5 = new DriveToPositionCommand(driveSubsystem, calculator.goForward(44));
     		//DriveToPositionCommand move6 = new DriveToPositionCommand(driveSubsystem, calculator.turnRight(90));
     		//DriveToPositionCommand move7 = new DriveToPositionCommand(driveSubsystem, calculator.goForward(21));
