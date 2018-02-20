@@ -9,6 +9,7 @@ import frc.team281.robot.RobotMap;
 import frc.team281.robot.subsystems.NavXIntializer;
 import frc.team281.robot.subsystems.TalonSettings;
 import frc.team281.robot.subsystems.TalonSettingsBuilder;
+import frc.team281.robot.trajectory.WriterTrajectoryLogger;
 
 /**
  * This is the drive system that will run in the robot. All the wpilib stuff
@@ -50,6 +51,8 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 	private WPI_TalonSRX rearLeftMotor;
 	private WPI_TalonSRX rearRightMotor;
 	
+	private WriterTrajectoryLogger trajectoryLogger;
+	
 	public RealDriveSubsystem(DriveInstructionSource driveInstructionSource) {
 		this.driveInstructionSource = driveInstructionSource;
 	}
@@ -59,7 +62,13 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 
 		this.navX = new NavXIntializer(SerialPort.Port.kMXP,NAVX_CALIBRATION_LOOP_TIME_MS).getCalibratedNavX();	
 		
-
+		try{
+		    trajectoryLogger = WriterTrajectoryLogger.roboRioFlashDriveLogger();
+		}
+		catch ( Exception ex){
+		    dataLogger.warn("Cannot Create Trajectory Logger-- is a flash drive plugged in?");
+		}
+		
 		frontLeftMotor = new WPI_TalonSRX(RobotMap.CAN.FRONT_LEFT_MOTOR);
 		frontRightMotor = new WPI_TalonSRX(RobotMap.CAN.FRONT_RIGHT_MOTOR);
 		rearLeftMotor = new WPI_TalonSRX(RobotMap.CAN.REAR_LEFT_MOTOR);
