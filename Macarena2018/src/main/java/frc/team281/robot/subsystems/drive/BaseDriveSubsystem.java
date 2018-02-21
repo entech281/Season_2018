@@ -2,6 +2,8 @@ package frc.team281.robot.subsystems.drive;
 
 import frc.team281.robot.subsystems.BaseSubsystem;
 import frc.team281.robot.subsystems.PositionBuffer;
+import frc.team281.robot.trajectory.TrajectoryLogger;
+import frc.team281.robot.trajectory.TrajectoryLoggerFactory;
 
 /**
  * Common base class for the drive subsystem. This contains stuff that's the
@@ -17,7 +19,7 @@ import frc.team281.robot.subsystems.PositionBuffer;
 public abstract class BaseDriveSubsystem extends BaseSubsystem {
 
 	public enum DriveMode {
-		DISABLED, CALIBRATE, READY, SPEED_DRIVE, POSITION_DRIVE
+		DISABLED, CALIBRATE, READY, SPEED_DRIVE, POSITION_DRIVE, PATH_DRIVE
 	}
 
 	protected DriveMode driveMode = DriveMode.DISABLED;
@@ -26,6 +28,21 @@ public abstract class BaseDriveSubsystem extends BaseSubsystem {
 	protected PositionBuffer positionBuffer = new PositionBuffer();
 	protected boolean calibrated = false;
 	
+	private TrajectoryLogger trajectoryLogger;
+	
+	
+	public void startPathCapture(String pathName){
+	    trajectoryLogger = new TrajectoryLoggerFactory().makeLoggerOnRoboRio(pathName);
+	    trajectoryLogger.init();
+	}
+	
+	public void endPathCapture(){
+	    trajectoryLogger.close();
+	}
+	
+	public void followPath(String pathName){
+	    
+	}
 	
 	/**
 	 * Changes modes, and returns true if the change worked, false if it didnt
@@ -71,6 +88,8 @@ public abstract class BaseDriveSubsystem extends BaseSubsystem {
 		// TODO Auto-generated method stub
 
 	}
+	
+	
 	
 	private class NullController extends BaseDriveController{
 

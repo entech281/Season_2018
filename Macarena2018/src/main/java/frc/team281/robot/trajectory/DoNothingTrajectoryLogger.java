@@ -17,4 +17,21 @@ public class DoNothingTrajectoryLogger implements TrajectoryLogger{
 
     }
 
+
+    @Override
+    public void pause() {
+    }
+
+    @Override
+    public void close() {
+
+        
+    }
+
+    @Override
+    public void unpause() {
+        
+    }
+
+    
 }

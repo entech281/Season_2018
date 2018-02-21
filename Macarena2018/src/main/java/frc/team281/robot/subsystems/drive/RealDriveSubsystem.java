@@ -44,7 +44,7 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 	private PositionDriveController positionDrive;
 	protected DoNothingDriveController doNothing = new DoNothingDriveController();
 	private DriveInstructionSource driveInstructionSource;
-	
+	private MotionPathDriveController motionPathDriveController;
 	private FourTalonsWithSettings speedModeTalons;
 	private FourTalonsWithSettings positionModeTalons;
 	
@@ -53,7 +53,7 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 	private WPI_TalonSRX rearLeftMotor;
 	private WPI_TalonSRX rearRightMotor;
 	
-	private TrajectoryLogger trajectoryLogger;
+	private TrajectoryLogger trajectoryLogger = new TrajectoryLoggerFactory().makeLoggerOnRoboRio("TEST");
 	
 	public RealDriveSubsystem(DriveInstructionSource driveInstructionSource) {
 		this.driveInstructionSource = driveInstructionSource;
@@ -63,8 +63,6 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 	public void initialize() {
 
 		this.navX = new NavXIntializer(SerialPort.Port.kMXP,NAVX_CALIBRATION_LOOP_TIME_MS).getCalibratedNavX();	
-		
-		trajectoryLogger = TrajectoryLoggerFactory.roboRioFlashDriveLogger();
 		
 		frontLeftMotor = new WPI_TalonSRX(RobotMap.CAN.FRONT_LEFT_MOTOR);
 		frontRightMotor = new WPI_TalonSRX(RobotMap.CAN.FRONT_RIGHT_MOTOR);

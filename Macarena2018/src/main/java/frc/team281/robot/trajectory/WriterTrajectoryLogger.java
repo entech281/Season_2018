@@ -1,8 +1,6 @@
 package frc.team281.robot.trajectory;
 
 import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 
@@ -14,8 +12,7 @@ public class WriterTrajectoryLogger implements TrajectoryLogger{
     public static final String HEADER2="leftClicks, leftCLicksPer100ms, rightClicks, rightClicksPer100ms, millis";
     public static final String FOOTER="************************************"; 
     private Writer writer;
-    
-
+    private boolean shouldWrite = true;
     
     public WriterTrajectoryLogger(Writer writer) {
         this.writer = new BufferedWriter(writer);
@@ -35,11 +32,13 @@ public class WriterTrajectoryLogger implements TrajectoryLogger{
     }
     public void logTrajectoryPoint (int leftEncoderClicks, int leftEncoderClicksPer100ms, 
             int rightEncoderClicks, int rightEncoderClicksPer100ms,int millisAtThisPoint ){
-        writeLine ( String.format("%d,%d,%d,%d,%d", 
-                leftEncoderClicks,leftEncoderClicksPer100ms,rightEncoderClicks ,rightEncoderClicksPer100ms,millisAtThisPoint));        
+        if ( shouldWrite ){
+                writeLine ( String.format("%d,%d,%d,%d,%d", 
+                        leftEncoderClicks,leftEncoderClicksPer100ms,rightEncoderClicks ,rightEncoderClicksPer100ms,millisAtThisPoint)); 
+        }
     }
     
-    public void stopAndClose(){
+    public void close(){
         writeLine(FOOTER);
         try {
             writer.flush();
@@ -48,6 +47,16 @@ public class WriterTrajectoryLogger implements TrajectoryLogger{
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void pause() {
+        this.shouldWrite = false;        
+    }
+
+    @Override
+    public void unpause() {
+        this.shouldWrite = false;         
     }
     
 }
