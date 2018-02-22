@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.SerialPort;
 import frc.team281.robot.DriveInstructionSource;
 import frc.team281.robot.RobotMap;
 import frc.team281.robot.subsystems.NavXIntializer;
+import frc.team281.robot.subsystems.PositionSource;
 import frc.team281.robot.subsystems.TalonSettings;
 import frc.team281.robot.subsystems.TalonSettingsBuilder;
 import frc.team281.robot.trajectory.TrajectoryLogger;
@@ -53,12 +54,19 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 	private WPI_TalonSRX rearLeftMotor;
 	private WPI_TalonSRX rearRightMotor;
 	
-	private TrajectoryLogger trajectoryLogger = new TrajectoryLoggerFactory().makeLoggerOnRoboRio("TEST");
+
 	
 	public RealDriveSubsystem(DriveInstructionSource driveInstructionSource) {
 		this.driveInstructionSource = driveInstructionSource;
 	}
 
+	/**
+	 * Delegated Methods
+	 */
+	public PositionSource getPositionSource() {
+		return positionDrive.getPositionBuffer();
+	}
+	
 	@Override
 	public void initialize() {
 
@@ -111,7 +119,7 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
                 rightPositionSettings);
 				
 		arcadeDrive = new BasicArcadeDriveController(speedModeTalons, driveInstructionSource);
-		positionDrive = new PositionDriveController(positionModeTalons, getPositionBuffer(), 
+		positionDrive = new PositionDriveController(positionModeTalons, 
 				        new EncoderInchesConverter(ENCODER_TICKS_PER_INCH));	
 		
 	}

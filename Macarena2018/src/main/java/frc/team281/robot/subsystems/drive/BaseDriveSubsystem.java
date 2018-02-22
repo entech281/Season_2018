@@ -25,24 +25,6 @@ public abstract class BaseDriveSubsystem extends BaseSubsystem {
 	protected DriveMode driveMode = DriveMode.DISABLED;
 	protected BaseDriveController currentController = new NullController();
 	
-	protected PositionBuffer positionBuffer = new PositionBuffer();
-	protected boolean calibrated = false;
-	
-	private TrajectoryLogger trajectoryLogger;
-	
-	
-	public void startPathCapture(String pathName){
-	    trajectoryLogger = new TrajectoryLoggerFactory().makeLoggerOnRoboRio(pathName);
-	    trajectoryLogger.init();
-	}
-	
-	public void endPathCapture(){
-	    trajectoryLogger.close();
-	}
-	
-	public void followPath(String pathName){
-	    
-	}
 	
 	/**
 	 * Changes modes, and returns true if the change worked, false if it didnt
@@ -77,10 +59,6 @@ public abstract class BaseDriveSubsystem extends BaseSubsystem {
 		dataLogger.log("CurrentController", currentController.getName());
 		newController.periodic();
 
-	}
-	
-	public PositionBuffer getPositionBuffer() {
-		return positionBuffer;
 	}
 
 	@Override

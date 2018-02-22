@@ -7,6 +7,7 @@ import frc.team281.robot.controllers.FourTalonEncoderChecker;
 import frc.team281.robot.controllers.TalonPositionController;
 import frc.team281.robot.controllers.TalonPositionControllerGroup;
 import frc.team281.robot.subsystems.Position;
+import frc.team281.robot.subsystems.PositionBuffer;
 import frc.team281.robot.subsystems.PositionSource;
 
 
@@ -25,17 +26,20 @@ public class PositionDriveController extends BaseDriveController {
 	private TalonPositionControllerGroup positionControllerGroup;
 	private EncoderInchesConverter encoderConverter;
 	private Position desiredPosition;
-	private PositionSource positionSource;
+	private PositionSource positionSource = new PositionBuffer();
 	private int updateCount = 0;
 
 	
-	public PositionDriveController(FourTalonsWithSettings talons, PositionSource positionSource,
+	public PositionDriveController(FourTalonsWithSettings talons, 
 			EncoderInchesConverter encoderConverter) {
 		this.talons = talons;
 		this.encoderConverter = encoderConverter;
-		this.positionSource = positionSource;
 	}
 
+	public PositionSource getPositionBuffer() {
+		return positionSource;
+	}
+	
 	@Override
 	public void activate() {
 

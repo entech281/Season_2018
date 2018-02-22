@@ -2,6 +2,7 @@ package frc.team281.robot.controllers;
 
 import frc.team281.robot.subsystems.Position;
 import frc.team281.robot.subsystems.drive.EncoderInchesConverter;
+import frc.team281.robot.trajectory.TwoWheelTrajectory;
 
 /**
  * Utilities for operating on a group of controllers
@@ -63,7 +64,7 @@ public class TalonPositionControllerGroup {
 		return new Position(leftInches, rightInches);
 
 	}	
-
+	
 	//TODO: needs tests!
 	public int computeLeftEncoderCounts() {
 		int total = 0;
