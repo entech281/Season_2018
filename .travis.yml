@@ -4,13 +4,10 @@ cache:
   directories:
   - /home/travis/.gradle
   - ~/Yertle2018/.gradle
-  - ~/PowerUProbot2018/.gradle
   - ~/Macarena2018/.gradle
 
 script: # Modify the commands below to build your repository.
   - cd Yertle2018
-  - ./gradlew build jacocoTestReport
-  - cd ../PowerUProbot2018
   - ./gradlew build jacocoTestReport
   - cd ../Macarena2018
   - ./gradlew clean build jacocoTestReport
