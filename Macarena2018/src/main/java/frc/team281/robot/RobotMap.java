@@ -12,9 +12,9 @@ package frc.team281.robot;
 public class RobotMap {
 
     public static class CAN {
-        public static final int FRONT_LEFT_MOTOR = 0;
+        public static final int FRONT_LEFT_MOTOR = 1;
         public static final int FRONT_RIGHT_MOTOR = 2;
-        public static final int REAR_LEFT_MOTOR = 1;
+        public static final int REAR_LEFT_MOTOR = 4;
         public static final int REAR_RIGHT_MOTOR = 3;
         
 
@@ -26,12 +26,12 @@ public class RobotMap {
         public static final int RIGHT_RAMP_MOTOR      = 0;//UNKNOWN
 
         public static class Lifter {
-            public static final int MOTOR_ONE = 4;
-            public static final int MOTOR_TWO = 5;  
+            public static final int MOTOR_ONE = 5;
+            public static final int MOTOR_TWO = 6;  
         }
         
         public static class Grabber {
-            public static final int MOTOR_LEFT = 6;
+            public static final int MOTOR_LEFT = 8;
             public static final int MOTOR_RIGHT = 7;
         }
         
@@ -56,6 +56,9 @@ public class RobotMap {
     public static class ControlPanel {
         public static final int PORT = 1;
         public static class Buttons {
+            public static final int LIFTER_RAISE = 9;
+            public static final int LIFTER_LOWER =10;
+            public static final int LIFTER_STOP = 11;
             public static final int GRABBER_LOAD = 7;
             public static final int GRABBER_SHOOT = 8;
             public static final int GRABBER_STOP = 9;
@@ -72,6 +75,8 @@ public class RobotMap {
         public static final int LIFTER_AT_BOTTOM = 0;
         public static final int GRABBER_CUBE_LOADED = 1;
         public static final int WRIST_AT_BOTTOM = 2;
+        public static final int LEFT_SWITCH_POSITION = 3;
+        public static final int RIGHT_SWITCH_POSITION = 4;
     }
     
     public static class PCM {

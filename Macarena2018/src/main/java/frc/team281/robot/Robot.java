@@ -1,6 +1,7 @@
 
 package frc.team281.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -11,15 +12,26 @@ import frc.team281.robot.commands.GrabberLoadCommand;
 import frc.team281.robot.commands.GrabberOpenCommand;
 import frc.team281.robot.commands.GrabberShootCommand;
 import frc.team281.robot.commands.GrabberStopCommand;
-import frc.team281.robot.commands.LifterHeightCommand;
+import frc.team281.robot.commands.LifterHomeCommand;
 import frc.team281.robot.commands.LifterLowerCommand;
 import frc.team281.robot.commands.LifterRaiseCommand;
+import frc.team281.robot.commands.LifterStopCommand;
 import frc.team281.robot.commands.WristPivotDownCommand;
 import frc.team281.robot.commands.WristPivotUpCommand;
 import frc.team281.robot.logger.DataLoggerFactory;
+import frc.team281.robot.subsystems.FakeGrabberSubsystem;
+import frc.team281.robot.subsystems.FakeLifterSubsystem;
+import frc.team281.robot.subsystems.FakeWristSubsystem;
+import frc.team281.robot.subsystems.GrabberSubsystem;
+import frc.team281.robot.subsystems.LifterSubsystem;
 import frc.team281.robot.subsystems.PositionCalculator;
+import frc.team281.robot.subsystems.WristSubsystem;
 import frc.team281.robot.subsystems.drive.BaseDriveSubsystem.DriveMode;
 import frc.team281.robot.subsystems.drive.RealDriveSubsystem;
+import frc.team281.robot.ConvertFieldMessageToCommandGroup;
+import frc.team281.robot.FieldMessage;
+import frc.team281.robot.FieldMessageGetter;
+
 
 /**
  * The robot, only used in the real match. Cannot be instantiated outside of the
@@ -37,7 +49,11 @@ public class Robot extends IterativeRobot implements CommandFactory {
 
     private RealDriveSubsystem driveSubsystem;
     private OperatorInterface operatorInterface;
-
+    private LifterSubsystem lifterSubsystem;
+    private GrabberSubsystem grabberSubsystem;
+    private WristSubsystem wristSubsystem;
+    private WhichAutoCodeToRun whatAutoToRun;
+    
     /**
      * This function is run when the robot is first started up and should be used
      * for any initialization code.
@@ -50,39 +66,48 @@ public class Robot extends IterativeRobot implements CommandFactory {
 
         operatorInterface = new OperatorInterface(this);
         driveSubsystem = new RealDriveSubsystem(operatorInterface);
-
+        lifterSubsystem = new LifterSubsystem();
+        grabberSubsystem= new FakeGrabberSubsystem();
+        wristSubsystem = new FakeWristSubsystem();
         driveSubsystem.initialize();
         operatorInterface.initialize();
+        lifterSubsystem.initialize();
+        grabberSubsystem.initialize();
+        wristSubsystem.initialize();
+        
+        String gameMessage = DriverStation.getInstance().getGameSpecificMessage();
+        FieldMessage fieldMessage = new FieldMessageGetter().convertGameMessageToFieldMessage(gameMessage); 
+        whatAutoToRun = new ConvertFieldMessageToCommandGroup().convert(fieldMessage);
+        
     }
 
     @Override
     public void autonomousInit() {
+    		
+    		//TODO: santiago, create a command group given whatAutoToRun
         driveSubsystem.setMode(DriveMode.POSITION_DRIVE);
-        DriveToPositionCommand move1 = new DriveToPositionCommand(driveSubsystem, PositionCalculator.goForward(60.0));
-        DriveToPositionCommand move2 = new DriveToPositionCommand(driveSubsystem, PositionCalculator.turnLeft(90));
-        DriveToPositionCommand move3 = new DriveToPositionCommand(driveSubsystem, PositionCalculator.goForward(140));
-        //DriveToPositionCommand move3 = new DriveToPositionCommand(driveSubsystem, calculator.goForward(108.));
-        //DriveToPositionCommand move4 = new DriveToPositionCommand(driveSubsystem, calculator.turnRight(55));
-        //DriveToPositionCommand move5 = new DriveToPositionCommand(driveSubsystem, calculator.goForward(44));
-        //DriveToPositionCommand move6 = new DriveToPositionCommand(driveSubsystem, calculator.turnRight(90));
-        //DriveToPositionCommand move7 = new DriveToPositionCommand(driveSubsystem, calculator.goForward(21));
+        DriveToPositionCommand move1 = new DriveToPositionCommand(driveSubsystem, PositionCalculator.goForward(22.0));
+        DriveToPositionCommand move2 = new DriveToPositionCommand(driveSubsystem, PositionCalculator.turnLeft(10.));
+        DriveToPositionCommand move3 = new DriveToPositionCommand(driveSubsystem, PositionCalculator.goForward(111.));
+        DriveToPositionCommand move4 = new DriveToPositionCommand(driveSubsystem, PositionCalculator.turnRight(10.));
+        //DriveToPositionCommand move5 = new DriveToPositionCommand(driveSubsystem, PositionCalculator.goForward(45));
+        //DriveToPositionCommand move6 = new DriveToPositionCommand(driveSubsystem, PositionCalculator.turnRight(90));
+        //DriveToPositionCommand move7 = new DriveToPositionCommand(driveSubsystem, PositionCalculator.goForward(34));
         CommandGroup m_AutonomousCommand = new CommandGroup();
         m_AutonomousCommand.addSequential(move1);
         m_AutonomousCommand.addSequential(move2);
         m_AutonomousCommand.addSequential(move3);
-            //m_AutonomousCommand.addSequential(move4);
-            //m_AutonomousCommand.addSequential(move5);
-            //m_AutonomousCommand.addSequential(move6);
-            //m_AutonomousCommand.addSequential(move7);
-
-
-        //m_AutonomousCommand.start();
+        m_AutonomousCommand.addSequential(move4);
+        //m_AutonomousCommand.addSequential(move5);
+        //m_AutonomousCommand.addSequential(move6);
+        //m_AutonomousCommand.addSequential(move7);
+        m_AutonomousCommand.start();
         
         FollowPositionPathCommand followPath = new FollowPositionPathCommand(driveSubsystem, 
                 PositionCalculator.builder()
-                .forward(60)
-                .left(90)
-                .forward(40)
+                .forward(24)
+                .left(25)
+                .forward(111)
                 .build()
         );
         followPath.start();
@@ -116,62 +141,57 @@ public class Robot extends IterativeRobot implements CommandFactory {
 
     @Override
     public LifterRaiseCommand createLifterRaiseCommand() {
-        // TODO Auto-generated method stub
-        return null;
+        return new LifterRaiseCommand(this.lifterSubsystem);
     }
 
     @Override
     public LifterLowerCommand createLifterLowerCommand() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public LifterHeightCommand createLifterHeightCommand(double heightInches) {
-        // TODO Auto-generated method stub
-        return null;
+        return new LifterLowerCommand(this.lifterSubsystem);
     }
 
     @Override
     public GrabberLoadCommand createGrabberLoadCommand() {
-        // TODO Auto-generated method stub
-        return null;
+        return new GrabberLoadCommand(this.grabberSubsystem);
     }
 
     @Override
     public GrabberShootCommand createGrabberShootCommand() {
-        // TODO Auto-generated method stub
-        return null;
+        return new GrabberShootCommand(this.grabberSubsystem);
     }
 
     @Override
     public GrabberStopCommand createGrabberStopCommand() {
-        // TODO Auto-generated method stub
-        return null;
+        return new GrabberStopCommand(this.grabberSubsystem);
     }
 
     @Override
     public GrabberOpenCommand createGrabberOpenCommand() {
-        // TODO Auto-generated method stub
-        return null;
+        return new GrabberOpenCommand(this.grabberSubsystem);
     }
 
     @Override
     public GrabberCloseCommand createGrabberCloseCommand() {
-        // TODO Auto-generated method stub
-        return null;
+        return new GrabberCloseCommand(this.grabberSubsystem);
     }
 
     @Override
     public WristPivotUpCommand createWristPivotUpCommand() {
-        // TODO Auto-generated method stub
-        return null;
+        return new WristPivotUpCommand(this.wristSubsystem);
     }
 
     @Override
     public WristPivotDownCommand createWristPivotDownCommand() {
-        // TODO Auto-generated method stub
-        return null;
+        return new WristPivotDownCommand(this.wristSubsystem);
+    }
+
+    @Override
+    public LifterHomeCommand createLifterHomeCommand() {
+        return new LifterHomeCommand(this.lifterSubsystem);
+    }
+
+    @Override
+    public LifterStopCommand createLifterStopCommand() {
+        return new LifterStopCommand(this.lifterSubsystem);
     }
     
     public static double Elevatorheight = 0;

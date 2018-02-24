@@ -1,13 +1,15 @@
 package frc.team281.robot;
 
+import edu.wpi.first.wpilibj.command.Command;
 import frc.team281.robot.commands.GrabberCloseCommand;
 import frc.team281.robot.commands.GrabberLoadCommand;
 import frc.team281.robot.commands.GrabberOpenCommand;
 import frc.team281.robot.commands.GrabberShootCommand;
 import frc.team281.robot.commands.GrabberStopCommand;
-import frc.team281.robot.commands.LifterHeightCommand;
+import frc.team281.robot.commands.LifterHomeCommand;
 import frc.team281.robot.commands.LifterLowerCommand;
 import frc.team281.robot.commands.LifterRaiseCommand;
+import frc.team281.robot.commands.LifterStopCommand;
 import frc.team281.robot.commands.WristPivotDownCommand;
 import frc.team281.robot.commands.WristPivotUpCommand;
 
@@ -25,7 +27,7 @@ public interface CommandFactory {
     
     LifterLowerCommand createLifterLowerCommand();
     
-    LifterHeightCommand createLifterHeightCommand(double heightInches);
+    LifterHomeCommand createLifterHomeCommand();
     
     GrabberLoadCommand createGrabberLoadCommand();
     
@@ -40,5 +42,7 @@ public interface CommandFactory {
     WristPivotUpCommand createWristPivotUpCommand();
     
     WristPivotDownCommand createWristPivotDownCommand();
+
+    LifterStopCommand  createLifterStopCommand();
 
 }
