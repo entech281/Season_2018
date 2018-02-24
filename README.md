@@ -14,7 +14,7 @@ Eclipse Preferences > Java > Code Style > Formatter > New > Name the profile to 
 
 ## Terminal Help
 
-_Instructions imply you're already in the `Team281_2018` directory_
+_Instructions imply you're already in the `Season_2018` directory_
 
 ### To push your changes to a branch
 1. git checkout _branchname_
@@ -33,6 +33,11 @@ _Instructions imply you're already in the `Team281_2018` directory_
 1. Connect to robot's WiFi hotspot 
 2. ./gradlew deploy
 3. Restart Robot Code in the Driver's Station
+
+## To delete local changes
+1. git stash
+2. git stash clear
+3. Whatever command you were trying to do before git stopped you due to merge conflicts or incompatabilities with your files
 
 ## Eclipse Help
 
@@ -57,7 +62,7 @@ _Instructions imply you're already in the `Team281_2018` directory_
 * ls (to see the names of all files inside current directory)
 * git reset --hard _CommitIdentifierCode_ (to rollback to a previous commit)
 * git reset --hard (to reset to the last _git pull_'ed version of a branch)
-* git reset -f (to unto a branch checkout)
+* git reset -f (to undo a branch checkout)
 * git checkout -b _BranchName_ (to create a branch)
 
 ## External Links
@@ -65,4 +70,4 @@ _Instructions imply you're already in the `Team281_2018` directory_
 
 <sub><sup>[Back to top](#contents)</sup></sub>
 
-##### Last updated 2/10/18 by Santiago #####
+##### Last updated 2/24/18 by Santiago #####
