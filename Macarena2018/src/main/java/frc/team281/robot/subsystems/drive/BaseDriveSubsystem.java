@@ -3,7 +3,7 @@ package frc.team281.robot.subsystems.drive;
 import frc.team281.robot.subsystems.BaseSubsystem;
 import frc.team281.robot.subsystems.PositionBuffer;
 import frc.team281.robot.trajectory.TrajectoryLogger;
-import frc.team281.robot.trajectory.TrajectoryLoggerFactory;
+import frc.team281.robot.trajectory.TrajectoryPlanner;
 
 /**
  * Common base class for the drive subsystem. This contains stuff that's the

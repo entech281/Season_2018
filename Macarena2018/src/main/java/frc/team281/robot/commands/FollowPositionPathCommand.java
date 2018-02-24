@@ -4,13 +4,14 @@ import java.util.List;
 
 import frc.team281.robot.subsystems.Position;
 import frc.team281.robot.subsystems.drive.BaseDriveSubsystem;
+import frc.team281.robot.subsystems.drive.RealDriveSubsystem;
 
 public class FollowPositionPathCommand extends BaseCommand{
 
-    private BaseDriveSubsystem driveSubsystem;
+    private RealDriveSubsystem driveSubsystem;
 
     protected List<Position> path;
-    public FollowPositionPathCommand(BaseDriveSubsystem subsystem, List<Position> path) {
+    public FollowPositionPathCommand(RealDriveSubsystem subsystem, List<Position> path) {
         super(subsystem);
         this.driveSubsystem = subsystem;
         this.path = path;
@@ -19,13 +20,13 @@ public class FollowPositionPathCommand extends BaseCommand{
     @Override
     protected void initialize() {
         for (Position p: path){
-            driveSubsystem.getPositionBuffer().addPosition(p);
+            driveSubsystem.getPositionSource().addPosition(p);
         }
         
     }
     @Override
     protected boolean isFinished() {
-        return ! driveSubsystem.getPositionBuffer().hasNextPosition();
+        return ! driveSubsystem.getPositionSource().hasNextPosition();
     }
     
 }

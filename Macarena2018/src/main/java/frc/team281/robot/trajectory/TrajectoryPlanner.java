@@ -10,21 +10,24 @@ import java.io.IOException;
 import frc.team281.robot.logger.DataLogger;
 import frc.team281.robot.logger.DataLoggerFactory;
 
-public class TrajectoryLoggerFactory {
+public class TrajectoryPlanner {
 
     public static final String ROBORIO_FLASH_DRIVE = "/media/sda1";
     public static final String ROBORIO_BASE_PATH="/blah/blah";
     private static DataLogger dataLogger = DataLoggerFactory.getLoggerFactory().createDataLogger("TrajectoryLoggerFactory");
+    private String fileName;
     
     protected File makeFullFilePath(String basePath, String fileName){
         return new File(basePath, fileName);
     }
     
-    public TrajectoryLogger makeLoggerOnRoboRio(String fileName){
+    public TrajectoryLogger startLogging(String fileName){
+    	this.fileName = fileName;
         return makeLoggerFromPath(ROBORIO_BASE_PATH,fileName);
     }
-    public TrajectoryLogger makeLoggerOnRoboRioFlash(String fileName){
-        return makeLoggerFromPath(ROBORIO_FLASH_DRIVE,fileName);
+    
+    public TrajectoryReader readLoggedPoints() {
+    	return makeReaderFromPath(ROBORIO_BASE_PATH,this.fileName);
     }    
     
     protected TrajectoryLogger makeLoggerFromPath(String basePath, String fileName){
@@ -38,12 +41,7 @@ public class TrajectoryLoggerFactory {
             }        
     }
     
-    public TrajectoryReader readLoggerOnRoboRio(String fileName){
-        return makeReaderFromPath(ROBORIO_BASE_PATH,fileName);
-    }
-    public TrajectoryReader readLoggerOnRoboRioFlash(String fileName){
-        return makeReaderFromPath(ROBORIO_FLASH_DRIVE,fileName);
-    }   
+
     
     protected TrajectoryReader makeReaderFromPath(String basePath, String fileName){
         try{

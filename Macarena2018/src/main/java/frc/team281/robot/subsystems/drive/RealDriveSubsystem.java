@@ -6,12 +6,14 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SerialPort;
 import frc.team281.robot.DriveInstructionSource;
 import frc.team281.robot.RobotMap;
+import frc.team281.robot.controllers.TalonGroup;
+import frc.team281.robot.controllers.TalonWithSettings;
 import frc.team281.robot.subsystems.NavXIntializer;
 import frc.team281.robot.subsystems.PositionSource;
 import frc.team281.robot.subsystems.TalonSettings;
 import frc.team281.robot.subsystems.TalonSettingsBuilder;
 import frc.team281.robot.trajectory.TrajectoryLogger;
-import frc.team281.robot.trajectory.TrajectoryLoggerFactory;
+import frc.team281.robot.trajectory.TrajectoryPlanner;
 import frc.team281.robot.trajectory.WriterTrajectoryLogger;
 
 /**
@@ -45,7 +47,7 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 	private PositionDriveController positionDrive;
 	protected DoNothingDriveController doNothing = new DoNothingDriveController();
 	private DriveInstructionSource driveInstructionSource;
-	private MotionPathDriveController motionPathDriveController;
+	private MotionPathDriveController motionPathDrive;
 	private FourTalonsWithSettings speedModeTalons;
 	private FourTalonsWithSettings positionModeTalons;
 	
@@ -67,6 +69,15 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 		return positionDrive.getPositionBuffer();
 	}
 	
+
+	public void startPathCapture(String fileName) {
+		motionPathDrive.startPathCapture(fileName);
+	}
+
+	public void endPathCapture() {
+		motionPathDrive.endPathCapture();
+	}
+
 	@Override
 	public void initialize() {
 
@@ -109,6 +120,18 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 
 		TalonSettings rightPositionSettings = TalonSettingsBuilder.inverted(leftPositionSettings);
 
+		TalonSettings leftMotionPathSettings = TalonSettingsBuilder.defaults()
+				.withCurrentLimits(35, 30, 200)
+				.coastInNeutral()
+				.withDirections(false, false)
+				.limitMotorOutputs(1.0, 0.25)
+				.noMotorStartupRamping()
+				.usePositionControl()
+				.withGains(0.3,0.9, 0.0, 0.0)
+				.withMotionProfile(800, 800,POSITION_ENCODER_TOLERANCE)
+				.build();
+
+		TalonSettings rightMotionPathSettings = TalonSettingsBuilder.inverted(leftMotionPathSettings);		
 		
 		positionModeTalons = new FourTalonsWithSettings(
                 frontLeftMotor,
@@ -120,8 +143,14 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 				
 		arcadeDrive = new BasicArcadeDriveController(speedModeTalons, driveInstructionSource);
 		positionDrive = new PositionDriveController(positionModeTalons, 
-				        new EncoderInchesConverter(ENCODER_TICKS_PER_INCH));	
+				        new EncoderInchesConverter(ENCODER_TICKS_PER_INCH));
 		
+		motionPathDrive = new MotionPathDriveController(
+				new TalonGroup(
+				new TalonWithSettings(frontLeftMotor, leftMotionPathSettings),
+				new TalonWithSettings(frontRightMotor, leftMotionPathSettings),
+				new TalonWithSettings(rearLeftMotor, rightMotionPathSettings),
+				new TalonWithSettings(rearRightMotor, rightMotionPathSettings)) );
 	}
 
 	@Override
@@ -137,7 +166,10 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 			runController(positionDrive);
 		} else if (driveMode == DriveMode.SPEED_DRIVE) {
 			runController(arcadeDrive);
-		} else {
+		} else if ( driveMode == DriveMode.PATH_DRIVE ) {
+			runController(motionPathDrive);
+		}
+		else {
 			runController(doNothing);
 		}
 	}

@@ -4,4 +4,5 @@ public interface PositionSource {
 	public Position getCurrentPosition();
 	public boolean hasNextPosition();
 	public void next();
+	public void addPosition(Position p);
 }
