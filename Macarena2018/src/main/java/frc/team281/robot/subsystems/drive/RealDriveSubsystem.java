@@ -6,6 +6,8 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SerialPort;
 import frc.team281.robot.DriveInstructionSource;
 import frc.team281.robot.RobotMap;
+import frc.team281.robot.controllers.DriveEncoderStatus;
+import frc.team281.robot.controllers.FourTalonEncoderCheckController;
 import frc.team281.robot.subsystems.NavXIntializer;
 import frc.team281.robot.subsystems.TalonSettings;
 import frc.team281.robot.subsystems.TalonSettingsBuilder;
@@ -40,7 +42,12 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 	private BasicArcadeDriveController arcadeDrive;
 	private PositionDriveController positionDrive;
 	protected DoNothingDriveController doNothing = new DoNothingDriveController();
+	protected FourTalonEncoderCheckController encoderCheckController;
+	
+	
 	private DriveInstructionSource driveInstructionSource;
+	private EncoderInchesConverter encoderInchesConverter = new EncoderInchesConverter(ENCODER_TICKS_PER_INCH);
+	
 	
 	private FourTalonsWithSettings speedModeTalons;
 	private FourTalonsWithSettings positionModeTalons;
@@ -115,11 +122,15 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
                 rightPositionSettings);
 				
 		arcadeDrive = new BasicArcadeDriveController(speedModeTalons, driveInstructionSource);
-		positionDrive = new PositionDriveController(positionModeTalons, getPositionBuffer(), 
-				        new EncoderInchesConverter(ENCODER_TICKS_PER_INCH));	
+		positionDrive = new PositionDriveController(getpositionModeTalons, getPositionBuffer(), encoderInchesConverter);	
+		encoderCheckController = new FourTalonEncoderCheckController( speedModeTalons, encoderInchesConverter);
 		
 	}
 
+	public DriveEncoderStatus getDriveEncoderStatus(){
+	    return encoderCheckController.getDriveEncoderStatus();
+	}
+	
 	@Override
 	public void periodic() {
 		dataLogger.log("DriveMode", driveMode + "");
@@ -128,6 +139,12 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 		dataLogger.log("frontRightEncoder", frontRightMotor.getSelectedSensorPosition(0));
 		dataLogger.log("rearLeftEncoder", rearLeftMotor.getSelectedSensorPosition(0));
 		dataLogger.log("rearRightEncoder", rearRightMotor.getSelectedSensorPosition(0));		
+		
+		/**
+		 * Update Encoder Situation. Everyone should
+		 * use DriveEncoderStatus to read the encoders
+		 */
+		encoderCheckController.periodic();
 		
 		if (driveMode == DriveMode.POSITION_DRIVE) {
 			runController(positionDrive);

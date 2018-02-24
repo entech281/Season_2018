@@ -3,7 +3,7 @@ package frc.team281.robot.subsystems.drive;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-import frc.team281.robot.controllers.FourTalonEncoderChecker;
+import frc.team281.robot.controllers.DriveEncoderStatus;
 import frc.team281.robot.controllers.TalonPositionController;
 import frc.team281.robot.controllers.TalonPositionControllerGroup;
 import frc.team281.robot.subsystems.Position;
@@ -23,17 +23,19 @@ public class PositionDriveController extends BaseDriveController {
 
 	private FourTalonsWithSettings talons;
 	private TalonPositionControllerGroup positionControllerGroup;
-	private EncoderInchesConverter encoderConverter;
+	private DriveEncoderStatus driveEncoderStatus;
+	private EncoderInchesConverter  encoderConverter;
 	private Position desiredPosition;
 	private PositionSource positionSource;
 	private int updateCount = 0;
 
 	
-	public PositionDriveController(FourTalonsWithSettings talons, PositionSource positionSource,
+	public PositionDriveController(DriveEncoderStatus status, FourTalonsWithSettings talons, PositionSource positionSource,
 			EncoderInchesConverter encoderConverter) {
 		this.talons = talons;
 		this.encoderConverter = encoderConverter;
 		this.positionSource = positionSource;
+		this.driveEncoderStatus = status;
 	}
 
 	@Override
@@ -59,7 +61,7 @@ public class PositionDriveController extends BaseDriveController {
 	}
 
 	public Position getCurrentPosition() {
-		return positionControllerGroup.getCurrentPosition(encoderConverter);
+		return driveEncoderStatus.getPositionIgnoringBrokenEncoders();
 	}
 
 
@@ -76,10 +78,6 @@ public class PositionDriveController extends BaseDriveController {
 	@Override
 	public void periodic() {		
 		processPositionCommand();
-		FourTalonEncoderChecker checker =  new FourTalonEncoderChecker(talons);
-		checker.setMotorsWithBrokenEncodersToFollowers();
-		
-		dataLogger.log("Motor Status:",checker.friendlyStatus());
 		displayControllerStatuses();
 	}
 
