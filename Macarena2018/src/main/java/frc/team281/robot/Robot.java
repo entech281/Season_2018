@@ -1,4 +1,3 @@
-
 package frc.team281.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -20,7 +19,6 @@ import frc.team281.robot.commands.WristPivotDownCommand;
 import frc.team281.robot.commands.WristPivotUpCommand;
 import frc.team281.robot.logger.DataLoggerFactory;
 import frc.team281.robot.subsystems.FakeGrabberSubsystem;
-import frc.team281.robot.subsystems.FakeLifterSubsystem;
 import frc.team281.robot.subsystems.FakeWristSubsystem;
 import frc.team281.robot.subsystems.GrabberSubsystem;
 import frc.team281.robot.subsystems.LifterSubsystem;
@@ -28,9 +26,6 @@ import frc.team281.robot.subsystems.PositionCalculator;
 import frc.team281.robot.subsystems.WristSubsystem;
 import frc.team281.robot.subsystems.drive.BaseDriveSubsystem.DriveMode;
 import frc.team281.robot.subsystems.drive.RealDriveSubsystem;
-import frc.team281.robot.ConvertFieldMessageToCommandGroup;
-import frc.team281.robot.FieldMessage;
-import frc.team281.robot.FieldMessageGetter;
 
 
 /**
@@ -84,7 +79,6 @@ public class Robot extends IterativeRobot implements CommandFactory {
     @Override
     public void autonomousInit() {
     		
-    		//TODO: santiago, create a command group given whatAutoToRun
         driveSubsystem.setMode(DriveMode.POSITION_DRIVE);
         DriveToPositionCommand move1 = new DriveToPositionCommand(driveSubsystem, PositionCalculator.goForward(22.0));
         DriveToPositionCommand move2 = new DriveToPositionCommand(driveSubsystem, PositionCalculator.turnLeft(10.));
@@ -112,8 +106,7 @@ public class Robot extends IterativeRobot implements CommandFactory {
         );
         followPath.start();
     }
-
-
+    
     @Override
     public void autonomousPeriodic() {
         Scheduler.getInstance().run();
