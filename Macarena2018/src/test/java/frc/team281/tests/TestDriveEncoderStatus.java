@@ -57,7 +57,8 @@ public class TestDriveEncoderStatus {
 		assertFalse(status.shouldLeftFrontFollowLeftRear());		
 		assertFalse(status.shouldLeftRearFollowLeftFront());	
 		assertFalse(status.shouldRightFrontFollowRightRear());	
-		assertFalse(status.shouldRightRearFollowRightFront());			
+		assertFalse(status.shouldRightRearFollowRightFront());	
+		assertTrue(status.friendlyStatus().indexOf("OK")> -1 );		
 	}
 	
 	@Test
@@ -91,4 +92,39 @@ public class TestDriveEncoderStatus {
 		assertTrue(status.friendlyStatus().indexOf("IMPAIRED")> -1 );
 		assertTrue(status.friendlyStatus().indexOf("LF: [-]")> -1 );
 	}
+	
+	@Test
+	public void testBothOnOneSideBroken() {
+		TalonEncoderStatus goodStatus = new TalonEncoderStatus();
+		clickEncoders(goodStatus,100,200,300,400,500);
+
+		TalonEncoderStatus badStatus = new TalonEncoderStatus();
+		clickEncoders(badStatus,100,200,200,200,200, 200, 200, 200);
+		
+		DriveEncoderStatus status = new DriveEncoderStatus(converter);
+		
+		//first one is the leftFront
+		status.updateTalonStatus(badStatus, badStatus, goodStatus, goodStatus);
+		assertFalse(status.allOk());
+		
+		assertEquals(0,status.getLeftEncoderCountsIgnoringBrokenEncoders());
+		assertEquals(500,status.getRightEncoderCountsIgnoringBrokenEncoders());
+		assertEquals(0,status.getLeftInchesIgnoringBrokenEncoders(),0.001);
+		assertEquals(50,status.getRightInchesIgnoringBrokenEncoders(),0.001);
+		assertTrue( status.isRightOk());
+		assertFalse(status.isLeftFrontOk());
+		assertFalse(status.isLeftRearOk());
+		assertFalse(status.isLeftOk());
+		assertTrue(  status.isRightFrontOk() && status.isRightRearOk());		
+		assertFalse( status.canDrive() );
+		assertTrue(status.hasProblems());
+		assertFalse(status.shouldLeftFrontFollowLeftRear());
+		assertFalse(status.shouldLeftRearFollowLeftFront());	
+		assertFalse(status.shouldRightFrontFollowRightRear());	
+		assertFalse(status.shouldRightRearFollowRightFront());		
+		
+		assertTrue(status.friendlyStatus().indexOf("CANT")> -1 );
+		assertTrue(status.shouldDisableAll());
+	}	
+	
 }
