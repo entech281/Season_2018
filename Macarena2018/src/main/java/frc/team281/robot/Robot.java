@@ -1,4 +1,3 @@
-
 package frc.team281.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -28,6 +27,7 @@ import frc.team281.robot.subsystems.WristSubsystem;
 import frc.team281.robot.subsystems.drive.BaseDriveSubsystem.DriveMode;
 import frc.team281.robot.subsystems.drive.RealDriveSubsystem;
 
+
 /**
  * The robot, only used in the real match. Cannot be instantiated outside of the
  * match, so we want to minimize its functionality here.
@@ -42,147 +42,149 @@ import frc.team281.robot.subsystems.drive.RealDriveSubsystem;
  */
 public class Robot extends IterativeRobot implements CommandFactory {
 
-	private RealDriveSubsystem driveSubsystem;
-	private OperatorInterface operatorInterface;
-	private LifterSubsystem lifterSubsystem;
-	private GrabberSubsystem grabberSubsystem;
-	private WristSubsystem wristSubsystem;
-	private WhichAutoCodeToRun whatAutoToRun;
+    private RealDriveSubsystem driveSubsystem;
+    private OperatorInterface operatorInterface;
+    private LifterSubsystem lifterSubsystem;
+    private GrabberSubsystem grabberSubsystem;
+    private WristSubsystem wristSubsystem;
+    private WhichAutoCodeToRun whatAutoToRun;
+    
+    /**
+     * This function is run when the robot is first started up and should be used
+     * for any initialization code.
+     */
+    @Override
+    public void robotInit() {
 
-	/**
-	 * This function is run when the robot is first started up and should be used
-	 * for any initialization code.
-	 */
-	@Override
-	public void robotInit() {
+        // create the objects for the real match
+        DataLoggerFactory.configureForMatch();
 
-		// create the objects for the real match
-		DataLoggerFactory.configureForMatch();
+        operatorInterface = new OperatorInterface(this);
+        driveSubsystem = new RealDriveSubsystem(operatorInterface);
+        lifterSubsystem = new LifterSubsystem();
+        grabberSubsystem= new FakeGrabberSubsystem();
+        wristSubsystem = new FakeWristSubsystem();
+        driveSubsystem.initialize();
+        operatorInterface.initialize();
+        lifterSubsystem.initialize();
+        grabberSubsystem.initialize();
+        wristSubsystem.initialize();
+        
+        String gameMessage = DriverStation.getInstance().getGameSpecificMessage();
+        FieldMessage fieldMessage = new FieldMessageGetter().convertGameMessageToFieldMessage(gameMessage); 
+        whatAutoToRun = new ConvertFieldMessageToCommandGroup().convert(fieldMessage);
+        
+    }
 
-		operatorInterface = new OperatorInterface(this);
-		driveSubsystem = new RealDriveSubsystem(operatorInterface);
-		lifterSubsystem = new LifterSubsystem();
-		grabberSubsystem = new FakeGrabberSubsystem();
-		wristSubsystem = new FakeWristSubsystem();
-		driveSubsystem.initialize();
-		operatorInterface.initialize();
-		lifterSubsystem.initialize();
-		grabberSubsystem.initialize();
-		wristSubsystem.initialize();
+    @Override
+    public void autonomousInit() {
+    		
+        driveSubsystem.setMode(DriveMode.POSITION_DRIVE);
+        DriveToPositionCommand move1 = new DriveToPositionCommand(driveSubsystem, PositionCalculator.goForward(22.0));
+        DriveToPositionCommand move2 = new DriveToPositionCommand(driveSubsystem, PositionCalculator.turnLeft(10.));
+        DriveToPositionCommand move3 = new DriveToPositionCommand(driveSubsystem, PositionCalculator.goForward(111.));
+        DriveToPositionCommand move4 = new DriveToPositionCommand(driveSubsystem, PositionCalculator.turnRight(10.));
+        //DriveToPositionCommand move5 = new DriveToPositionCommand(driveSubsystem, PositionCalculator.goForward(45));
+        //DriveToPositionCommand move6 = new DriveToPositionCommand(driveSubsystem, PositionCalculator.turnRight(90));
+        //DriveToPositionCommand move7 = new DriveToPositionCommand(driveSubsystem, PositionCalculator.goForward(34));
+        CommandGroup m_AutonomousCommand = new CommandGroup();
+        m_AutonomousCommand.addSequential(move1);
+        m_AutonomousCommand.addSequential(move2);
+        m_AutonomousCommand.addSequential(move3);
+        m_AutonomousCommand.addSequential(move4);
+        //m_AutonomousCommand.addSequential(move5);
+        //m_AutonomousCommand.addSequential(move6);
+        //m_AutonomousCommand.addSequential(move7);
+        m_AutonomousCommand.start();
+        
+        FollowPositionPathCommand followPath = new FollowPositionPathCommand(driveSubsystem, 
+                PositionCalculator.builder()
+                .forward(24)
+                .left(25)
+                .forward(111)
+                .build()
+        );
+        followPath.start();
+    }
+    
+    @Override
+    public void autonomousPeriodic() {
+        Scheduler.getInstance().run();
+    }
 
-		String gameMessage = DriverStation.getInstance().getGameSpecificMessage();
-		FieldMessage fieldMessage = new FieldMessageGetter().convertGameMessageToFieldMessage(gameMessage);
-		whatAutoToRun = new ConvertFieldMessageToCommandGroup().convert(fieldMessage);
+    @Override
+    public void disabledInit() {
+        driveSubsystem.setMode(DriveMode.DISABLED);
+    }
 
-	}
+    @Override
+    public void disabledPeriodic() {
+        Scheduler.getInstance().run();
+    }
 
-	@Override
-	public void autonomousInit() {
+    @Override
+    public void teleopInit() {
+        driveSubsystem.setMode(DriveMode.SPEED_DRIVE);
+    }
 
-		// TODO: santiago, create a command group given whatAutoToRun
-		driveSubsystem.setMode(DriveMode.POSITION_DRIVE);
-		DriveToPositionCommand move1 = new DriveToPositionCommand(driveSubsystem, PositionCalculator.goForward(22.0));
-		DriveToPositionCommand move2 = new DriveToPositionCommand(driveSubsystem, PositionCalculator.turnLeft(10.));
-		DriveToPositionCommand move3 = new DriveToPositionCommand(driveSubsystem, PositionCalculator.goForward(111.));
-		DriveToPositionCommand move4 = new DriveToPositionCommand(driveSubsystem, PositionCalculator.turnRight(10.));
-		// DriveToPositionCommand move5 = new DriveToPositionCommand(driveSubsystem,
-		// PositionCalculator.goForward(45));
-		// DriveToPositionCommand move6 = new DriveToPositionCommand(driveSubsystem,
-		// PositionCalculator.turnRight(90));
-		// DriveToPositionCommand move7 = new DriveToPositionCommand(driveSubsystem,
-		// PositionCalculator.goForward(34));
-		CommandGroup m_AutonomousCommand = new CommandGroup();
-		m_AutonomousCommand.addSequential(move1);
-		m_AutonomousCommand.addSequential(move2);
-		m_AutonomousCommand.addSequential(move3);
-		m_AutonomousCommand.addSequential(move4);
-		// m_AutonomousCommand.addSequential(move5);
-		// m_AutonomousCommand.addSequential(move6);
-		// m_AutonomousCommand.addSequential(move7);
-		m_AutonomousCommand.start();
+    @Override
+    public void teleopPeriodic() {
+        Scheduler.getInstance().run();
+    }
 
-		FollowPositionPathCommand followPath = new FollowPositionPathCommand(driveSubsystem,
-				PositionCalculator.builder().forward(24).left(25).forward(111).build());
-		followPath.start();
-	}
+    @Override
+    public LifterRaiseCommand createLifterRaiseCommand() {
+        return new LifterRaiseCommand(this.lifterSubsystem);
+    }
 
-	@Override
-	public void autonomousPeriodic() {
-		Scheduler.getInstance().run();
-	}
+    @Override
+    public LifterLowerCommand createLifterLowerCommand() {
+        return new LifterLowerCommand(this.lifterSubsystem);
+    }
 
-	@Override
-	public void disabledInit() {
-		driveSubsystem.setMode(DriveMode.DISABLED);
-	}
+    @Override
+    public GrabberLoadCommand createGrabberLoadCommand() {
+        return new GrabberLoadCommand(this.grabberSubsystem);
+    }
 
-	@Override
-	public void disabledPeriodic() {
-		Scheduler.getInstance().run();
-	}
+    @Override
+    public GrabberShootCommand createGrabberShootCommand() {
+        return new GrabberShootCommand(this.grabberSubsystem);
+    }
 
-	@Override
-	public void teleopInit() {
-		driveSubsystem.setMode(DriveMode.SPEED_DRIVE);
-	}
+    @Override
+    public GrabberStopCommand createGrabberStopCommand() {
+        return new GrabberStopCommand(this.grabberSubsystem);
+    }
 
-	@Override
-	public void teleopPeriodic() {
-		Scheduler.getInstance().run();
-	}
+    @Override
+    public GrabberOpenCommand createGrabberOpenCommand() {
+        return new GrabberOpenCommand(this.grabberSubsystem);
+    }
 
-	@Override
-	public LifterRaiseCommand createLifterRaiseCommand() {
-		return new LifterRaiseCommand(this.lifterSubsystem);
-	}
+    @Override
+    public GrabberCloseCommand createGrabberCloseCommand() {
+        return new GrabberCloseCommand(this.grabberSubsystem);
+    }
 
-	@Override
-	public LifterLowerCommand createLifterLowerCommand() {
-		return new LifterLowerCommand(this.lifterSubsystem);
-	}
+    @Override
+    public WristPivotUpCommand createWristPivotUpCommand() {
+        return new WristPivotUpCommand(this.wristSubsystem);
+    }
 
-	@Override
-	public GrabberLoadCommand createGrabberLoadCommand() {
-		return new GrabberLoadCommand(this.grabberSubsystem);
-	}
+    @Override
+    public WristPivotDownCommand createWristPivotDownCommand() {
+        return new WristPivotDownCommand(this.wristSubsystem);
+    }
 
-	@Override
-	public GrabberShootCommand createGrabberShootCommand() {
-		return new GrabberShootCommand(this.grabberSubsystem);
-	}
+    @Override
+    public LifterHomeCommand createLifterHomeCommand() {
+        return new LifterHomeCommand(this.lifterSubsystem);
+    }
 
-	@Override
-	public GrabberStopCommand createGrabberStopCommand() {
-		return new GrabberStopCommand(this.grabberSubsystem);
-	}
+    @Override
+    public LifterStopCommand createLifterStopCommand() {
+        return new LifterStopCommand(this.lifterSubsystem);
+    }
 
-	@Override
-	public GrabberOpenCommand createGrabberOpenCommand() {
-		return new GrabberOpenCommand(this.grabberSubsystem);
-	}
-
-	@Override
-	public GrabberCloseCommand createGrabberCloseCommand() {
-		return new GrabberCloseCommand(this.grabberSubsystem);
-	}
-
-	@Override
-	public WristPivotUpCommand createWristPivotUpCommand() {
-		return new WristPivotUpCommand(this.wristSubsystem);
-	}
-
-	@Override
-	public WristPivotDownCommand createWristPivotDownCommand() {
-		return new WristPivotDownCommand(this.wristSubsystem);
-	}
-
-	@Override
-	public LifterHomeCommand createLifterHomeCommand() {
-		return new LifterHomeCommand(this.lifterSubsystem);
-	}
-
-	@Override
-	public LifterStopCommand createLifterStopCommand() {
-		return new LifterStopCommand(this.lifterSubsystem);
-	}
 }
