@@ -31,15 +31,17 @@ public class TalonSettingsBuilder {
 		return settings.copy();
 	}
 
-	public static TalonSettings withDirectionSettings(TalonSettings settings, boolean invertedSensor, boolean invertedDirection) {
+	public static TalonSettings withDirectionSettings(TalonSettings settings, boolean invertedSensor,
+			boolean invertedDirection) {
 		TalonSettings s = settings.copy();
 		s.motorDirections.inverted = invertedDirection;
 		s.motorDirections.sensorPhase = invertedSensor;
 		return s;
 	}
+
 	public static TalonSettings inverted(TalonSettings settings) {
 		TalonSettings s = settings.copy();
-		s.motorDirections.inverted = ! settings.motorDirections.inverted;
+		s.motorDirections.inverted = !settings.motorDirections.inverted;
 		return s;
 	}
 
@@ -65,6 +67,7 @@ public class TalonSettingsBuilder {
 	 */
 	public interface TalonControlMode {
 		public PositionControlSettings.GainSettings usePositionControl();
+
 		public SpeedControlSettings useSpeedControl();
 	}
 
@@ -75,7 +78,8 @@ public class TalonSettingsBuilder {
 		}
 
 		public interface ProfileSettings {
-			Finish withMotionProfile(int cruiseEncoderClicksPerSecond, int accelerationEncoderClicksPerSecond2, int allowableError);
+			Finish withMotionProfile(int cruiseEncoderClicksPerSecond, int accelerationEncoderClicksPerSecond2,
+					int allowableError);
 		}
 
 		public interface Finish {
@@ -207,7 +211,8 @@ public class TalonSettingsBuilder {
 		}
 
 		@Override
-		public Finish withMotionProfile(int cruiseEncoderClicksPerSecond, int accelerationEncoderClicksPerSecond2, int allowableError) {
+		public Finish withMotionProfile(int cruiseEncoderClicksPerSecond, int accelerationEncoderClicksPerSecond2,
+				int allowableError) {
 			settings.profile.accelerationEncoderClicksPerSecond2 = accelerationEncoderClicksPerSecond2;
 			settings.profile.cruiseVelocityEncoderClicksPerSecond = cruiseEncoderClicksPerSecond;
 			settings.profile.allowableClosedLoopError = allowableError;

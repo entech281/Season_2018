@@ -4,21 +4,24 @@ import frc.team281.robot.subsystems.BaseSubsystem;
 import frc.team281.robot.subsystems.WristSubsystem;
 
 public class WristPivotDownCommand extends BaseCommand {
-    WristSubsystem wrist=new WristSubsystem();
-    public WristPivotDownCommand(BaseSubsystem subsystem) {
-        super(subsystem);
-        
-    }
+	WristSubsystem wrist = new WristSubsystem();
 
-    public WristPivotDownCommand(BaseSubsystem subsystem, double timeOut) {
-        super(subsystem, timeOut);
-    }
-    public void execute() {
-        wrist.pivotDown();
-    }
-    @Override
-    protected boolean isFinished() {
-        return true;
-    }
+	public WristPivotDownCommand(BaseSubsystem subsystem) {
+		super(subsystem);
+
+	}
+
+	public WristPivotDownCommand(BaseSubsystem subsystem, double timeOut) {
+		super(subsystem, timeOut);
+	}
+
+	public void execute() {
+		wrist.pivotDown();
+	}
+
+	@Override
+	protected boolean isFinished() {
+		return true;
+	}
 
 }

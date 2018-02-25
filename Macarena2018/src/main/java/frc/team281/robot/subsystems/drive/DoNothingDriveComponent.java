@@ -1,6 +1,6 @@
 package frc.team281.robot.subsystems.drive;
 
-public class DoNothingDriveComponent implements DriveComponent{
+public class DoNothingDriveComponent implements DriveComponent {
 
 	@Override
 	public void activate() {

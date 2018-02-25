@@ -14,39 +14,39 @@ import frc.team281.robot.subsystems.BaseSubsystem;
  */
 public abstract class BaseCommand extends Command {
 
-    protected DataLogger dataLogger;
-    public static final double UNLIMITED_TIMEOUT = 100000000;
+	protected DataLogger dataLogger;
+	public static final double UNLIMITED_TIMEOUT = 100000000;
 
-    public BaseCommand(BaseSubsystem subsystem) {
-        this(subsystem, UNLIMITED_TIMEOUT);
-    }
+	public BaseCommand(BaseSubsystem subsystem) {
+		this(subsystem, UNLIMITED_TIMEOUT);
+	}
 
-    /**
-     * Save subclasses from needing to do this code
-     * 
-     * @param subsystem
-     * @param timeOut
-     */
-    public BaseCommand(BaseSubsystem subsystem, double timeOut) {
-        super(timeOut);
-        this.dataLogger = DataLoggerFactory.getLoggerFactory().createDataLogger(this.getName());
+	/**
+	 * Save subclasses from needing to do this code
+	 * 
+	 * @param subsystem
+	 * @param timeOut
+	 */
+	public BaseCommand(BaseSubsystem subsystem, double timeOut) {
+		super(timeOut);
+		this.dataLogger = DataLoggerFactory.getLoggerFactory().createDataLogger(this.getName());
 
-        if (subsystem != null) {
-            requires(subsystem);
-        }
+		if (subsystem != null) {
+			requires(subsystem);
+		}
 
-    }
+	}
 
-    // these methods are protected in the base class.
-    // we open them up so that they can be called in unti testing.
-    @Override
-    public synchronized boolean isRunning() {
-        return super.isRunning();
-    }
+	// these methods are protected in the base class.
+	// we open them up so that they can be called in unti testing.
+	@Override
+	public synchronized boolean isRunning() {
+		return super.isRunning();
+	}
 
-    @Override
-    public synchronized boolean isCanceled() {
-        return super.isCanceled();
-    }
+	@Override
+	public synchronized boolean isCanceled() {
+		return super.isCanceled();
+	}
 
 }

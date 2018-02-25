@@ -20,7 +20,7 @@ public class SmartDashboardLogger extends DataLogger {
 
 	@Override
 	public void log(String key, Object value) {
-		SmartDashboard.putString(computePath(key), ""+value);
+		SmartDashboard.putString(computePath(key), "" + value);
 	}
 
 	@Override

@@ -7,7 +7,7 @@ import frc.team281.robot.subsystems.TalonSettings;
 import frc.team281.robot.subsystems.TalonSettingsBuilder;
 import frc.team281.robot.talons.FourTalonGroup;
 
-public class FourWheelSpeedDrive implements DriveComponent{
+public class FourWheelSpeedDrive implements DriveComponent {
 
 	protected FourTalonGroup talons;
 	protected TalonSettings leftSettings;
@@ -17,7 +17,7 @@ public class FourWheelSpeedDrive implements DriveComponent{
 	private FourWheelSpeedDrive(Builder builder) {
 		this.talons = builder.talons;
 		leftSettings = TalonSettingsBuilder.copy(builder.settings);
-		rightSettings = TalonSettingsBuilder.inverted(builder.settings);		
+		rightSettings = TalonSettingsBuilder.inverted(builder.settings);
 	}
 
 	public void activate() {
@@ -126,7 +126,8 @@ public class FourWheelSpeedDrive implements DriveComponent{
 		public FourWheelSpeedDrive build();
 	}
 
-	public static class Builder implements  SafetySettings.BrakeMode, SafetySettings, DirectionSettings, MotorOutputLimits, Finish {
+	public static class Builder
+			implements SafetySettings.BrakeMode, SafetySettings, DirectionSettings, MotorOutputLimits, Finish {
 
 		private TalonSettings settings = new TalonSettings();
 		protected FourTalonGroup talons;

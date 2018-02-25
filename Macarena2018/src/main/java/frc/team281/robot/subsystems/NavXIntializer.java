@@ -12,13 +12,14 @@ public class NavXIntializer {
 	private SerialPort.Port serialPort;
 	private DataLogger dataLogger;
 	private int calibration_timeout = 0;
-	public NavXIntializer(SerialPort.Port port , int calibration_timeout) {
+
+	public NavXIntializer(SerialPort.Port port, int calibration_timeout) {
 		this.serialPort = port;
 		this.calibration_timeout = calibration_timeout;
-		
+
 		this.dataLogger = DataLoggerFactory.getLoggerFactory().createDataLogger("NavXInit");
 	}
-	
+
 	public void calibrate() {
 		// Do NavX first to try and give it time to calibrate
 		try {
@@ -38,12 +39,13 @@ public class NavXIntializer {
 				}
 			}
 			this.navX.zeroYaw();
-		}		
+		}
 	}
+
 	public boolean isOk() {
 		return this.navX != null && this.navX.isConnected();
 	}
-	
+
 	public AHRS getCalibratedNavX() {
 		calibrate();
 		return this.navX;

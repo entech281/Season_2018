@@ -4,32 +4,32 @@ import frc.team281.robot.subsystems.LifterSubsystem;
 
 public class LifterHomeCommand extends BaseCommand {
 
-    public static final int TIMEOUT_SECS = 20;
-    
-    private LifterSubsystem lifter;
-    
-    public LifterHomeCommand(LifterSubsystem subsystem) {
-        super(subsystem,TIMEOUT_SECS);
-        this.lifter = (LifterSubsystem)subsystem;
-    }
+	public static final int TIMEOUT_SECS = 20;
 
-    @Override
-    protected void initialize() {
-        lifter.motorsDown(LifterSubsystem.HOMING_SPEED_PERCENT);
-    }
+	private LifterSubsystem lifter;
 
-    @Override
-    protected void end() {
+	public LifterHomeCommand(LifterSubsystem subsystem) {
+		super(subsystem, TIMEOUT_SECS);
+		this.lifter = (LifterSubsystem) subsystem;
+	}
 
-    }
+	@Override
+	protected void initialize() {
+		lifter.motorsDown(LifterSubsystem.HOMING_SPEED_PERCENT);
+	}
 
-    @Override
-    protected boolean isFinished() {
-        return lifter.isLifterAtBottom() || isTimedOut();
-    }
-    
-    @Override
-    protected void interrupted() {
-        end();
-    }
+	@Override
+	protected void end() {
+
+	}
+
+	@Override
+	protected boolean isFinished() {
+		return lifter.isLifterAtBottom() || isTimedOut();
+	}
+
+	@Override
+	protected void interrupted() {
+		end();
+	}
 }

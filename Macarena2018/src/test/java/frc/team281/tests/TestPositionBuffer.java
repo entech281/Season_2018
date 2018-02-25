@@ -14,15 +14,15 @@ public class TestPositionBuffer {
 	public void testEmptyBufferReadsFinished() {
 		PositionBuffer buf = new PositionBuffer();
 		assertFalse(buf.hasNextPosition());
-		
-		buf.addPosition(new Position(80,80));
+
+		buf.addPosition(new Position(80, 80));
 		assertTrue(buf.hasNextPosition());
-		
+
 		Position p = buf.getCurrentPosition();
 		assertTrue(buf.hasNextPosition());
-		
+
 		buf.next();
 		assertFalse(buf.hasNextPosition());
 	}
-	
+
 }

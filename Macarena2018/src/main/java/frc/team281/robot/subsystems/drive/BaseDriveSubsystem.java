@@ -21,45 +21,45 @@ public abstract class BaseDriveSubsystem extends BaseSubsystem {
 	}
 
 	protected DriveMode driveMode = DriveMode.DISABLED;
-	protected DriveComponent currentComponent = new DoNothingDriveComponent();	
+	protected DriveComponent currentComponent = new DoNothingDriveComponent();
 	protected PositionBuffer positionBuffer = new PositionBuffer();
 	protected boolean calibrated = false;
-	
-	
+
 	/**
 	 * Changes modes, and returns true if the change worked, false if it didnt
+	 * 
 	 * @param newDriveMode
 	 * @return
 	 */
-	public boolean setMode ( DriveMode newDriveMode) {
-		if ( newDriveMode == driveMode) {
-			dataLogger.warn("Stayed in mode " + newDriveMode );
+	public boolean setMode(DriveMode newDriveMode) {
+		if (newDriveMode == driveMode) {
+			dataLogger.warn("Stayed in mode " + newDriveMode);
 			return false;
 		}
-		
+
 		driveMode = newDriveMode;
 		dataLogger.warn("Drive Mode Changed:" + driveMode + "-->" + newDriveMode);
 		return true;
-		
-	}
-	
-	public void activate(DriveComponent newComponent) {
-	    if ( newComponent == null ){
-	        dataLogger.warn("Trying to run null component! Use doNothing controller, never use null!");
-	        return;
-	    }
 
-	    if (!newComponent.equals(currentComponent)) {		    
-			dataLogger.warn("Switching Controllers: " +  currentComponent.getName() + "-->" + newComponent.getName());
-			currentComponent.deactivate();	
+	}
+
+	public void activate(DriveComponent newComponent) {
+		if (newComponent == null) {
+			dataLogger.warn("Trying to run null component! Use doNothing controller, never use null!");
+			return;
+		}
+
+		if (!newComponent.equals(currentComponent)) {
+			dataLogger.warn("Switching Controllers: " + currentComponent.getName() + "-->" + newComponent.getName());
+			currentComponent.deactivate();
 			newComponent.activate();
 			currentComponent = newComponent;
 		}
-		
+
 		dataLogger.log("CurrentComponent", currentComponent.getName());
 
 	}
-	
+
 	public PositionBuffer getPositionBuffer() {
 		return positionBuffer;
 	}

@@ -1,25 +1,24 @@
 package frc.team281.robot.commands;
 
-    
 import frc.team281.robot.subsystems.LifterSubsystem;
 
 public class LifterStopCommand extends BaseCommand {
 
-    private LifterSubsystem lifter;
-    public LifterStopCommand(LifterSubsystem subsystem) {
-        super(subsystem);
-        this.lifter = subsystem;
-    }
+	private LifterSubsystem lifter;
 
-    @Override
-    protected void initialize() {
-        lifter.motorsOff();
-    }
+	public LifterStopCommand(LifterSubsystem subsystem) {
+		super(subsystem);
+		this.lifter = subsystem;
+	}
 
-    @Override
-    protected boolean isFinished() {
-        return true;
-    }
+	@Override
+	protected void initialize() {
+		lifter.motorsOff();
+	}
 
+	@Override
+	protected boolean isFinished() {
+		return true;
+	}
 
 }

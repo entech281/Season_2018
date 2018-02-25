@@ -1,6 +1,5 @@
 package frc.team281.robot;
 
-import edu.wpi.first.wpilibj.command.Command;
 import frc.team281.robot.commands.GrabberCloseCommand;
 import frc.team281.robot.commands.GrabberLoadCommand;
 import frc.team281.robot.commands.GrabberOpenCommand;
@@ -22,27 +21,27 @@ import frc.team281.robot.commands.WristPivotUpCommand;
  *
  */
 public interface CommandFactory {
-    
-    LifterRaiseCommand createLifterRaiseCommand();
-    
-    LifterLowerCommand createLifterLowerCommand();
-    
-    LifterHomeCommand createLifterHomeCommand();
-    
-    GrabberLoadCommand createGrabberLoadCommand();
-    
-    GrabberShootCommand createGrabberShootCommand();
-    
-    GrabberStopCommand createGrabberStopCommand();
-    
-    GrabberOpenCommand createGrabberOpenCommand();
-    
-    GrabberCloseCommand createGrabberCloseCommand();
-    
-    WristPivotUpCommand createWristPivotUpCommand();
-    
-    WristPivotDownCommand createWristPivotDownCommand();
 
-    LifterStopCommand  createLifterStopCommand();
+	LifterRaiseCommand createLifterRaiseCommand();
+
+	LifterLowerCommand createLifterLowerCommand();
+
+	LifterHomeCommand createLifterHomeCommand();
+
+	GrabberLoadCommand createGrabberLoadCommand();
+
+	GrabberShootCommand createGrabberShootCommand();
+
+	GrabberStopCommand createGrabberStopCommand();
+
+	GrabberOpenCommand createGrabberOpenCommand();
+
+	GrabberCloseCommand createGrabberCloseCommand();
+
+	WristPivotUpCommand createWristPivotUpCommand();
+
+	WristPivotDownCommand createWristPivotDownCommand();
+
+	LifterStopCommand createLifterStopCommand();
 
 }

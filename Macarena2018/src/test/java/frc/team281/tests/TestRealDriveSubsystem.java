@@ -7,18 +7,16 @@ import org.junit.Test;
 import frc.team281.robot.subsystems.drive.RealDriveSubsystem;
 import frc.team281.subsystems.FakeDriveInstructionSource;
 
-public class TestRealDriveSubsystem extends BaseTest{
-	
+public class TestRealDriveSubsystem extends BaseTest {
+
 	@Test
 	public void testBasics() {
-		
-		
+
 		FakeDriveInstructionSource fakeSource = new FakeDriveInstructionSource();
 		RealDriveSubsystem drive = new RealDriveSubsystem(fakeSource);
-		
-		
-		assertEquals(drive.getName(),"RealDriveSubsystem");
-		
+
+		assertEquals(drive.getName(), "RealDriveSubsystem");
+
 	}
 
 }

@@ -12,18 +12,17 @@ import frc.team281.robot.subsystems.TalonSettingsBuilder;
 import frc.team281.robot.talons.DriveEncoderStatus;
 import frc.team281.robot.talons.FourTalonGroup;
 
-public class FourWheelPositionDrive implements DriveComponent{
+public class FourWheelPositionDrive implements DriveComponent {
 
 	public static final double TOLERANCE_INCHES = 1.0;
-	
+
 	protected FourTalonGroup talons;
 	protected TalonSettings leftSettings;
 	protected TalonSettings rightSettings;
 	protected boolean isActive = false;
 	private Position desiredPosition;
 	protected DataLogger dataLogger;
-	
-	
+
 	private FourWheelPositionDrive(Builder builder) {
 		this.talons = builder.talons;
 		this.dataLogger = DataLoggerFactory.getLoggerFactory().createDataLogger(getClass().getSimpleName());
@@ -48,68 +47,64 @@ public class FourWheelPositionDrive implements DriveComponent{
 		talons.frontLeft.set(0.0);
 		talons.rearLeft.set(0.0);
 		talons.frontRight.set(0.0);
-		talons.rearRight.set(0.0);				
+		talons.rearRight.set(0.0);
 	}
-	
-	protected void setPosition ( double leftPos, double rightPos, boolean isRelative) {
 
-		if ( ! isRelative) {
+	protected void setPosition(double leftPos, double rightPos, boolean isRelative) {
+
+		if (!isRelative) {
 			resetPosition();
 		}
 		talons.frontLeft.set(leftPos);
 		talons.rearLeft.set(leftPos);
 		talons.frontRight.set(rightPos);
-		talons.rearRight.set(rightPos);					
+		talons.rearRight.set(rightPos);
 	}
-	
+
 	public void updatePosition(PositionSource positionSource, DriveEncoderStatus driveEncoderStatus) {
-		if ( hasCurrentCommand() ) {
+		if (hasCurrentCommand()) {
 			Position current = driveEncoderStatus.getPositionIgnoringBrokenEncoders();
 			Position command = getCurrentCommand();
-			if ( command.isCloseTo(current, TOLERANCE_INCHES)) {
-			    positionSource.next();
+			if (command.isCloseTo(current, TOLERANCE_INCHES)) {
+				positionSource.next();
 				setCurrentCommand(null);
-			}			
-		}
-		else {
-			if ( positionSource.hasNextPosition()) {
+			}
+		} else {
+			if (positionSource.hasNextPosition()) {
 				EncoderInchesConverter converter = driveEncoderStatus.getConverter();
 				Position p = positionSource.getCurrentPosition();
 				setCurrentCommand(p);
 				int encoderLeft = converter.toCounts(p.getLeftInches());
 				int encoderRight = converter.toCounts(p.getRightInches());
 				setPosition(encoderLeft, encoderRight, p.isRelative());
+			} else {
+
 			}
-			else {
-				
-			}
-		}		
-		if ( hasCurrentCommand() ) {
-			dataLogger.log("commandPosition", getCurrentCommand());
 		}
-		else {
+		if (hasCurrentCommand()) {
+			dataLogger.log("commandPosition", getCurrentCommand());
+		} else {
 			dataLogger.log("commandPosition", "<IDLE>");
 		}
-	
-	}
 
+	}
 
 	public boolean hasCurrentCommand() {
 		return this.desiredPosition != null;
 	}
+
 	public void setCurrentCommand(Position position) {
 		this.desiredPosition = position;
 	}
+
 	public Position getCurrentCommand() {
 		return this.desiredPosition;
-	}	
-	
+	}
+
 	protected void processPositionCommand() {
 
-		
-	}	
-	
-	
+	}
+
 	public static SafetySettings defaults(FourTalonGroup talons) {
 		return new Builder(talons, new TalonSettings());
 	}
@@ -126,14 +121,14 @@ public class FourWheelPositionDrive implements DriveComponent{
 
 		public BrakeMode withCurrentLimits(int maxInstantaneousAmps, int maxSustainedAmps, int sustainedMilliseconds);
 	}
-	
+
 	public interface DirectionSettings {
 		public MotorOutputLimits defaultDirectionSettings();
 
 		public MotorOutputLimits withDirections(boolean sensorPhase, boolean inverted);
 
 	}
-	
+
 	// things you can do to limit how fast the motor goes
 	public interface MotorOutputLimits {
 		public MotorRamping noMotorOutputLimits();
@@ -154,7 +149,8 @@ public class FourWheelPositionDrive implements DriveComponent{
 		}
 
 		public interface ProfileSettings {
-			Finish withMotionProfile(int cruiseEncoderClicksPerSecond, int accelerationEncoderClicksPerSecond2, int allowableError);
+			Finish withMotionProfile(int cruiseEncoderClicksPerSecond, int accelerationEncoderClicksPerSecond2,
+					int allowableError);
 		}
 	}
 
@@ -162,8 +158,9 @@ public class FourWheelPositionDrive implements DriveComponent{
 		public FourWheelPositionDrive build();
 	}
 
-	public static class Builder implements  SafetySettings.BrakeMode, SafetySettings, DirectionSettings, MotorOutputLimits, 
-	 PositionControlSettings.GainSettings, PositionControlSettings.ProfileSettings,Finish , MotorRamping{
+	public static class Builder
+			implements SafetySettings.BrakeMode, SafetySettings, DirectionSettings, MotorOutputLimits,
+			PositionControlSettings.GainSettings, PositionControlSettings.ProfileSettings, Finish, MotorRamping {
 
 		private TalonSettings settings = new TalonSettings();
 		protected FourTalonGroup talons;
@@ -245,7 +242,8 @@ public class FourWheelPositionDrive implements DriveComponent{
 		}
 
 		@Override
-		public Finish withMotionProfile(int cruiseEncoderClicksPerSecond, int accelerationEncoderClicksPerSecond2, int allowableError) {
+		public Finish withMotionProfile(int cruiseEncoderClicksPerSecond, int accelerationEncoderClicksPerSecond2,
+				int allowableError) {
 			settings.profile.accelerationEncoderClicksPerSecond2 = accelerationEncoderClicksPerSecond2;
 			settings.profile.cruiseVelocityEncoderClicksPerSecond = cruiseEncoderClicksPerSecond;
 			settings.profile.allowableClosedLoopError = allowableError;
@@ -274,8 +272,7 @@ public class FourWheelPositionDrive implements DriveComponent{
 			return this;
 		}
 
-	}	
-	
+	}
 
 	@Override
 	public String getName() {

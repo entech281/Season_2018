@@ -33,7 +33,5 @@ public class BaseTest {
 	public void setupWpiLib() {
 		RobotTestUtils.setupForTesting();
 	}
-	
-
 
 }

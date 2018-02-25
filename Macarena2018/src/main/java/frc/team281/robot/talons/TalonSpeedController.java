@@ -6,43 +6,42 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import frc.team281.robot.subsystems.TalonSettings;
 
-
 public class TalonSpeedController {
-	
+
 	protected WPI_TalonSRX talon;
 	protected TalonSettings settings;
 	protected TalonEncoderStatus encoderStatus;
-	
+
 	public WPI_TalonSRX getTalon() {
 		return talon;
 	}
-	
+
 	public TalonEncoderStatus getEncoderStatus() {
 		encoderStatus.updateEncoderStatus(talon);
 		return encoderStatus;
 	}
-	
+
 	public void reconfigure() {
 		settings.configureTalon(talon);
 	}
-	
+
 	public void setSpeed(double speed) {
 		talon.set(speed);
 	}
-	
+
 	public void stop() {
 		talon.set(0.0);
 	}
-	
+
 	private TalonSpeedController(Builder builder) {
 		talon = builder.talon;
 		settings = builder.settings;
 	}
-	
-	public static SafetySettings defaults( WPI_TalonSRX talon) {
+
+	public static SafetySettings defaults(WPI_TalonSRX talon) {
 		return new Builder(talon, new TalonSettings());
 	}
-	
+
 	// things you need to do no matter what, for safety reasons
 	public interface SafetySettings {
 		public interface BrakeMode {
@@ -50,7 +49,9 @@ public class TalonSpeedController {
 
 			public DirectionSettings coastInNeutral();
 		}
+
 		public BrakeMode withPrettySafeCurrentLimits();
+
 		public BrakeMode withCurrentLimits(int maxInstantaneousAmps, int maxSustainedAmps, int sustainedMilliseconds);
 	}
 
@@ -61,6 +62,7 @@ public class TalonSpeedController {
 		public MotorOutputLimits withDirections(boolean sensorPhase, boolean inverted);
 
 	}
+
 	// things you can do to limit how fast the motor goes
 	public interface MotorOutputLimits {
 		public Finish noMotorOutputLimits();
@@ -68,18 +70,17 @@ public class TalonSpeedController {
 		public Finish limitMotorOutputs(double peakPercent, double minimumPercent);
 	}
 
-	public interface Finish{
+	public interface Finish {
 		public TalonSpeedController build();
 	}
 
-
-	public static class Builder implements   SafetySettings.BrakeMode,SafetySettings,
-	     DirectionSettings, MotorOutputLimits, Finish{
+	public static class Builder
+			implements SafetySettings.BrakeMode, SafetySettings, DirectionSettings, MotorOutputLimits, Finish {
 
 		private TalonSettings settings = new TalonSettings();
 		protected WPI_TalonSRX talon;
-		
-		private Builder( WPI_TalonSRX talon, TalonSettings settings) {
+
+		private Builder(WPI_TalonSRX talon, TalonSettings settings) {
 			this.talon = talon;
 			this.settings = settings;
 			settings.controlMode = ControlMode.PercentOutput;
@@ -152,7 +153,6 @@ public class TalonSpeedController {
 			return this;
 		}
 
-
 	}
-	
+
 }
