@@ -41,7 +41,7 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 	private PositionDriveController positionDrive;
 	protected DoNothingDriveController doNothing = new DoNothingDriveController();
 	private DriveInstructionSource driveInstructionSource;
-	
+	private MotionPathDriveController motionPathDrive;
 	private FourTalonsWithSettings speedModeTalons;
 	private FourTalonsWithSettings positionModeTalons;
 	
@@ -54,6 +54,9 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 		this.driveInstructionSource = driveInstructionSource;
 	}
 
+	public MotionPathDriveController getMotionPathController() {
+		return motionPathDrive;
+	}
 	@Override
 	public void initialize() {
 
@@ -117,6 +120,7 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 		arcadeDrive = new BasicArcadeDriveController(speedModeTalons, driveInstructionSource);
 		positionDrive = new PositionDriveController(positionModeTalons, getPositionBuffer(), 
 				        new EncoderInchesConverter(ENCODER_TICKS_PER_INCH));	
+		motionPathDrive = new MotionPathDriveController(positionModeTalons);
 		
 	}
 
@@ -131,9 +135,14 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 		
 		if (driveMode == DriveMode.POSITION_DRIVE) {
 			runController(positionDrive);
-		} else if (driveMode == DriveMode.SPEED_DRIVE) {
+		}
+		else if (driveMode == DriveMode.SPEED_DRIVE) {
 			runController(arcadeDrive);
-		} else {
+		}
+		else if ( driveMode == DriveMode.PATH_DRIVE) {
+			runController(motionPathDrive);
+		}
+	    else {
 			runController(doNothing);
 		}
 	}

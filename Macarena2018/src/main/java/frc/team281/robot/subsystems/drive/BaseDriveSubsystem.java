@@ -17,7 +17,7 @@ import frc.team281.robot.subsystems.PositionBuffer;
 public abstract class BaseDriveSubsystem extends BaseSubsystem {
 
 	public enum DriveMode {
-		DISABLED, CALIBRATE, READY, SPEED_DRIVE, POSITION_DRIVE
+		DISABLED, CALIBRATE, READY, SPEED_DRIVE, POSITION_DRIVE, PATH_DRIVE
 	}
 
 	protected DriveMode driveMode = DriveMode.DISABLED;
