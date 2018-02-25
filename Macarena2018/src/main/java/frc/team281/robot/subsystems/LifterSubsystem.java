@@ -4,12 +4,10 @@ package frc.team281.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.team281.robot.RobotMap;
-import frc.team281.robot.controllers.TalonSpeedController;
+import frc.team281.robot.talons.TalonSpeedController;
 
 public class LifterSubsystem extends BaseSubsystem {
     
-    private WPI_TalonSRX motorOne;
-    private WPI_TalonSRX motorTwo;
     private TalonSpeedController motorOneController;
     private TalonSpeedController motorTwoController;
     
@@ -28,40 +26,40 @@ public class LifterSubsystem extends BaseSubsystem {
     
     @Override
     public void initialize() {
-        motorOne = new WPI_TalonSRX(RobotMap.CAN.Lifter.MOTOR_ONE);
-        motorTwo = new WPI_TalonSRX(RobotMap.CAN.Lifter.MOTOR_TWO);        
+    	WPI_TalonSRX motorOne = new WPI_TalonSRX(RobotMap.CAN.Lifter.MOTOR_ONE);
+    	WPI_TalonSRX motorTwo = new WPI_TalonSRX(RobotMap.CAN.Lifter.MOTOR_TWO);        
         limitSwitch = new DigitalInput(RobotMap.DigitalIO.LIFTER_AT_BOTTOM);
-        
-        TalonSettings motorOneSettings = TalonSettingsBuilder
-                .defaults()
-                .withCurrentLimits(20, 15, 200)
-                .brakeInNeutral()
-                .defaultDirectionSettings()
-                .noMotorOutputLimits()
-                .noMotorStartupRamping()
-                .useSpeedControl()
-                .build();
-        
-        TalonSettings motorTwoSettings = TalonSettingsBuilder.inverted(motorOneSettings);
-        motorOneController = new TalonSpeedController(motorOne, motorOneSettings);
-        motorTwoController = new TalonSpeedController(motorTwo, motorTwoSettings);
+
+        motorOneController = TalonSpeedController.defaults(motorOne)
+        		.withCurrentLimits(10, 5, 200)
+        		.coastInNeutral()
+        		.withDirections(false, false)
+        		.noMotorOutputLimits()
+        		.build();
+
+        motorTwoController = TalonSpeedController.defaults(motorTwo)
+        		.withCurrentLimits(10, 5, 200)
+        		.coastInNeutral()
+        		.withDirections(false, true)
+        		.noMotorOutputLimits()
+        		.build();        
 
     }
     
     public void motorsUp(double speedPercent){
-        motorOneController.setDesiredSpeed(speedPercent);
-        motorTwoController.setDesiredSpeed(-speedPercent);
+        motorOneController.setSpeed(speedPercent);
+        motorTwoController.setSpeed(-speedPercent);
 
     }
     public void motorsDown(double speedPercent){
-        motorOneController.setDesiredSpeed(-speedPercent);
-        motorTwoController.setDesiredSpeed(speedPercent);  
+        motorOneController.setSpeed(-speedPercent);
+        motorTwoController.setSpeed(speedPercent);  
     }
     
     public void motorsOff(){
-        motorOneController.setDesiredSpeed(0);
-        motorTwoController.setDesiredSpeed(0);  
-    }    
+        motorOneController.setSpeed(0);
+        motorTwoController.setSpeed(0);  
+    }  
 
     @Override
     public void periodic() {

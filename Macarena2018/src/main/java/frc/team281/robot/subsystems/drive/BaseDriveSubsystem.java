@@ -17,12 +17,11 @@ import frc.team281.robot.subsystems.PositionBuffer;
 public abstract class BaseDriveSubsystem extends BaseSubsystem {
 
 	public enum DriveMode {
-		DISABLED, CALIBRATE, READY, SPEED_DRIVE, POSITION_DRIVE
+		DISABLED, SPEED_DRIVE, POSITION_DRIVE
 	}
 
 	protected DriveMode driveMode = DriveMode.DISABLED;
-	protected BaseDriveController currentController = new NullController();
-	
+	protected DriveComponent currentComponent = new DoNothingDriveComponent();	
 	protected PositionBuffer positionBuffer = new PositionBuffer();
 	protected boolean calibrated = false;
 	
@@ -44,21 +43,20 @@ public abstract class BaseDriveSubsystem extends BaseSubsystem {
 		
 	}
 	
-	public void runController(BaseDriveController newController) {
-	    if ( newController == null ){
-	        dataLogger.warn("Trying to run null controller! Use doNothing controller, never use null!");
+	public void activate(DriveComponent newComponent) {
+	    if ( newComponent == null ){
+	        dataLogger.warn("Trying to run null component! Use doNothing controller, never use null!");
 	        return;
 	    }
 
-	    if (!newController.equals(currentController)) {		    
-			dataLogger.warn("Switching Controllers: " +  currentController.getName() + "-->" + newController.getName());
-			currentController.deactivate();	
-			newController.activate();
-			currentController = newController;
+	    if (!newComponent.equals(currentComponent)) {		    
+			dataLogger.warn("Switching Controllers: " +  currentComponent.getName() + "-->" + newComponent.getName());
+			currentComponent.deactivate();	
+			newComponent.activate();
+			currentComponent = newComponent;
 		}
 		
-		dataLogger.log("CurrentController", currentController.getName());
-		newController.periodic();
+		dataLogger.log("CurrentComponent", currentComponent.getName());
 
 	}
 	
@@ -68,24 +66,6 @@ public abstract class BaseDriveSubsystem extends BaseSubsystem {
 
 	@Override
 	public void initialize() {
-		// TODO Auto-generated method stub
-
-	}
-	
-	private class NullController extends BaseDriveController{
-
-        @Override
-        public void activate() {  
-        }
-
-        @Override
-        public void periodic() {
-        }
-
-        @Override
-        public void deactivate() {
-        }
-	    
 	}
 
 }

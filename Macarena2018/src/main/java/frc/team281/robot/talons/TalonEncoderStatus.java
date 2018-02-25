@@ -1,4 +1,4 @@
-package frc.team281.robot.controllers;
+package frc.team281.robot.talons;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;

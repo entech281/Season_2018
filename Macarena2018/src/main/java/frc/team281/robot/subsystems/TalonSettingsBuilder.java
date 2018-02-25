@@ -65,7 +65,6 @@ public class TalonSettingsBuilder {
 	 */
 	public interface TalonControlMode {
 		public PositionControlSettings.GainSettings usePositionControl();
-
 		public SpeedControlSettings useSpeedControl();
 	}
 

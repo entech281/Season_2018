@@ -4,13 +4,12 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.SerialPort;
+import frc.team281.robot.DriveInstruction;
 import frc.team281.robot.DriveInstructionSource;
 import frc.team281.robot.RobotMap;
-import frc.team281.robot.controllers.DriveEncoderStatus;
-import frc.team281.robot.controllers.FourTalonEncoderCheckController;
 import frc.team281.robot.subsystems.NavXIntializer;
-import frc.team281.robot.subsystems.TalonSettings;
-import frc.team281.robot.subsystems.TalonSettingsBuilder;
+import frc.team281.robot.talons.DriveEncoderStatus;
+import frc.team281.robot.talons.FourTalonGroup;
 
 /**
  * This is the drive system that will run in the robot. All the wpilib stuff
@@ -35,27 +34,17 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 	public static final int POSITION_ENCODER_TOLERANCE = 25;
 	public static final double POSITION_TOLERANCE_INCHES = (double)POSITION_ENCODER_TOLERANCE/ ENCODER_TICKS_PER_INCH;
 	
-	//protected FourTalonGroup talons;
 	private AHRS navX;
 
-	//private FourDriveTalonCalibratorController calibrator;
-	private BasicArcadeDriveController arcadeDrive;
-	private PositionDriveController positionDrive;
-	protected DoNothingDriveController doNothing = new DoNothingDriveController();
-	protected FourTalonEncoderCheckController encoderCheckController;
+	private FourWheelSpeedDrive speedDrive;
+	private FourWheelPositionDrive positionDrive;
 	
-	
+	protected DoNothingDriveComponent doNothing = new DoNothingDriveComponent();
+	protected FourTalonEncoderChecker encoderChecker;	
 	private DriveInstructionSource driveInstructionSource;
-	private EncoderInchesConverter encoderInchesConverter = new EncoderInchesConverter(ENCODER_TICKS_PER_INCH);
+	protected DriveEncoderStatus driveEncoderStatus = new DriveEncoderStatus(new EncoderInchesConverter(ENCODER_TICKS_PER_INCH));	
 	
-	
-	private FourTalonsWithSettings speedModeTalons;
-	private FourTalonsWithSettings positionModeTalons;
-	
-	private WPI_TalonSRX frontLeftMotor;
-	private WPI_TalonSRX frontRightMotor;
-	private WPI_TalonSRX rearLeftMotor;
-	private WPI_TalonSRX rearRightMotor;
+	private FourTalonGroup talons;
 	
 	public RealDriveSubsystem(DriveInstructionSource driveInstructionSource) {
 		this.driveInstructionSource = driveInstructionSource;
@@ -66,93 +55,66 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 
 		this.navX = new NavXIntializer(SerialPort.Port.kMXP,NAVX_CALIBRATION_LOOP_TIME_MS).getCalibratedNavX();	
 		
-
-		frontLeftMotor = new WPI_TalonSRX(RobotMap.CAN.FRONT_LEFT_MOTOR);
-		frontRightMotor = new WPI_TalonSRX(RobotMap.CAN.FRONT_RIGHT_MOTOR);
-		rearLeftMotor = new WPI_TalonSRX(RobotMap.CAN.REAR_LEFT_MOTOR);
-		rearRightMotor = new WPI_TalonSRX(RobotMap.CAN.REAR_RIGHT_MOTOR);
+		talons.frontLeft = new WPI_TalonSRX(RobotMap.CAN.FRONT_LEFT_MOTOR);
+		talons.frontRight = new WPI_TalonSRX(RobotMap.CAN.FRONT_RIGHT_MOTOR);
+		talons.rearLeft = new WPI_TalonSRX(RobotMap.CAN.REAR_LEFT_MOTOR);
+		talons.rearRight = new WPI_TalonSRX(RobotMap.CAN.REAR_RIGHT_MOTOR);
 		
-		TalonSettings leftSpeedSettings = TalonSettingsBuilder.defaults()
+		speedDrive = FourWheelSpeedDrive.defaults(talons)
 				.withCurrentLimits(35, 30, 200)
 				.coastInNeutral()
-				.withDirections(false, false)
-				.limitMotorOutputs(1.0, 0.2)
-				.noMotorStartupRamping()
-				.useSpeedControl()
-				.build();
-		TalonSettings rightSpeedSettings = TalonSettingsBuilder.inverted(leftSpeedSettings);
+				.withDirections(false, true)
+				.noMotorOutputLimits()
+				.build();	
 		
-
-		speedModeTalons = new FourTalonsWithSettings(
-		        frontLeftMotor,
-		        rearLeftMotor,
-		        frontRightMotor, 		        
-		        rearRightMotor,
-		        leftSpeedSettings,
-		        rightSpeedSettings);		
-
-		TalonSettings leftPositionSettings = TalonSettingsBuilder.defaults()
+		positionDrive = FourWheelPositionDrive.defaults(talons)
 				.withCurrentLimits(35, 30, 200)
 				.coastInNeutral()
 				.withDirections(false, false)
 				.limitMotorOutputs(1.0, 0.25)
 				.noMotorStartupRamping()
-				.usePositionControl()
 				.withGains(0.3,5.0, 0.0, 0.0)
 				.withMotionProfile(150, 150,POSITION_ENCODER_TOLERANCE)
-				.build();
-
-		TalonSettings rightPositionSettings = TalonSettingsBuilder.defaults()
-				.withCurrentLimits(35, 30, 200)
-				.coastInNeutral()
-				.withDirections(false, true)
-				.limitMotorOutputs(1.0, 0.15)
-				.noMotorStartupRamping()
-				.usePositionControl()
-				.withGains(0.3,8.0, 0, 0.0)
-				.withMotionProfile(150, 150,POSITION_ENCODER_TOLERANCE)
-				.build();
+				.build();					
 		
-		positionModeTalons = new FourTalonsWithSettings(
-                frontLeftMotor,
-                rearLeftMotor,                
-                frontRightMotor, 
-                rearRightMotor,
-                leftPositionSettings,
-                rightPositionSettings);
-				
-		arcadeDrive = new BasicArcadeDriveController(speedModeTalons, driveInstructionSource);
-		positionDrive = new PositionDriveController(getpositionModeTalons, getPositionBuffer(), encoderInchesConverter);	
-		encoderCheckController = new FourTalonEncoderCheckController( speedModeTalons, encoderInchesConverter);
-		
+		encoderChecker = new FourTalonEncoderChecker();
 	}
 
 	public DriveEncoderStatus getDriveEncoderStatus(){
-	    return encoderCheckController.getDriveEncoderStatus();
+	    return driveEncoderStatus;
 	}
 	
 	@Override
 	public void periodic() {
 		dataLogger.log("DriveMode", driveMode + "");
+			
+		displayControllerStatus ( talons.frontLeft, "frontLeft");
+		displayControllerStatus ( talons.frontRight, "frontRight");
+		displayControllerStatus ( talons.rearLeft, "rearLeft");
+		displayControllerStatus ( talons.rearRight, "rearRight");
 		
-		dataLogger.log("frontLeftEncoder", frontLeftMotor.getSelectedSensorPosition(0));
-		dataLogger.log("frontRightEncoder", frontRightMotor.getSelectedSensorPosition(0));
-		dataLogger.log("rearLeftEncoder", rearLeftMotor.getSelectedSensorPosition(0));
-		dataLogger.log("rearRightEncoder", rearRightMotor.getSelectedSensorPosition(0));		
+		driveEncoderStatus.updateStatus(talons);
+		encoderChecker.updateMotorsToWorkAroundBrokenEncodersIfEnabled(talons,driveEncoderStatus);
 		
-		/**
-		 * Update Encoder Situation. Everyone should
-		 * use DriveEncoderStatus to read the encoders
-		 */
-		encoderCheckController.periodic();
-		
-		if (driveMode == DriveMode.POSITION_DRIVE) {
-			runController(positionDrive);
+		if (driveMode == DriveMode.POSITION_DRIVE) {			
+			activate(positionDrive);
+			positionDrive.updatePosition(getPositionBuffer(), driveEncoderStatus);
+						
 		} else if (driveMode == DriveMode.SPEED_DRIVE) {
-			runController(arcadeDrive);
+			activate(speedDrive);
+			DriveInstruction di = driveInstructionSource.getNextInstruction();
+			speedDrive.arcadeDrive(di.getForward(),di.getLateral());
 		} else {
-			runController(doNothing);
+			activate(doNothing);
 		}
 	}
+	
+	protected void displayControllerStatus(WPI_TalonSRX talon, String name) {
+        dataLogger.log(name +"_errorMsg", talon.getLastError() );
+        dataLogger.log(name +"_get", talon.get() );
+        dataLogger.log(name +"_percent", talon.getMotorOutputPercent() );
+        dataLogger.log(name +"_pos", talon.getSelectedSensorPosition(0) );
+        dataLogger.log(name +"_vel", talon.getSelectedSensorVelocity(0) );		
+	}	
 
 }

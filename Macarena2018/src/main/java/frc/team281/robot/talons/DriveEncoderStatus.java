@@ -1,8 +1,7 @@
-package frc.team281.robot.controllers;
+package frc.team281.robot.talons;
 
 import frc.team281.robot.subsystems.Position;
 import frc.team281.robot.subsystems.drive.EncoderInchesConverter;
-import frc.team281.robot.subsystems.drive.FourTalonsWithSettings;
 
 /**
  * Various methods to read the encoders on the talons.
@@ -11,38 +10,63 @@ import frc.team281.robot.subsystems.drive.FourTalonsWithSettings;
  */
 public class DriveEncoderStatus {    
     
-    private TalonEncoderStatus leftFrontStatus = new TalonEncoderStatus();
+	private TalonEncoderStatus leftFrontStatus = new TalonEncoderStatus();
     private TalonEncoderStatus leftRearStatus = new TalonEncoderStatus();
     private TalonEncoderStatus rightFrontStatus = new TalonEncoderStatus();
     private TalonEncoderStatus rightRearStatus = new TalonEncoderStatus();    
     
     private EncoderInchesConverter converter;
     
-    public DriveEncoderStatus (EncoderInchesConverter converter ){        
+    public EncoderInchesConverter getConverter() {
+		return converter;
+	}
+
+	public DriveEncoderStatus (EncoderInchesConverter converter ){        
         this.converter = converter;
     }
     
-    public void updateStatus ( FourTalonsWithSettings talons){
-         leftFrontStatus.updateEncoderStatus(talons.getFrontLeft());
-         leftRearStatus.updateEncoderStatus(talons.getFrontLeft());
-         rightFrontStatus.updateEncoderStatus(talons.getFrontLeft());
-         rightRearStatus.updateEncoderStatus(talons.getFrontLeft());
+    public void updateStatus ( FourTalonGroup talons){
+         leftFrontStatus.updateEncoderStatus(talons.frontLeft);
+         leftRearStatus.updateEncoderStatus(talons.rearLeft);
+         rightFrontStatus.updateEncoderStatus(talons.frontRight);
+         rightRearStatus.updateEncoderStatus(talons.rearRight);
     }
 
+ 
     public Position getPositionIgnoringBrokenEncoders(){
         return new Position ( getLeftInchesIgnoringBrokenEncoders(),
                 getRightInchesIgnoringBrokenEncoders() );
     }
     
+    
+    public TalonEncoderStatus getLeftFrontStatus() {
+		return leftFrontStatus;
+	}
+
+	public TalonEncoderStatus getLeftRearStatus() {
+		return leftRearStatus;
+	}
+
+	public TalonEncoderStatus getRightFrontStatus() {
+		return rightFrontStatus;
+	}
+
+	public TalonEncoderStatus getRightRearStatus() {
+		return rightRearStatus;
+	}
+	
     public double getLeftInchesIgnoringBrokenEncoders(){
         return converter.toInches(getLeftEncoderCountsIgnoringBrokenEncoders());
     }
+    
     public double getRightInchesIgnoringBrokenEncoders(){
         return converter.toInches(getRightEncoderCountsIgnoringBrokenEncoders());
     }  
+    
     public int getLeftEncoderCountsIgnoringBrokenEncoders() {
         return computeEncoderCountForPairIngoringBroken(leftFrontStatus,leftRearStatus);    
-    }    
+    }
+    
     public int getRightEncoderCountsIgnoringBrokenEncoders() {
         return computeEncoderCountForPairIngoringBroken(rightFrontStatus,rightRearStatus);
     }    

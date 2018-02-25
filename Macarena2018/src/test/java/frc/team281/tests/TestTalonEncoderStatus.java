@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
-import frc.team281.robot.controllers.TalonEncoderStatus;
+import frc.team281.robot.talons.TalonEncoderStatus;
 
 public class TestTalonEncoderStatus {
 
