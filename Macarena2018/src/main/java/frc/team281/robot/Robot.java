@@ -17,6 +17,9 @@ import frc.team281.robot.commands.LifterRaiseCommand;
 import frc.team281.robot.commands.LifterStopCommand;
 import frc.team281.robot.commands.WristPivotDownCommand;
 import frc.team281.robot.commands.WristPivotUpCommand;
+import frc.team281.robot.commands.path.EndCapturePathCommand;
+import frc.team281.robot.commands.path.FollowCapturedPathCommand;
+import frc.team281.robot.commands.path.StartCapturePathCommand;
 import frc.team281.robot.logger.DataLoggerFactory;
 import frc.team281.robot.subsystems.FakeGrabberSubsystem;
 import frc.team281.robot.subsystems.FakeWristSubsystem;
@@ -185,5 +188,20 @@ public class Robot extends IterativeRobot implements CommandFactory {
     @Override
     public LifterStopCommand createLifterStopCommand() {
         return new LifterStopCommand(this.lifterSubsystem);
+    }
+
+    @Override
+    public StartCapturePathCommand createStartCapturePathCommand(String pathName) {
+        return new StartCapturePathCommand(this.driveSubsystem,pathName);
+    }
+
+    @Override
+    public EndCapturePathCommand createEndCapturePathComand() {
+        return new EndCapturePathCommand(this.driveSubsystem);
+    }
+
+    @Override
+    public FollowCapturedPathCommand createFollowCapturedPathCommand(String pathName) {
+        return new FollowCapturedPathCommand(this.driveSubsystem,pathName);
     }
 }

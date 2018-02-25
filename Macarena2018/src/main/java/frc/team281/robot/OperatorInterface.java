@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;;
  */
 public class OperatorInterface implements DriveInstructionSource {
 
+    public static final String PATH_NAME="FOO";
     private Joystick driveJoystick;
     private Joystick controlPanel;
     
@@ -28,6 +29,10 @@ public class OperatorInterface implements DriveInstructionSource {
     private JoystickButton grabberStopButton;
     private JoystickButton grabberOpenButton;
     private JoystickButton grabberCloseButton;
+
+    private JoystickButton recordPathButton;
+    private JoystickButton endRecordPathButton;
+    private JoystickButton playbackPathButton;    
     
     public static class LifterHeights {
         public static final double SCALE_HIGH = 100;
@@ -72,6 +77,15 @@ public class OperatorInterface implements DriveInstructionSource {
         grabberCloseButton = new JoystickButton(controlPanel, RobotMap.ControlPanel.Buttons.GRABBER_CLOSE);
         grabberCloseButton.whenPressed(factory.createGrabberCloseCommand()); 
 
+        
+        recordPathButton = new JoystickButton(driveJoystick, RobotMap.DriveJoystick.Buttons.START_RECORD_MOTION_PATH);
+        recordPathButton.whenPressed(factory.createStartCapturePathCommand(PATH_NAME));
+        
+        endRecordPathButton = new JoystickButton(driveJoystick, RobotMap.DriveJoystick.Buttons.END_RECORD_MOTION_PATH);
+        endRecordPathButton.whenPressed(factory.createEndCapturePathComand());
+        
+        playbackPathButton = new JoystickButton(driveJoystick, RobotMap.DriveJoystick.Buttons.REPLAY_MOTION_PATH);
+        playbackPathButton.whenPressed(factory.createFollowCapturedPathCommand(PATH_NAME));
     }
 
     @Override

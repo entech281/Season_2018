@@ -142,6 +142,10 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 		else if ( driveMode == DriveMode.PATH_DRIVE) {
 			runController(motionPathDrive);
 		}
+		else if ( driveMode == DriveMode.PATH_CAPTURE){
+		    runController(arcadeDrive);
+		    motionPathDrive.captureTrajectoryPoint();
+		}
 	    else {
 			runController(doNothing);
 		}

@@ -11,6 +11,9 @@ import frc.team281.robot.commands.LifterRaiseCommand;
 import frc.team281.robot.commands.LifterStopCommand;
 import frc.team281.robot.commands.WristPivotDownCommand;
 import frc.team281.robot.commands.WristPivotUpCommand;
+import frc.team281.robot.commands.path.EndCapturePathCommand;
+import frc.team281.robot.commands.path.FollowCapturedPathCommand;
+import frc.team281.robot.commands.path.StartCapturePathCommand;
 
 /**
  * An interface that creates commands. This is a seam that allows testing
@@ -43,5 +46,9 @@ public interface CommandFactory {
     WristPivotDownCommand createWristPivotDownCommand();
 
     LifterStopCommand  createLifterStopCommand();
+    
+    StartCapturePathCommand createStartCapturePathCommand(String pathName);
+    EndCapturePathCommand createEndCapturePathComand();
+    FollowCapturedPathCommand createFollowCapturedPathCommand(String pathName);
 
 }

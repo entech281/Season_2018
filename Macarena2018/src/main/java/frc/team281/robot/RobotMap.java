@@ -36,9 +36,9 @@ public class RobotMap {
         public static class Buttons {   
             public static final int LIFTER_RAISE = 5;
             public static final int LIFTER_LOWER = 3;
-            public static final int LIFTER_SCALE_HIGH = 8;
-            public static final int LIFTER_SCALE_MID = 9;
-            public static final int LIFTER_SCALE_LOW = 10;
+            public static final int START_RECORD_MOTION_PATH = 8;
+            public static final int END_RECORD_MOTION_PATH = 9;
+            public static final int REPLAY_MOTION_PATH = 10;
             public static final int LIFTER_SCALE_FENCE = 11;
             public static final int LIFTER_SCALE_GROUND = 12;
         }
