@@ -3,9 +3,16 @@ package frc.team281.robot.trajectory;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 
 import frc.team281.robot.logger.DataLogger;
 import frc.team281.robot.logger.DataLoggerFactory;
@@ -33,7 +40,8 @@ public class TrajectoryPlanner {
     protected TrajectoryLogger makeLoggerFromPath(String basePath, String fileName){
             try{
                 File fullPath = makeFullFilePath(basePath,fileName);
-                return new WriterTrajectoryLogger( new BufferedWriter(new FileWriter( fullPath)));
+                Writer os = new OutputStreamWriter(new FileOutputStream(fullPath), StandardCharsets.UTF_8);
+                return new WriterTrajectoryLogger( new BufferedWriter(os));
             }
             catch ( IOException ioe){
                 dataLogger.warn("Cannot Create Logger for RoboRio Flash Drive");
@@ -46,7 +54,8 @@ public class TrajectoryPlanner {
     protected TrajectoryReader makeReaderFromPath(String basePath, String fileName){
         try{
             File fullPath = makeFullFilePath(basePath,fileName);
-            return new ReaderTrajectoryReader( new BufferedReader(new FileReader( fullPath)));
+            Reader r = new InputStreamReader ( new FileInputStream ( fullPath), StandardCharsets.UTF_8);
+            return new ReaderTrajectoryReader( new BufferedReader(r));
         }
         catch ( IOException ioe){
             dataLogger.warn("Cannot Create Logger for RoboRio Flash Drive");
