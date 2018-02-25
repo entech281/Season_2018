@@ -144,7 +144,8 @@ public class FourWheelSpeedDrive implements DriveComponent {
 
 		@Override
 		public FourWheelSpeedDrive build() {
-			return new FourWheelSpeedDrive(this);
+			FourWheelSpeedDrive f = new FourWheelSpeedDrive(this);
+			return f;
 		}
 
 		@Override

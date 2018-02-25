@@ -26,6 +26,17 @@ public class DriveEncoderStatus {
 		this.converter = converter;
 	}
 
+	//mainly for unit testing.
+	public void updateTalonStatus(TalonEncoderStatus leftFrontStatus, 
+			TalonEncoderStatus leftRearStatus, 
+			TalonEncoderStatus rightFrontStatus,
+			TalonEncoderStatus rightRearStatus ) {
+		this.leftFrontStatus = leftFrontStatus;
+		this.leftRearStatus = leftRearStatus;
+		this.rightFrontStatus = rightFrontStatus;
+		this.rightRearStatus = rightRearStatus;		
+	}
+	
 	public void updateStatusFromTalons(FourTalonGroup talons) {
 		leftFrontStatus.updateEncoderStatus(talons.frontLeft);
 		leftRearStatus.updateEncoderStatus(talons.rearLeft);
@@ -102,9 +113,9 @@ public class DriveEncoderStatus {
 
 	protected String convertBooleanToMotorStatus(boolean status) {
 		if (status) {
-			return "[-]";
-		} else {
 			return "[+]";
+		} else {
+			return "[-]";
 		}
 	}
 

@@ -43,14 +43,14 @@ public class FourWheelPositionDrive implements DriveComponent {
 		isActive = false;
 	}
 
-	protected void resetPosition() {
+	public void resetPosition() {
 		talons.frontLeft.set(0.0);
 		talons.rearLeft.set(0.0);
 		talons.frontRight.set(0.0);
 		talons.rearRight.set(0.0);
 	}
 
-	protected void setPosition(double leftPos, double rightPos, boolean isRelative) {
+	public void setPosition(double leftPos, double rightPos, boolean isRelative) {
 
 		if (!isRelative) {
 			resetPosition();
@@ -89,11 +89,11 @@ public class FourWheelPositionDrive implements DriveComponent {
 
 	}
 
-	public boolean hasCurrentCommand() {
+	protected boolean hasCurrentCommand() {
 		return this.desiredPosition != null;
 	}
 
-	public void setCurrentCommand(Position position) {
+	protected void setCurrentCommand(Position position) {
 		this.desiredPosition = position;
 	}
 
@@ -101,9 +101,6 @@ public class FourWheelPositionDrive implements DriveComponent {
 		return this.desiredPosition;
 	}
 
-	protected void processPositionCommand() {
-
-	}
 
 	public static SafetySettings defaults(FourTalonGroup talons) {
 		return new Builder(talons, new TalonSettings());
@@ -178,7 +175,8 @@ public class FourWheelPositionDrive implements DriveComponent {
 		@Override
 		public FourWheelPositionDrive build() {
 			settings.controlMode = ControlMode.MotionMagic;
-			return new FourWheelPositionDrive(this);
+			FourWheelPositionDrive f = new FourWheelPositionDrive(this);
+			return f;
 		}
 
 		@Override
