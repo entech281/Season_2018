@@ -35,13 +35,7 @@ public class RobotMap {
 		public static final int PORT = 0;
 
 		public static class Buttons {
-			public static final int LIFTER_RAISE = 5;
-			public static final int LIFTER_LOWER = 3;
-			public static final int LIFTER_SCALE_HIGH = 8;
-			public static final int LIFTER_SCALE_MID = 9;
-			public static final int LIFTER_SCALE_LOW = 10;
-			public static final int LIFTER_SCALE_FENCE = 11;
-			public static final int LIFTER_SCALE_GROUND = 12;
+			public static final int FIELD_ABSOLUTE_DRIVING = 11;
 		}
 	}
 
@@ -49,14 +43,14 @@ public class RobotMap {
 		public static final int PORT = 1;
 
 		public static class Buttons {
-			public static final int LIFTER_RAISE = 9;
-			public static final int LIFTER_LOWER = 10;
-			public static final int LIFTER_STOP = 11;
-			public static final int GRABBER_LOAD = 7;
-			public static final int GRABBER_SHOOT = 8;
-			public static final int GRABBER_STOP = 9;
+			public static final int LIFTER_RAISE = 4;
+			public static final int LIFTER_LOWER = 5;
+			public static final int LIFTER_TO_TOP = 3;
+			public static final int LIFTER_TO_GROUND = 2;
+			public static final int WRIST_UP_BUTTON = 6;
+			public static final int GRABBER_LOAD = 8;
+			public static final int GRABBER_SHOOT = 9;
 			public static final int GRABBER_OPEN = 10;
-			public static final int GRABBER_CLOSE = 11;
 		}
 	}
 
@@ -66,8 +60,8 @@ public class RobotMap {
 
 	public static class DigitalIO {
 		public static final int LIFTER_AT_BOTTOM = 0;
-		public static final int GRABBER_CUBE_LOADED = 1;
-		public static final int WRIST_AT_BOTTOM = 2;
+		public static final int LIFTER_AT_TOP = 1;
+		public static final int GRABBER_CUBE_LOADED = 2;
 		public static final int LEFT_SWITCH_POSITION = 3;
 		public static final int RIGHT_SWITCH_POSITION = 4;
 	}
