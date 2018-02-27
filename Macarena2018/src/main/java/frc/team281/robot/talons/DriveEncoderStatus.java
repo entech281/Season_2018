@@ -73,14 +73,14 @@ public class DriveEncoderStatus {
 	}
 
 	public int getLeftEncoderCountsIgnoringBrokenEncoders() {
-		return computeEncoderCountForPairIngoringBroken(leftFrontStatus, leftRearStatus);
+		return computeEncoderCountForPairIgnoringBroken(leftFrontStatus, leftRearStatus);
 	}
 
 	public int getRightEncoderCountsIgnoringBrokenEncoders() {
-		return computeEncoderCountForPairIngoringBroken(rightFrontStatus, rightRearStatus);
+		return computeEncoderCountForPairIgnoringBroken(rightFrontStatus, rightRearStatus);
 	}
 
-	private int computeEncoderCountForPairIngoringBroken(TalonEncoderStatus first, TalonEncoderStatus second) {
+	private int computeEncoderCountForPairIgnoringBroken(TalonEncoderStatus first, TalonEncoderStatus second) {
 		if (first.isEncoderOk() && second.isEncoderOk()) {
 			return (first.getPosition() + second.getPosition()) / 2;
 		} else if (!first.isEncoderOk() && !second.isEncoderOk()) {
