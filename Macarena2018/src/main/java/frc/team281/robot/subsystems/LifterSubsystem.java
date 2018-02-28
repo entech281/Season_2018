@@ -13,7 +13,7 @@ public class LifterSubsystem extends BaseSubsystem {
     private TalonSpeedController motorOneController;
     private TalonSpeedController motorTwoController;
 
-    public static final double FULL_SPEED_PERCENT = 100;
+    public static final double FULL_SPEED_PERCENT = 20;
     public static final double HOMING_SPEED_PERCENT = 20;
 
     public static final double MIN_HEIGHT_INCHES = 1.0;
@@ -51,8 +51,8 @@ public class LifterSubsystem extends BaseSubsystem {
     public void motorsUp(double speedPercent) {
         if ( ! isAtLimit() ){
             
-            motorOneController.setDesiredSpeed(speedPercent);
-            motorTwoController.setDesiredSpeed(-speedPercent);
+            motorOneController.setDesiredSpeed(-speedPercent);
+            motorTwoController.setDesiredSpeed(speedPercent);
         }
         else{
             dataLogger.warn("Cannot Move-- at Limits");
@@ -63,8 +63,8 @@ public class LifterSubsystem extends BaseSubsystem {
     public void motorsDown(double speedPercent) {
         if ( ! isAtLimit() ){
             
-            motorOneController.setDesiredSpeed(-speedPercent);
-            motorTwoController.setDesiredSpeed(speedPercent);
+            motorOneController.setDesiredSpeed(speedPercent);
+            motorTwoController.setDesiredSpeed(-speedPercent);
         }
         else{
             dataLogger.warn("Cannot Move-- at Limits");

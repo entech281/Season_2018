@@ -47,8 +47,11 @@ public class OperatorInterface implements DriveInstructionSource {
         
         lifterRaiseButton = new JoystickButton(controlPanel, RobotMap.ControlPanel.Buttons.LIFTER_RAISE);
         lifterRaiseButton.whileHeld(factory.createLifterRaiseCommand());
+        lifterRaiseButton.whenReleased(factory.createLifterStopCommand());
+        
         lifterLowerButton = new JoystickButton(controlPanel, RobotMap.ControlPanel.Buttons.LIFTER_LOWER);
         lifterLowerButton.whileHeld(factory.createLifterLowerCommand());
+        lifterLowerButton.whenReleased(factory.createLifterStopCommand());
         
 
         lifterGroundButton = new JoystickButton(controlPanel, RobotMap.ControlPanel.Buttons.LIFTER_TO_GROUND);
