@@ -22,18 +22,20 @@ public class GrabberSubsystem extends BaseSubsystem {
     
     private DigitalInput limitSwitch;
     
-    private DoubleSolenoid Solenoid;
+    private DoubleSolenoid solenoid;
 
     
     public GrabberSubsystem() {
+        
     }
 
     @Override
     public void initialize() {
+        dataLogger.warn("Grabber Subsystem Init");
         leftMotor = new WPI_TalonSRX(RobotMap.CAN.Grabber.MOTOR_LEFT);
         rightMotor = new WPI_TalonSRX(RobotMap.CAN.Grabber.MOTOR_RIGHT);
 
-        Solenoid = new DoubleSolenoid(PCM.Grabber.INSIDE, PCM.Grabber.OUTSIDE);
+        solenoid = new DoubleSolenoid(RobotMap.CAN.PC_MODULE, PCM.Grabber.INSIDE, PCM.Grabber.OUTSIDE);
         
         limitSwitch = new DigitalInput(DigitalIO.GRABBER_CUBE_LOADED);
         
@@ -50,7 +52,7 @@ public class GrabberSubsystem extends BaseSubsystem {
         TalonSettings rightMotorSettings = TalonSettingsBuilder.inverted(leftMotorSettings);
         leftMotorController = new TalonSpeedController(leftMotor, leftMotorSettings);
         rightMotorController = new TalonSpeedController(rightMotor, rightMotorSettings);        
-        
+        dataLogger.warn("Grabber Subsystem Init Finished");
     }
 
     public boolean isCubeTouchingSwitch() {
@@ -62,15 +64,15 @@ public class GrabberSubsystem extends BaseSubsystem {
             dataLogger.warn("Cannot Load-- already at limit");
         }
         else{
-            leftMotorController.setDesiredSpeed(LEFT_LOAD_PERCENT);
-            rightMotorController.setDesiredSpeed(RIGHT_LOAD_PERCENT);              
+            leftMotorController.setDesiredSpeed(-LEFT_LOAD_PERCENT);
+            rightMotorController.setDesiredSpeed(-RIGHT_LOAD_PERCENT);              
         }
       
     }
     
     public void startShooting() {
-        leftMotorController.setDesiredSpeed(-LEFT_LOAD_PERCENT);
-        rightMotorController.setDesiredSpeed(-RIGHT_LOAD_PERCENT);  
+        leftMotorController.setDesiredSpeed(LEFT_LOAD_PERCENT);
+        rightMotorController.setDesiredSpeed(RIGHT_LOAD_PERCENT);  
     }
     
     @Override
@@ -87,15 +89,15 @@ public class GrabberSubsystem extends BaseSubsystem {
     }
     
     public void solenoidOff() {
-        Solenoid.set(DoubleSolenoid.Value.kOff);
+        solenoid.set(DoubleSolenoid.Value.kOff);
     }
     
     public void open() {
-        Solenoid.set(DoubleSolenoid.Value.kForward);
+        solenoid.set(DoubleSolenoid.Value.kReverse);
     }
     
     public void close() {
-        Solenoid.set(DoubleSolenoid.Value.kReverse);
+        solenoid.set(DoubleSolenoid.Value.kForward);
     }
     
 }

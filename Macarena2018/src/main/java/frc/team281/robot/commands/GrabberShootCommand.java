@@ -4,10 +4,11 @@ import frc.team281.robot.subsystems.BaseSubsystem;
 import frc.team281.robot.subsystems.GrabberSubsystem;
 
 public class GrabberShootCommand extends BaseCommand {
-    private GrabberSubsystem grab = new GrabberSubsystem();
+    private GrabberSubsystem grab;
     
     public GrabberShootCommand(BaseSubsystem subsystem) {
         super(subsystem);
+        grab = (GrabberSubsystem)subsystem;
         setTimeout(2000);
     }
 
@@ -16,7 +17,8 @@ public class GrabberShootCommand extends BaseCommand {
     }
     @Override
     public void execute() {
-        grab.open();
+        grab.startShooting();
+        
     }
 
     @Override
