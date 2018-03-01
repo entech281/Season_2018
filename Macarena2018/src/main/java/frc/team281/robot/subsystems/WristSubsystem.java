@@ -1,7 +1,5 @@
 package frc.team281.robot.subsystems;
 
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Solenoid;
 import frc.team281.robot.RobotMap;
 import frc.team281.robot.RobotMap.PCM;
@@ -48,5 +46,5 @@ public class WristSubsystem extends BaseSubsystem {
         up.set(false);
         down.set(false);
     }
-
+    
 }
