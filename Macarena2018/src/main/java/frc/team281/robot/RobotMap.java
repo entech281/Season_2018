@@ -12,22 +12,22 @@ package frc.team281.robot;
 public class RobotMap {
 
     public static class CAN {
-        public static final int FRONT_LEFT_MOTOR = 1;
-        public static final int FRONT_RIGHT_MOTOR = 2;
-        public static final int REAR_LEFT_MOTOR = 4;
-        public static final int REAR_RIGHT_MOTOR = 3;
+        public static int FRONT_LEFT_MOTOR = 1;
+        public static int FRONT_RIGHT_MOTOR = 2;
+        public static int REAR_LEFT_MOTOR = 4;
+        public static int REAR_RIGHT_MOTOR = 3;
         
         public static class Lifter {
-            public static final int MOTOR_ONE = 5;
-            public static final int MOTOR_TWO = 6;  
+            public static int MOTOR_ONE = 5;
+            public static int MOTOR_TWO = 6;  
         }
         
         public static class Grabber {
-            public static final int MOTOR_LEFT = 8;
-            public static final int MOTOR_RIGHT = 7;
+            public static int MOTOR_LEFT = 8;
+            public static int MOTOR_RIGHT = 7;
         }
         
-        public static final int PC_MODULE = 10;
+        public static int PC_MODULE = 10;
 
     }
 
@@ -57,28 +57,28 @@ public class RobotMap {
     }
 
     public static class DigitalIO {
-        public static final int LIFTER_AT_BOTTOM = 0;
-        public static final int LIFTER_AT_TOP = 1;
-        public static final int GRABBER_CUBE_LOADED = 2;
-        public static final int LEFT_SWITCH_POSITION = 3;
-        public static final int RIGHT_SWITCH_POSITION = 4;
-        public static final int PREFERENCE_SWITCH = 5;
+        public static int LIFTER_AT_BOTTOM = 0;
+        public static int LIFTER_AT_TOP = 1;
+        public static int GRABBER_CUBE_LOADED = 2;
+        public static int LEFT_SWITCH_POSITION = 3;
+        public static int RIGHT_SWITCH_POSITION = 4;
+        public static int PREFERENCE_SWITCH = 5;
 
     }
     
     public static class PCM {
         public static class Grabber {
-            public static final int OUTSIDE = 2;
-            public static final int INSIDE = 3;
+            public static int OUTSIDE = 2;
+            public static int INSIDE = 3;
         }
         
         public static class Wrist {
-            public static final int UP = 1;
-            public static final int DOWN = 0;
+            public static int UP = 1;
+            public static int DOWN = 0;
         }
     }
     
-    public static final double JOYSTICK_Y_SOFTNESS = 1.5;
-    public static final double JOYSTICK_X_SOFTNESS = 1.5;
+    public static double JOYSTICK_Y_SOFTNESS = 1.5;
+    public static double JOYSTICK_X_SOFTNESS = 1.5;
 
 }

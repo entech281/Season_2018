@@ -56,6 +56,10 @@ public class Robot extends IterativeRobot implements CommandFactory {
     DigitalInput rightPositionSwitch = new DigitalInput(DigitalIO.RIGHT_SWITCH_POSITION);
     DigitalInput preferenceSwitch = new DigitalInput(DigitalIO.PREFERENCE_SWITCH);
     
+    public void configToPracticeBot() {
+        
+    }
+    
     /**
      * This function is run when the robot is first started up and should be used
      * for any initialization code.
