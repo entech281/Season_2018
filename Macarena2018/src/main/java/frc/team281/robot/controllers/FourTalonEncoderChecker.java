@@ -3,7 +3,7 @@ package frc.team281.robot.controllers;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-import frc.team281.robot.RobotMap;
+import frc.team281.robot.Robot;
 import frc.team281.robot.logger.DataLogger;
 import frc.team281.robot.logger.DataLoggerFactory;
 import frc.team281.robot.subsystems.drive.FourTalonsWithSettings;
@@ -31,7 +31,7 @@ public class FourTalonEncoderChecker {
 	    }
 	    else {
 	        if ( shouldDisableAll() ){
-	            sb.append("CANT DRIVE:: ");
+	            sb.append("CAN'T DRIVE:: ");
 	        }
 	        else{
 	            sb.append("IMPAIRED:: ");
@@ -70,19 +70,19 @@ public class FourTalonEncoderChecker {
 		} else {
 			if (shouldLeftFrontFollowLeftRear()) {
 				log.warn("Left Front Encoder appears to be broken. It will follow Left Rear");
-				talons.getFrontLeft().set(ControlMode.Follower, RobotMap.CAN.REAR_LEFT_MOTOR);
+				talons.getFrontLeft().set(ControlMode.Follower, Robot.robotMap.CAN.REAR_LEFT_MOTOR);
 			}
 			if (shouldLeftRearFollowLeftFront()) {
 				log.warn("Left Rear Encoder appears to be broken. It will follow Left Front");
-				talons.getRearLeft().set(ControlMode.Follower,RobotMap.CAN.FRONT_LEFT_MOTOR);
+				talons.getRearLeft().set(ControlMode.Follower,Robot.robotMap.CAN.FRONT_LEFT_MOTOR);
 			}
 			if (shouldRightFrontFollowRightRear()) {
 				log.warn("Right Front Encoder appears to be broken. It will follow Right Rear");
-				talons.getFrontRight().set(ControlMode.Follower,RobotMap.CAN.REAR_RIGHT_MOTOR);
+				talons.getFrontRight().set(ControlMode.Follower,Robot.robotMap.CAN.REAR_RIGHT_MOTOR);
 			}
 			if (shouldRightRearFollowRightFront()) {
 				log.warn("Right Rear Encoder appears to be broken. It will follow Right Front");
-				talons.getRearRight().set(ControlMode.Follower,RobotMap.CAN.FRONT_RIGHT_MOTOR );
+				talons.getRearRight().set(ControlMode.Follower,Robot.robotMap.CAN.FRONT_RIGHT_MOTOR );
 			}
 		}		
 		log.log("frontLeftMode",talons.getFrontLeft().getControlMode());

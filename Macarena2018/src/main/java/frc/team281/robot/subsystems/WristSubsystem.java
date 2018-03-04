@@ -1,8 +1,7 @@
 package frc.team281.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Solenoid;
-import frc.team281.robot.RobotMap;
-import frc.team281.robot.RobotMap.PCM;
+import frc.team281.robot.Robot;
 
 public class WristSubsystem extends BaseSubsystem {
 
@@ -21,8 +20,8 @@ public class WristSubsystem extends BaseSubsystem {
     public void initialize() {
         //2 solenoid = new DoubleSolenoid(RobotMap.CAN.PC_MODULE, PCM.Wrist.UP, PCM.Wrist.DOWN);
         wristUp = true;
-        up = new Solenoid(RobotMap.CAN.PC_MODULE, PCM.Wrist.UP);
-        down = new Solenoid(RobotMap.CAN.PC_MODULE,PCM.Wrist.DOWN);
+        up = new Solenoid(Robot.robotMap.CAN.PC_MODULE, Robot.robotMap.PCM.Wrist.UP);
+        down = new Solenoid(Robot.robotMap.CAN.PC_MODULE,Robot.robotMap.PCM.Wrist.DOWN);
 
     }
 

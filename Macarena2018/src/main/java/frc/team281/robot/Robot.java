@@ -25,7 +25,6 @@ import frc.team281.robot.subsystems.LifterSubsystem;
 import frc.team281.robot.subsystems.WristSubsystem;
 import frc.team281.robot.subsystems.drive.BaseDriveSubsystem.DriveMode;
 import frc.team281.robot.subsystems.drive.RealDriveSubsystem;
-import frc.team281.robot.RobotMap.DigitalIO;
 import frc.team281.robot.commands.DriveForwardNoEncodersCommand;
 
 
@@ -42,6 +41,9 @@ import frc.team281.robot.commands.DriveForwardNoEncodersCommand;
  * that one implement CommandFactory
  */
 public class Robot extends IterativeRobot implements CommandFactory {
+    
+    public static final RobotConfig robotMap = new RobotConfigFactory().configToMatch();
+    
 
     private RealDriveSubsystem driveSubsystem;
     private OperatorInterface operatorInterface;
@@ -52,13 +54,9 @@ public class Robot extends IterativeRobot implements CommandFactory {
     private DriveForwardNoEncodersCommand DFNEC;
     private Compressor compressor;
     
-    DigitalInput leftPositionSwitch = new DigitalInput(DigitalIO.LEFT_SWITCH_POSITION);
-    DigitalInput rightPositionSwitch = new DigitalInput(DigitalIO.RIGHT_SWITCH_POSITION);
-    DigitalInput preferenceSwitch = new DigitalInput(DigitalIO.PREFERENCE_SWITCH);
-    
-    public void configToPracticeBot() {
-        
-    }
+    DigitalInput leftPositionSwitch = new DigitalInput(robotMap.DigitalIO.LEFT_SWITCH_POSITION);
+    DigitalInput rightPositionSwitch = new DigitalInput(robotMap.DigitalIO.RIGHT_SWITCH_POSITION);
+    DigitalInput preferenceSwitch = new DigitalInput(robotMap.DigitalIO.PREFERENCE_SWITCH);
     
     /**
      * This function is run when the robot is first started up and should be used
@@ -81,7 +79,7 @@ public class Robot extends IterativeRobot implements CommandFactory {
         lifterSubsystem.initialize();
         grabberSubsystem.initialize();
         wristSubsystem.initialize();
-        compressor = new Compressor(RobotMap.CAN.PC_MODULE);
+        compressor = new Compressor(robotMap.CAN.PC_MODULE);
         compressor.start();
         DFNEC = new DriveForwardNoEncodersCommand(driveSubsystem, 3, .75);
         
@@ -99,7 +97,7 @@ public class Robot extends IterativeRobot implements CommandFactory {
         AutoCommandFactory af = new AutoCommandFactory(lifterSubsystem, grabberSubsystem, driveSubsystem);
         CommandGroup autoCommand = af.makeAutoCommand(whatAutoToRun);
         DFNEC.start();
-        //autoCommand.start();
+        autoCommand.start();
        
     }
     

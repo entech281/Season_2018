@@ -2,7 +2,8 @@ package frc.team281.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import frc.team281.robot.commands.LifterStopCommand;;
+import frc.team281.robot.commands.LifterStopCommand;
+
 
 /**
  * Reads the hardware that interfaces with real users, and issues commands to a
@@ -14,7 +15,7 @@ import frc.team281.robot.commands.LifterStopCommand;;
  * It translates joysticks and buttons into commands and DriveInstructions
  */
 public class OperatorInterface implements DriveInstructionSource {
-
+    
     private Joystick driveJoystick;
     private Joystick controlPanel;
     
@@ -42,39 +43,40 @@ public class OperatorInterface implements DriveInstructionSource {
     }
 
     public void initialize() {
-
-        driveJoystick = new Joystick(RobotMap.DriveJoystick.PORT);
-        controlPanel = new Joystick(RobotMap.ControlPanel.PORT);
         
-        lifterRaiseButton = new JoystickButton(controlPanel, RobotMap.ControlPanel.Buttons.LIFTER_RAISE);
+        
+        driveJoystick = new Joystick(Robot.robotMap.DriveJoystick.PORT);
+        controlPanel = new Joystick(Robot.robotMap.ControlPanel.PORT);
+        
+        lifterRaiseButton = new JoystickButton(controlPanel, Robot.robotMap.ControlPanel.Buttons.LIFTER_RAISE);
         lifterRaiseButton.whileHeld(factory.createLifterRaiseCommand());
         lifterRaiseButton.whenReleased(factory.createLifterStopCommand());
 
         
-        lifterLowerButton = new JoystickButton(controlPanel, RobotMap.ControlPanel.Buttons.LIFTER_LOWER);
+        lifterLowerButton = new JoystickButton(controlPanel, Robot.robotMap.ControlPanel.Buttons.LIFTER_LOWER);
         lifterLowerButton.whileHeld(factory.createLifterLowerCommand());
         lifterLowerButton.whenReleased(factory.createLifterStopCommand());        
 
-        lifterGroundButton = new JoystickButton(controlPanel, RobotMap.ControlPanel.Buttons.LIFTER_TO_GROUND);
+        lifterGroundButton = new JoystickButton(controlPanel, Robot.robotMap.ControlPanel.Buttons.LIFTER_TO_GROUND);
         lifterGroundButton.whenPressed(factory.createLifterHomeCommand());
 
         
-        lifterTopButton = new JoystickButton(controlPanel, RobotMap.ControlPanel.Buttons.LIFTER_TO_TOP);
+        lifterTopButton = new JoystickButton(controlPanel, Robot.robotMap.ControlPanel.Buttons.LIFTER_TO_TOP);
         lifterTopButton.whenPressed(factory.createLifterTopCommand());
 
-        wristUpButton = new JoystickButton(controlPanel, RobotMap.ControlPanel.Buttons.WRIST_UP);
+        wristUpButton = new JoystickButton(controlPanel, Robot.robotMap.ControlPanel.Buttons.WRIST_UP);
         wristUpButton.whenPressed(factory.createWristPivotUpCommand());
         wristUpButton.whenReleased(factory.createWristPivotDownCommand());
 
-        grabberLoadButton = new JoystickButton(controlPanel, RobotMap.ControlPanel.Buttons.GRABBER_LOAD);
+        grabberLoadButton = new JoystickButton(controlPanel, Robot.robotMap.ControlPanel.Buttons.GRABBER_LOAD);
         grabberLoadButton.whenPressed(factory.createGrabberLoadCommand());
         grabberLoadButton.whenReleased(factory.createGrabberStopCommand());
         
-        grabberShootButton = new JoystickButton(controlPanel, RobotMap.ControlPanel.Buttons.GRABBER_SHOOT);
+        grabberShootButton = new JoystickButton(controlPanel, Robot.robotMap.ControlPanel.Buttons.GRABBER_SHOOT);
         grabberShootButton.whenPressed(factory.createGrabberShootCommand());
         grabberShootButton.whenReleased(factory.createGrabberStopCommand());
         
-        grabberOpenButton = new JoystickButton(controlPanel, RobotMap.ControlPanel.Buttons.GRABBER_OPEN);
+        grabberOpenButton = new JoystickButton(controlPanel, Robot.robotMap.ControlPanel.Buttons.GRABBER_OPEN);
         grabberOpenButton.whenPressed(factory.createGrabberOpenCommand());
         grabberOpenButton.whenReleased(factory.createGrabberCloseCommand());
 

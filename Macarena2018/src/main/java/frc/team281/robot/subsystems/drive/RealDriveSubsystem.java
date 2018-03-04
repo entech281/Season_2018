@@ -4,7 +4,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
 import frc.team281.robot.DriveInstructionSource;
-import frc.team281.robot.RobotMap;
+import frc.team281.robot.Robot;
 import frc.team281.robot.subsystems.TalonSettings;
 import frc.team281.robot.subsystems.TalonSettingsBuilder;
 
@@ -58,10 +58,10 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 		//this.navX = new NavXIntializer(SerialPort.Port.kMXP,NAVX_CALIBRATION_LOOP_TIME_MS).getCalibratedNavX();	
 		
 
-		frontLeftMotor = new WPI_TalonSRX(RobotMap.CAN.FRONT_LEFT_MOTOR);
-		frontRightMotor = new WPI_TalonSRX(RobotMap.CAN.FRONT_RIGHT_MOTOR);
-		rearLeftMotor = new WPI_TalonSRX(RobotMap.CAN.REAR_LEFT_MOTOR);
-		rearRightMotor = new WPI_TalonSRX(RobotMap.CAN.REAR_RIGHT_MOTOR);
+		frontLeftMotor = new WPI_TalonSRX(Robot.robotMap.CAN.FRONT_LEFT_MOTOR);
+		frontRightMotor = new WPI_TalonSRX(Robot.robotMap.CAN.FRONT_RIGHT_MOTOR);
+		rearLeftMotor = new WPI_TalonSRX(Robot.robotMap.CAN.REAR_LEFT_MOTOR);
+		rearRightMotor = new WPI_TalonSRX(Robot.robotMap.CAN.REAR_RIGHT_MOTOR);
 		
 		TalonSettings leftSpeedSettings = TalonSettingsBuilder.defaults()
 				.withCurrentLimits(35, 30, 200)

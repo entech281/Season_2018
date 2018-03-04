@@ -5,12 +5,9 @@ import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
 import org.junit.Test;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
-
-import frc.team281.robot.RobotMap;
+import frc.team281.robot.Robot;
 import frc.team281.robot.controllers.FourTalonEncoderChecker;
 import frc.team281.robot.subsystems.drive.FourTalonsWithSettings;
 
@@ -52,7 +49,7 @@ public class TestFourTalonEncoderChecker extends BaseTest{
 				
 		verify(talons.getFrontLeft(), never()).set(anyObject(), anyDouble() );
 		verify(talons.getFrontRight(), never()).set(anyObject(), anyDouble() );
-		verify(talons.getRearLeft()).set(ControlMode.Follower, RobotMap.CAN.FRONT_LEFT_MOTOR);
+		verify(talons.getRearLeft()).set(ControlMode.Follower, Robot.robotMap.CAN.FRONT_LEFT_MOTOR);
 		verify(talons.getRearRight(), never()).set(anyObject(), anyDouble() );				
 	}
 	
@@ -68,7 +65,7 @@ public class TestFourTalonEncoderChecker extends BaseTest{
 		new FourTalonEncoderChecker(talons).setMotorsWithBrokenEncodersToFollowers();
 				
 		verify(talons.getFrontLeft(), never()).set(anyObject(), anyDouble() );
-		verify(talons.getFrontRight()).set(ControlMode.Follower, RobotMap.CAN.REAR_RIGHT_MOTOR);
+		verify(talons.getFrontRight()).set(ControlMode.Follower, Robot.robotMap.CAN.REAR_RIGHT_MOTOR);
 		verify(talons.getRearLeft(), never()).set(anyObject(), anyDouble() );
 		verify(talons.getRearRight(), never()).set(anyObject(), anyDouble() );				
 	}	
@@ -85,7 +82,7 @@ public class TestFourTalonEncoderChecker extends BaseTest{
         new FourTalonEncoderChecker(talons).setMotorsWithBrokenEncodersToFollowers();
                 
         verify(talons.getFrontLeft(), never()).set(anyObject(), anyDouble() );
-        verify(talons.getFrontRight()).set(ControlMode.Follower, RobotMap.CAN.REAR_RIGHT_MOTOR);
+        verify(talons.getFrontRight()).set(ControlMode.Follower, Robot.robotMap.CAN.REAR_RIGHT_MOTOR);
         verify(talons.getRearLeft(), never()).set(anyObject(), anyDouble() );
         verify(talons.getRearRight(), never()).set(anyObject(), anyDouble() );              
     }   	

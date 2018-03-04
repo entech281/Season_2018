@@ -3,7 +3,7 @@ package frc.team281.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import frc.team281.robot.RobotMap;
+import frc.team281.robot.Robot;
 import frc.team281.robot.controllers.TalonSpeedController;
 
 public class LifterSubsystem extends BaseSubsystem {
@@ -30,10 +30,10 @@ public class LifterSubsystem extends BaseSubsystem {
 
     @Override
     public void initialize() {
-        motorOne = new WPI_TalonSRX(RobotMap.CAN.Lifter.MOTOR_ONE);
-        motorTwo = new WPI_TalonSRX(RobotMap.CAN.Lifter.MOTOR_TWO);
-        bottomLimitSwitch = new DigitalInput(RobotMap.DigitalIO.LIFTER_AT_BOTTOM);
-        topLimitSwitch = new DigitalInput(RobotMap.DigitalIO.LIFTER_AT_TOP);
+        motorOne = new WPI_TalonSRX(Robot.robotMap.CAN.Lifter.MOTOR_ONE);
+        motorTwo = new WPI_TalonSRX(Robot.robotMap.CAN.Lifter.MOTOR_TWO);
+        bottomLimitSwitch = new DigitalInput(Robot.robotMap.DigitalIO.LIFTER_AT_BOTTOM);
+        topLimitSwitch = new DigitalInput(Robot.robotMap.DigitalIO.LIFTER_AT_TOP);
         
         TalonSettings motorSettings = TalonSettingsBuilder.defaults()
                 .withCurrentLimits(20, 15, 200)

@@ -1,6 +1,6 @@
 package frc.team281.robot.controllers;
 
-import frc.team281.robot.RobotMap;
+import frc.team281.robot.Robot;
 import frc.team281.robot.subsystems.TalonSettingsBuilder;
 import frc.team281.robot.subsystems.drive.FourTalonsWithSettings;
 
@@ -37,19 +37,19 @@ public class EncoderCheck {
 		} else {
 			if (shouldLeftFrontFollowLeftRear()) {
 				originalTalons.setFrontLeftSettings(
-						TalonSettingsBuilder.follow(originalTalons.getRearLeftSettings(), RobotMap.CAN.FRONT_RIGHT_MOTOR));
+						TalonSettingsBuilder.follow(originalTalons.getRearLeftSettings(), Robot.robotMap.CAN.FRONT_RIGHT_MOTOR));
 			}
 			if (shouldLeftRearFollowLeftFront()) {
 				originalTalons.setRearLeftSettings(
-						TalonSettingsBuilder.follow(originalTalons.getFrontLeftSettings(), RobotMap.CAN.FRONT_LEFT_MOTOR));
+						TalonSettingsBuilder.follow(originalTalons.getFrontLeftSettings(), Robot.robotMap.CAN.FRONT_LEFT_MOTOR));
 			}
 			if (shouldRightFrontFollowRightRear()) {
 				originalTalons.setFrontRightSettings(
-						TalonSettingsBuilder.follow(originalTalons.getRearRightSettings(), RobotMap.CAN.FRONT_RIGHT_MOTOR));
+						TalonSettingsBuilder.follow(originalTalons.getRearRightSettings(), Robot.robotMap.CAN.FRONT_RIGHT_MOTOR));
 			}
 			if (shouldRightRearFollowRightFront()) {
 				originalTalons.setRearRightSettings(
-						TalonSettingsBuilder.follow(originalTalons.getFrontRightSettings(), RobotMap.CAN.FRONT_RIGHT_MOTOR));
+						TalonSettingsBuilder.follow(originalTalons.getFrontRightSettings(), Robot.robotMap.CAN.FRONT_RIGHT_MOTOR));
 
 			}
 		}		

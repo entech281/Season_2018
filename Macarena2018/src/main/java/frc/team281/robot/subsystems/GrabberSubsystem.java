@@ -5,9 +5,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import frc.team281.robot.RobotMap;
-import frc.team281.robot.RobotMap.DigitalIO;
-import frc.team281.robot.RobotMap.PCM;
+import frc.team281.robot.Robot;
 import frc.team281.robot.controllers.TalonSpeedController;
 
 public class GrabberSubsystem extends BaseSubsystem {
@@ -35,12 +33,12 @@ public class GrabberSubsystem extends BaseSubsystem {
     @Override
     public void initialize() {
         dataLogger.warn("Grabber Subsystem Init");
-        leftMotor = new WPI_TalonSRX(RobotMap.CAN.Grabber.MOTOR_LEFT);
-        rightMotor = new WPI_TalonSRX(RobotMap.CAN.Grabber.MOTOR_RIGHT);
+        leftMotor = new WPI_TalonSRX(Robot.robotMap.CAN.Grabber.MOTOR_LEFT);
+        rightMotor = new WPI_TalonSRX(Robot.robotMap.CAN.Grabber.MOTOR_RIGHT);
 
-        solenoid = new DoubleSolenoid(RobotMap.CAN.PC_MODULE, PCM.Grabber.INSIDE, PCM.Grabber.OUTSIDE);
+        solenoid = new DoubleSolenoid(Robot.robotMap.CAN.PC_MODULE,Robot.robotMap.PCM.Grabber.INSIDE, Robot.robotMap.PCM.Grabber.OUTSIDE);
         
-        limitSwitch = new DigitalInput(DigitalIO.GRABBER_CUBE_LOADED);
+        limitSwitch = new DigitalInput(Robot.robotMap.DigitalIO.GRABBER_CUBE_LOADED);
         
         TalonSettings leftMotorSettings = TalonSettingsBuilder
                 .defaults()
