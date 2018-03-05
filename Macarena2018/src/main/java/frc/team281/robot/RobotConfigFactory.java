@@ -1,9 +1,10 @@
 package frc.team281.robot;
 
 public class RobotConfigFactory {
-    private boolean MatchBot;
     
+    @SuppressWarnings("unused")
     private RobotConfig matchBotConfig = new RobotConfig();
+    @SuppressWarnings("unused")
     private RobotConfig practiceBotConfig = new RobotConfig();
     
     public RobotConfig configToMatch() {
@@ -38,8 +39,6 @@ public class RobotConfigFactory {
         matchBotConfig.PCM.Wrist.UP = 0;
         matchBotConfig.PCM.Wrist.DOWN = 0;
         matchBotConfig.JOYSTICK_X_SOFTNESS = 1.5;
-        matchBotConfig.JOYSTICK_Y_SOFTNESS = 1.5;
-        MatchBot=true;
         return matchBotConfig;
     }
     public RobotConfig configToPractice() {
@@ -76,10 +75,7 @@ public class RobotConfigFactory {
         matchBotConfig.PCM.Wrist.DOWN = 0;
         matchBotConfig.JOYSTICK_X_SOFTNESS = 1.5;
         matchBotConfig.JOYSTICK_Y_SOFTNESS = 1.5;
-        MatchBot=false;
         return matchBotConfig;
     }
-    public RobotConfig getConfig() {
-        return MatchBot?matchBotConfig:practiceBotConfig;
-    }
+    
 }
