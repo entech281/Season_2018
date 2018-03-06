@@ -91,8 +91,8 @@ public class OperatorInterface implements DriveInstructionSource {
     }
 
     public static double adjustJoystickSoftness(double softnessFactor, double rawValue) {
-        boolean isNegative=(rawValue<0)?true:false;
-        double adjusted = (isNegative? Math.pow(-rawValue, softnessFactor):Math.pow(rawValue, softnessFactor));
+        boolean isNegative = rawValue < 0;
+        double adjusted = isNegative? Math.pow(-rawValue, softnessFactor):Math.pow(rawValue, softnessFactor);
         return isNegative?-adjusted:adjusted;
     }
 }
