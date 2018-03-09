@@ -137,7 +137,7 @@ public class LinearAxis {
    
     public void checkLimits(){
         if ( moveState == MoveState.MOVING_BACK ){
-             if (!  startLimitSwitch.get() || getPosition() < 0 ){
+             if (!  startLimitSwitch.get() || getPosition() <= 0 ){
                  stop();
                  axisEncoder.reset();                                  
              }
