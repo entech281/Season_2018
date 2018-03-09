@@ -57,6 +57,11 @@ public class LinearAxis {
         }
         
     }
+    
+    public MoveState getMoveState(){
+        return this.moveState;
+    }
+    
     public void moveToStart(){
         moveToPosition(0);
     }
@@ -82,6 +87,10 @@ public class LinearAxis {
     
     public double getSpeed(){
         return this.currentSpeed;
+    }
+    
+    public int getCommandedPosition(){
+        return desiredPositionCounts;
     }
     
     public int getPosition(){
