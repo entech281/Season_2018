@@ -24,7 +24,7 @@ public class LinearAxis {
     private DigitalInput startLimitSwitch;
     private DigitalInput endLimitSwitch;
     
-    private int lengthCounts = 0;
+    private int nominalLengthCounts = 0;
     private int positionTolerance = 0;
     private int desiredPositionCounts = 0;
     private double cruiseSpeedPercent = 0.0;
@@ -32,7 +32,12 @@ public class LinearAxis {
     private double rampCounts = 0.0;
     private double currentSpeed = 0.0;
     private double inverted = 1.0;
+    
+    private boolean homingTop = false;
+    private boolean homingBottom = false;
+    
     private MoveState moveState = MoveState.STOPPED;
+    
     
     public enum MoveState {
         MOVING_FORWARD,
@@ -41,13 +46,13 @@ public class LinearAxis {
     }
     
     public LinearAxis(Encoder encoder, DigitalInput startLimit, DigitalInput endLimit, WPI_TalonSRX talon ,
-            int lengthCounts, double cruiseSpeedPercent, double minSpeedPercent, int rampCounts, boolean inverted, int positionTolerance){
+            int nominalLengthCounts, double cruiseSpeedPercent, double minSpeedPercent, int rampCounts, boolean inverted, int positionTolerance){
         dataLogger = DataLoggerFactory.getLoggerFactory().createDataLogger("LinearAxis");
         this.axisEncoder = encoder;
         this.startLimitSwitch = startLimit;
         this.endLimitSwitch = endLimit;
         this.talon = talon;
-        this.lengthCounts = lengthCounts;
+        this.nominalLengthCounts = nominalLengthCounts;
         this.cruiseSpeedPercent = cruiseSpeedPercent;
         this.positionTolerance = positionTolerance;
         this.minSpeedPercent = minSpeedPercent;
@@ -58,6 +63,10 @@ public class LinearAxis {
         
     }
     
+    protected void setMotorSpeed(double speedPercent){
+        talon.set(ControlMode.PercentOutput, speedPercent);
+    }
+    
     public MoveState getMoveState(){
         return this.moveState;
     }
@@ -65,8 +74,9 @@ public class LinearAxis {
     public void moveToStart(){
         moveToPosition(0);
     }
+    
     public void moveToEnd(){
-        moveToPosition(this.lengthCounts);
+        moveToPosition(this.nominalLengthCounts);
     }
     
     public void moveToPosition(int positionCounts){
@@ -76,11 +86,11 @@ public class LinearAxis {
     public void init(){
         //assume we're starting on the bottom
         axisEncoder.reset();
-        talon.set(ControlMode.PercentOutput, 0.0);
+        setMotorSpeed( 0.0);
     }
     
     public void stop(){
-        talon.set(0.0);
+        setMotorSpeed(0.0);
         currentSpeed = 0.0;
         moveState = MoveState.STOPPED;
     }
@@ -106,10 +116,19 @@ public class LinearAxis {
         talon.set(inverted*currentSpeed);
     }
     
+    protected boolean isMoveBasicallyTop(){
+        return Math.abs(desiredPositionCounts - nominalLengthCounts) <= this.positionTolerance;
+    }
+    
+    protected boolean isMoveBasicallyBottom(){
+        return Math.abs(desiredPositionCounts) <= this.positionTolerance;
+    }    
+    
     public void computeSpeed(){
         //this is a basic trapezoidal profile
         //if we're more than rampdown counts, go full speed.
         //other wise, taper down to min speed over ramp counts
+        //if the command move is either end of the axis move at minimum speed till you get there
         
         int distanceToMove = desiredPositionCounts - getPosition();
         int absDistanceToMove = Math.abs(distanceToMove);
@@ -118,6 +137,14 @@ public class LinearAxis {
         }
         else if ( absDistanceToMove >= rampCounts){
             currentSpeed  = cruiseSpeedPercent;
+        }
+        else if ( isMoveBasicallyBottom() ){
+            currentSpeed = minSpeedPercent;
+            homingBottom = true;
+        }
+        else if ( isMoveBasicallyTop()){            
+            currentSpeed = minSpeedPercent;
+            homingTop = true;
         }
         else{
             //start ramping down
@@ -144,15 +171,15 @@ public class LinearAxis {
         }
 
         if ( moveState == MoveState.MOVING_FORWARD ){
-            if (  ! endLimitSwitch.get() || getPosition() > this.lengthCounts ){
+            if (  ! endLimitSwitch.get() || getPosition() > this.nominalLengthCounts ){
                 stop();
             }
         }    
     }
     
     public int limitCommand(int commandedPosition){
-        if ( commandedPosition > this.lengthCounts){
-            return this.lengthCounts;
+        if ( commandedPosition > this.nominalLengthCounts){
+            return this.nominalLengthCounts;
         }
         else if ( commandedPosition < 0 ){
             return 0;
