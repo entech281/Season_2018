@@ -24,17 +24,10 @@ public class LinearAxis {
     private DigitalInput startLimitSwitch;
     private DigitalInput endLimitSwitch;
     
-    private int nominalLengthCounts = 0;
-    private int positionTolerance = 0;
-    private int desiredPositionCounts = 0;
-    private double cruiseSpeedPercent = 0.0;
-    private double minSpeedPercent = 0.0;
-    private double rampCounts = 0.0;
     private double currentSpeed = 0.0;
     private double inverted = 1.0;
-    
-    private boolean homingTop = false;
-    private boolean homingBottom = false;
+    private TrapezoidalSpeedCalculator motionProfile;
+
     
     private MoveState moveState = MoveState.STOPPED;
     
@@ -46,17 +39,14 @@ public class LinearAxis {
     }
     
     public LinearAxis(Encoder encoder, DigitalInput startLimit, DigitalInput endLimit, WPI_TalonSRX talon ,
-            int nominalLengthCounts, double cruiseSpeedPercent, double minSpeedPercent, int rampCounts, boolean inverted, int positionTolerance){
+            TrapezoidalSpeedCalculator motionProfile, boolean inverted){
         dataLogger = DataLoggerFactory.getLoggerFactory().createDataLogger("LinearAxis");
+        this.motionProfile = motionProfile;
         this.axisEncoder = encoder;
         this.startLimitSwitch = startLimit;
         this.endLimitSwitch = endLimit;
         this.talon = talon;
-        this.nominalLengthCounts = nominalLengthCounts;
-        this.cruiseSpeedPercent = cruiseSpeedPercent;
-        this.positionTolerance = positionTolerance;
-        this.minSpeedPercent = minSpeedPercent;
-        this.rampCounts = rampCounts;
+
         if ( inverted){
             this.inverted = -1.0;
         }
@@ -72,15 +62,15 @@ public class LinearAxis {
     }
     
     public void moveToStart(){
-        moveToPosition(0);
+        motionProfile.setPositionToStart();
     }
     
     public void moveToEnd(){
-        moveToPosition(this.nominalLengthCounts);
+        motionProfile.setPositionToEnd();
     }
     
     public void moveToPosition(int positionCounts){
-        desiredPositionCounts = limitCommand(positionCounts);
+        motionProfile.setDesiredPositionCounts(positionCounts);
     }
     
     public void init(){
@@ -99,9 +89,7 @@ public class LinearAxis {
         return this.currentSpeed;
     }
     
-    public int getCommandedPosition(){
-        return desiredPositionCounts;
-    }
+
     
     public int getPosition(){
         return axisEncoder.get();
@@ -111,81 +99,29 @@ public class LinearAxis {
         dataLogger.log("Position",getPosition());
         dataLogger.log("Speed",getSpeed() );
         dataLogger.log("State",this.moveState+"");
+        int currentPosition = axisEncoder.get();
+        motionProfile.setCurrentPositionCounts(currentPosition);
         checkLimits();
-        computeSpeed();
+        
+        currentSpeed = motionProfile.calculateSpeed();
         talon.set(inverted*currentSpeed);
     }
     
-    protected boolean isMoveBasicallyTop(){
-        return Math.abs(desiredPositionCounts - nominalLengthCounts) <= this.positionTolerance;
-    }
-    
-    protected boolean isMoveBasicallyBottom(){
-        return Math.abs(desiredPositionCounts) <= this.positionTolerance;
-    }    
-    
-    public void computeSpeed(){
-        //this is a basic trapezoidal profile
-        //if we're more than rampdown counts, go full speed.
-        //other wise, taper down to min speed over ramp counts
-        //if the command move is either end of the axis move at minimum speed till you get there
-        
-        int distanceToMove = desiredPositionCounts - getPosition();
-        int absDistanceToMove = Math.abs(distanceToMove);
-        if ( absDistanceToMove < positionTolerance){
-            stop();
-        }
-        else if ( absDistanceToMove >= rampCounts){
-            currentSpeed  = cruiseSpeedPercent;
-        }
-        else if ( isMoveBasicallyBottom() ){
-            currentSpeed = minSpeedPercent;
-            homingBottom = true;
-        }
-        else if ( isMoveBasicallyTop()){            
-            currentSpeed = minSpeedPercent;
-            homingTop = true;
-        }
-        else{
-            //start ramping down
-            double rampPercentage = (double)absDistanceToMove / (double)rampCounts;
-            currentSpeed = minSpeedPercent + (( cruiseSpeedPercent - minSpeedPercent) * rampPercentage );
-        }
-        
-        //now apply sign
-        if ( distanceToMove < 0 ){
-            currentSpeed *= (-1.0);
-            moveState = MoveState.MOVING_BACK;
-        }
-        else{
-            moveState = MoveState.MOVING_FORWARD;
-        }
-    }
+
    
     public void checkLimits(){
         if ( moveState == MoveState.MOVING_BACK ){
-             if (!  startLimitSwitch.get() || getPosition() <= 0 ){
+             if (!  startLimitSwitch.get() || motionProfile.isAtLowerLimit() ){
                  stop();
                  axisEncoder.reset();                                  
              }
         }
 
         if ( moveState == MoveState.MOVING_FORWARD ){
-            if (  ! endLimitSwitch.get() || getPosition() > this.nominalLengthCounts ){
+            if (  ! endLimitSwitch.get() || motionProfile.isAtUpperLimit() ){
                 stop();
             }
         }    
     }
     
-    public int limitCommand(int commandedPosition){
-        if ( commandedPosition > this.nominalLengthCounts){
-            return this.nominalLengthCounts;
-        }
-        else if ( commandedPosition < 0 ){
-            return 0;
-        }
-        else{
-            return commandedPosition;
-        }
-    }
 }
