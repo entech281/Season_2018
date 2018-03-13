@@ -62,7 +62,7 @@ public class Robot extends IterativeRobot implements CommandFactory {
     DigitalInput rightPositionSwitch = new DigitalInput(DigitalIO.RIGHT_SWITCH_POSITION);
     DigitalInput preferenceSwitch = new DigitalInput(DigitalIO.PREFERENCE_SWITCH);
     
-    private Preferences prefs;
+    private Preferences prefs = Preferences.getInstance();
     public int rightSwitchPreference;
     public int leftSwitchPreference;
     public int rightScalePreference;
@@ -133,16 +133,16 @@ public class Robot extends IterativeRobot implements CommandFactory {
 
     @Override
     public void disabledPeriodic() {
-        //if(prefs!=null) {
-        //    rightScalePreference = prefs.getInt("Right Scale: ", 1);
-        //    leftScalePreference =  prefs.getInt("Left Scale", 2);
-        //    rightSwitchPreference = prefs.getInt("Right Switch", 3);
-        //    leftSwitchPreference = prefs.getInt("Right Scale", 4);
-        //    SmartDashboard.putString("right Scale Preference: ",rightScalePreference+"");
-        //    SmartDashboard.putString("left Scale Preference: ",leftScalePreference+"");
-        //    SmartDashboard.putString("right Switch Preference: ",rightSwitchPreference+"");
-        //    SmartDashboard.putString("left Switch Preference: ",leftSwitchPreference+"");
-       // }
+        if(prefs!=null) {
+            rightScalePreference = prefs.getInt("Right Scale: ", 1);
+            leftScalePreference =  prefs.getInt("Left Scale", 2);
+            rightSwitchPreference = prefs.getInt("Right Switch", 3);
+            leftSwitchPreference = prefs.getInt("Right Scale", 4);
+            SmartDashboard.putString("right Scale Preference: ",rightScalePreference+"");
+            SmartDashboard.putString("left Scale Preference: ",leftScalePreference+"");
+            SmartDashboard.putString("right Switch Preference: ",rightSwitchPreference+"");
+            SmartDashboard.putString("left Switch Preference: ",leftSwitchPreference+"");
+        }
         Scheduler.getInstance().run();
     }
 
