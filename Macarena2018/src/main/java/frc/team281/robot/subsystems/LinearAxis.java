@@ -27,10 +27,7 @@ public class LinearAxis {
     private double currentSpeed = 0.0;
     private double inverted = 1.0;
     private TrapezoidalSpeedCalculator motionProfile;
-
-    
     private MoveState moveState = MoveState.STOPPED;
-    
     
     public enum MoveState {
         MOVING_FORWARD,
