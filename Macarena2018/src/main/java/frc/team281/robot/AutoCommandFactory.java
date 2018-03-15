@@ -154,9 +154,9 @@ public class AutoCommandFactory {
                 .right(90)     
                 .forward(190)     
                 .left(45)
-                .forward(48)
+                .forward(52)
                 .left(75)
-                .forward(24)
+                .forward(36)
                 .build();
         if ( mirrored ) {
         	lp = PositionCalculator.mirror(lp);
