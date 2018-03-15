@@ -150,12 +150,12 @@ public class AutoCommandFactory {
     
     public BaseCommand autoPathF(boolean mirrored) {
     	List<Position> lp = PositionCalculator.builder()
-                .forward(228)
+                .forward(220)
                 .right(90)     
                 .forward(190)     
                 .left(45)
-                .forward(36)
-                .left(90)
+                .forward(48)
+                .left(75)
                 .forward(24)
                 .build();
         if ( mirrored ) {
