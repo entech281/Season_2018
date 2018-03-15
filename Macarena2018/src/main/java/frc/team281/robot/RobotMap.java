@@ -49,6 +49,9 @@ public class RobotMap {
             public static final int GRABBER_SHOOT = 9;
             public static final int GRABBER_OPEN = 7;
             public static final int WRIST_UP = 6;
+            public static final int GRABBER_LOAD_AND_CLOSE=10;
+            public static final int GRABBER_SHOOT_AND_OPEN=12;
+            
         }
     }
 
@@ -63,6 +66,8 @@ public class RobotMap {
         public static final int LEFT_SWITCH_POSITION = 3;
         public static final int RIGHT_SWITCH_POSITION = 4;
         public static final int PREFERENCE_SWITCH = 5;
+        public static final int LIFTER_ENCODER_A = 8;
+        public static final int LIFTER_ENCODER_B = 9;
 
     }
     
