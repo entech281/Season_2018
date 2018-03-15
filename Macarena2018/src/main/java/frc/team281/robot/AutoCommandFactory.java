@@ -32,7 +32,7 @@ public class AutoCommandFactory {
     }
     
     public CommandGroup makeAutoCommand(WhichAutoCodeToRun whatAutoToRun) {
-
+        //ABCD
         switch (whatAutoToRun) {
         case A: 
             return makeAutoProcedure(autoPathA(false));
@@ -128,7 +128,7 @@ public class AutoCommandFactory {
                 .left(45)
                 .forward(78)
                 .right(45)
-                //.forward(48)
+                .forward(24)
                 .build();
     	if ( mirrored ) {
     		lp = PositionCalculator.mirror(lp);
@@ -138,7 +138,9 @@ public class AutoCommandFactory {
     
     public BaseCommand autoPathE(boolean mirrored) {
     	List<Position> lp = PositionCalculator.builder()
-                .forward(138)
+                .forward(228)
+                .right(90)
+                .forward(111)
                 .build();
         if ( mirrored ) {
         	lp = PositionCalculator.mirror(lp);
@@ -148,17 +150,13 @@ public class AutoCommandFactory {
     
     public BaseCommand autoPathF(boolean mirrored) {
     	List<Position> lp = PositionCalculator.builder()
-                .forward(138)
-                .left(25)     
-                .forward(111)     
-                .right(35)        
-                .forward(84)      
-                .right(45)        
-                .forward(52)      
-                .right(45)        
-                .forward(130)     
-                .left(90)     
-                .forward(41)
+                .forward(228)
+                .right(90)     
+                .forward(190)     
+                .left(45)
+                .forward(36)
+                .left(90)
+                .forward(24)
                 .build();
         if ( mirrored ) {
         	lp = PositionCalculator.mirror(lp);
