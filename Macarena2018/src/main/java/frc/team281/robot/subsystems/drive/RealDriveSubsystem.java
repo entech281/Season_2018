@@ -106,7 +106,7 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 
 		TalonSettings leftFrontPositionSettings = TalonSettingsBuilder.defaults()
 				.withCurrentLimits(35, 30, 200)
-				.brakeInNeutral()
+				.coastInNeutral()
 				.withDirections(false, false)
 				.limitMotorOutputs(1.0, 0.25)
 				.noMotorStartupRamping()
@@ -116,7 +116,7 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 				.build();
 		TalonSettings leftRearPositionSettings = TalonSettingsBuilder.defaults()
                 .withCurrentLimits(35, 30, 200)
-                .brakeInNeutral()
+                .coastInNeutral()
                 .withDirections(false, false)
                 .limitMotorOutputs(1.0, 0.25)
                 .noMotorStartupRamping()
@@ -126,7 +126,7 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
                 .build();
 		TalonSettings rightFrontPositionSettings = TalonSettingsBuilder.defaults()
 				.withCurrentLimits(35, 30, 200)
-				.brakeInNeutral()
+				.coastInNeutral()
 				.withDirections(false, true)
 				.limitMotorOutputs(1.0, 0.15)
 				.noMotorStartupRamping()
@@ -138,7 +138,7 @@ public class RealDriveSubsystem extends BaseDriveSubsystem {
 
         TalonSettings rightRearPositionSettings = TalonSettingsBuilder.defaults()
                 .withCurrentLimits(35, 30, 200)
-                .brakeInNeutral()
+                .coastInNeutral()
                 .withDirections(true, true)
                 .limitMotorOutputs(1.0, 0.15)
                 .noMotorStartupRamping()

@@ -155,7 +155,7 @@ public class AutoCommandFactory {
                 .forward(190)     
                 .left(45)
                 .forward(52)
-                .left(75)
+                .left(65)
                 .forward(36)
                 .build();
         if ( mirrored ) {
