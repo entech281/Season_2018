@@ -59,7 +59,8 @@ public class Robot extends IterativeRobot implements CommandFactory {
     private AutoPlanComputer autoStrategySelector = new AutoPlanComputer();
     DigitalInput leftPositionSwitch = new DigitalInput(DigitalIO.LEFT_SWITCH_POSITION);
     DigitalInput rightPositionSwitch = new DigitalInput(DigitalIO.RIGHT_SWITCH_POSITION);
-    DigitalInput preferenceSwitch = new DigitalInput(DigitalIO.PREFERENCE_SWITCH);
+    DigitalInput overrideSwitch = new DigitalInput(DigitalIO.PREFERENCE_SWITCH);
+    private FieldMessage fieldPose;
 
     
     /**
@@ -123,13 +124,14 @@ public class Robot extends IterativeRobot implements CommandFactory {
     protected AutoPlan selectAutoToRun(){
         
         String gameMessage = DriverStation.getInstance().getGameSpecificMessage();
-        FieldMessage fm = new FieldMessageGetter(leftPositionSwitch.get(), rightPositionSwitch.get()).convertGameMessageToFieldMessage(gameMessage);
+        fieldPose = new FieldMessageGetter(leftPositionSwitch.get(), rightPositionSwitch.get(), overrideSwitch.get() )
+                .convertGameMessageToFieldMessage(gameMessage);
         
         //TODO: read buttons to get these four booleans, 
         //      OR  use autoStrategySelector.computePlanFromRobotPreferences(fm);
         //      OR  read buttons and convert to an int and use autoStrategySelector.computePlanFromRobotPreferences(fm,int)
         // return autoStrategySelector.computePlanFromFieldPoseSwitches(fm, false,false,false,true);
-        return autoStrategySelector.computePlanFromRobotPreferences(fm);
+        return autoStrategySelector.computePlanFromRobotPreferences(fieldPose);
     }
     
     @Override

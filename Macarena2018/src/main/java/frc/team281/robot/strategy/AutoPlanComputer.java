@@ -77,7 +77,6 @@ public class AutoPlanComputer {
     public AutoPlan testAutoPathB() {
 		return new AutoPlan("B",false, false, AUTO_B);
     }
-
     public AutoPlan testAutoPathC() {
 		return new AutoPlan("C",false, false, AUTO_C);
     }
