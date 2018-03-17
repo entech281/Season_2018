@@ -97,7 +97,7 @@ public class Robot extends IterativeRobot implements CommandFactory {
     	SmartDashboard.putString("Selected Auto", autoPlan+"");
         driveSubsystem.setMode(DriveMode.POSITION_DRIVE);
         AutoCommandFactory af = new AutoCommandFactory(lifterSubsystem, grabberSubsystem, wristSubsystem, driveSubsystem);
-        autoPlan.setMirror(true);
+        //autoPlan.setMirror(true);
         CommandGroup autoCommand = af.makeAutoCommand(autoPlan);
         autoCommand.start();
        

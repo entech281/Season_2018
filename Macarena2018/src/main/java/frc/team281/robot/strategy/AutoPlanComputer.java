@@ -34,9 +34,9 @@ public class AutoPlanComputer {
 
     // OPPOSITE SIDE SWITCH
     protected List<Position> AUTO_C = PositionCalculator.builder()
-            .forward(19.5*11.5)
+            .forward(18.69*12)
             .right(90)
-            .forward(15.8*11.5)
+            .forward(15.14*12)
             .right(90)
             .build();
 
@@ -52,7 +52,7 @@ public class AutoPlanComputer {
     protected List<Position> AUTO_E = PositionCalculator.builder()
             .forward(19.5*12)
             .right(90)
-            .forward(15.8*6)
+            .forward(7.9*12)
             .build();
 
     // OPPOSITE SIDE SCALE
