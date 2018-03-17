@@ -68,8 +68,20 @@ public class AutoPlanComputer {
         return computePlanFromFieldPoseSwitches(fm,false,false,false,false);
     }
 
+    public AutoPlan testPlanA(){
+        return new AutoPlan("A",true,true,AUTO_A);
+    }
+    public AutoPlan testPlanB(){
+        return new AutoPlan("B",true,true,AUTO_B);
+    }
+    public AutoPlan testPlanC(){
+        return new AutoPlan("C",true,true,AUTO_C);
+    }
+    public AutoPlan testPlanD(){
+        return new AutoPlan("D",true,true,AUTO_D);
+    }
     public AutoPlan testPlanE(){
-        return new AutoPlan("Aryan Test",true,true,AUTO_E);
+        return new AutoPlan("E",true,true,AUTO_E);
     }
     
     public AutoPlan computePlanFromFieldPoseSwitches(FieldMessage fm, boolean bothThisSideSelector, boolean frontSlashSelector, 
