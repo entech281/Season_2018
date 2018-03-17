@@ -92,6 +92,7 @@ public class Robot extends IterativeRobot implements CommandFactory {
     @Override
     public void autonomousInit() {
         AutoPlan autoPlan = selectAutoToRun();
+        autoPlan = autoStrategySelector.testAutoPathE();
     	SmartDashboard.putString("Selected Auto", autoPlan+"");
         driveSubsystem.setMode(DriveMode.POSITION_DRIVE);
         AutoCommandFactory af = new AutoCommandFactory(lifterSubsystem, grabberSubsystem, wristSubsystem, driveSubsystem);

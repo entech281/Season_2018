@@ -48,9 +48,11 @@ public class AutoPlanComputer {
             .right(45)
             .build();
 
-    // DRIVE FORWARD ONLY
+    // DRIVE FORWARD & TURN & STOP AT CENTER ONLY
     protected List<Position> AUTO_E = PositionCalculator.builder()
-            .forward(11.5*12)
+            .forward(19.5*12)
+            .right(90)
+            .forward(15.8*6)
             .build();
 
     // OPPOSITE SIDE SCALE
@@ -67,7 +69,27 @@ public class AutoPlanComputer {
         //TODO:convert the into 4 booleans
         return computePlanFromFieldPoseSwitches(fm,false,false,false,false);
     }
+    
+    public AutoPlan testAutoPathA() {
+		return new AutoPlan("A",false, false, AUTO_A);
+    }
+    
+    public AutoPlan testAutoPathB() {
+		return new AutoPlan("B",false, false, AUTO_B);
+    }
 
+    public AutoPlan testAutoPathC() {
+		return new AutoPlan("C",false, false, AUTO_C);
+    }
+
+    public AutoPlan testAutoPathD() {
+		return new AutoPlan("D",false, false, AUTO_D);
+    }
+    
+    public AutoPlan testAutoPathE() {
+    		return new AutoPlan("E",false, false, AUTO_E);
+    }
+    
     public AutoPlan computePlanFromFieldPoseSwitches(FieldMessage fm, boolean bothThisSideSelector, boolean frontSlashSelector, 
             boolean backSlashSelector, boolean bothOppositeSelector){
         
