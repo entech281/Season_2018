@@ -51,7 +51,7 @@ public class AutoPlanComputer {
     protected List<Position> AUTO_D = PositionCalculator.builder()
             .forward(2.0*12)
             .left(45)
-            .forward(6.5*12)
+            .forward(7*12)
             .right(45)
             .build();
 
@@ -64,11 +64,14 @@ public class AutoPlanComputer {
 
     // OPPOSITE SIDE SCALE
     protected List<Position> AUTO_F = PositionCalculator.builder()
-        .forward(19.5*12)
-        .right(90)
-        .forward(15.8*12)
-        .left(90)
-        .build();
+            .forward(240)
+            .right(90)
+            .forward(190)
+            .left(45)
+            .forward(52)
+            .left(65)
+            .build();
+
 
     protected List<Position> EMPTY = PositionCalculator.builder().build();
 
@@ -80,7 +83,7 @@ public class AutoPlanComputer {
         
         if ( fm.isRobotInMiddle()){
             selectedPlan =  new AutoPlan(D,false, true, AUTO_D);
-            if ( fm.isOurScaleOnTheRight()){
+            if ( fm.isOurSwitchOnTheRight()){
                 selectedPlan.setMirror(true);
             }
         } else {
@@ -88,7 +91,7 @@ public class AutoPlanComputer {
             //use the field Pose to decide what to do
             FieldPose pose = fm.getFieldPose();
 
-            // For the moment, we don't drop the cube if we're travelling to opposite side of field
+            // For the moment, we don't drop the cube if we're traveling to opposite side of field
             // AutoPlan logicals: goingForSwitch, dropCube
             if ( pose == FieldPose.BOTH_OUR_SIDE){
                 if ( bothThisSideSelector ) {
